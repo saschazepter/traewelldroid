@@ -14,7 +14,7 @@
     <string name="display_travel_time_hours_minutes">%1$dt %2$dmin</string>
     <string name="display_travel_time_days_hours_minutes">%1$dd %2$dt %3$dmin</string>
     <string name="display_average_speed">%1$.2f km/t</string>
-    <string name="where_are_you">Hvor er du\?</string>
+    <string name="where_are_you">Hvor er du?</string>
     <string name="search">Søk</string>
     <string name="next_station">Neste stasjon: %1$s</string>
     <string name="from_station">av %1$s</string>
