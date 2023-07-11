@@ -13,7 +13,7 @@
     <string name="display_travel_time_minutes">%1$dmin</string>
     <string name="display_travel_time_hours_minutes">%1$du %2$dm</string>
     <string name="display_average_speed">%1$.2f km/u</string>
-    <string name="where_are_you">Waar ben je\?</string>
+    <string name="where_are_you">Waar ben je?</string>
     <string name="search">Zoeken</string>
     <string name="next_station">Volgend station: %1$s</string>
     <string name="previous">Vorig</string>
@@ -40,7 +40,7 @@
     <string name="error_missing_location_permission">Om deze functie te gebruiken, moet u de locatietoestemming inschakelen in uw apparaatinstellingen.</string>
     <string name="title_select_time">Selecteer de vertrektijd</string>
     <string name="business_private">Privaat</string>
-    <string name="delete_status">Weet u zeker dat u deze check-in wilt verwijderen\?</string>
+    <string name="delete_status">Weet u zeker dat u deze check-in wilt verwijderen?</string>
     <string name="input_stop">Halte / Ril100</string>
     <string name="yes">Ja</string>
     <string name="data_loading" tools:ignore="TypographyEllipsis">Data laden …</string>
