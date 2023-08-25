@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="input_password">Şifre</string>
     <string name="login">Giriş yap</string>
-    <string name="where_are_you">Neredesin\?</string>
+    <string name="where_are_you">Neredesin?</string>
     <string name="search">Ara</string>
     <string name="next_station">Gelecek istasyon: %1$s</string>
     <string name="title_user">Profil</string>
@@ -18,7 +18,7 @@
     <string name="business">İş</string>
     <string name="set_homeland">Ev istasyonunu belirle</string>
     <string name="home">Ev</string>
-    <string name="delete_status">Bu check-ini silmek istediğinizden emin misiniz\?</string>
+    <string name="delete_status">Bu check-ini silmek istediğinizden emin misiniz?</string>
     <string name="delete">Sil</string>
     <string name="status_delete_success">Check-ininiz başarıyla silindi.</string>
     <string name="status_delete_failure">Check-ininizi silerken bir hata oldu.</string>
@@ -79,7 +79,7 @@
     <string name="request_url_verification">Bağlantıları aç</string>
     <string name="input_stop">Durak / İstasyon Kodu (Ril100)</string>
     <string name="travel_purpose">Seyahat amacı</string>
-    <string name="request_url_verification_text">Träwelldroid şimdi traewelling.de adresindeki bağlantıları açabilir. Ayarlamak ister misiniz\? Bu ayrıca sistem ayarlarından istenildiğinde değiştirilebilir.</string>
+    <string name="request_url_verification_text">Träwelldroid şimdi traewelling.de adresindeki bağlantıları açabilir. Ayarlamak ister misiniz? Bu ayrıca sistem ayarlarından istenildiğinde değiştirilebilir.</string>
     <string name="username_or_email">Kullanıcı adı veya e-posta adresi</string>
     <string name="set_homeland_success">Ev istasyonunuz %1$s olarak ayarlandı.</string>
     <string name="request_url_login_verification">Träwelldroid uygulamasını kullanmak için Träwelldroid uygulamasının bağlantıları açmasına izin vermelisiniz. Lütfen ayarlardan açınız.</string>
@@ -109,7 +109,7 @@
     <string name="maxspeed_layer">Maksimum hız</string>
     <string name="signal_description">Sinyal sistemlerini, sinyalleri vb. gösterir.</string>
     <string name="tag_ticket_title">Bilet</string>
-    <string name="hint_event_missing">Bir etkinliği göremiyor musunuz\? Önerinizi Träwelling websitesine gönderebilirsiniz! https://traewelling.de/events</string>
+    <string name="hint_event_missing">Bir etkinliği göremiyor musunuz? Önerinizi Träwelling websitesine gönderebilirsiniz! https://traewelling.de/events</string>
     <string name="tag_ticket_example">Örneğin: Kentkart, TrenKart, Esnek Bilet, …</string>
     <string name="tag_travel_class_example">Örneğin: 1. Mevki, Ekonomi, Business, …</string>
     <string name="follow_request_issued">%1$s seni takip etmek istiyor!</string>
