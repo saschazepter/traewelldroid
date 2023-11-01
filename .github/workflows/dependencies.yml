@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Submit dependencies
-        uses: mikepenz/gradle-dependency-submission@{latest}
+        uses: mikepenz/gradle-dependency-submission@v0.9.1
         with:
           use-gradlew: true
           gradle-build-module: |-
