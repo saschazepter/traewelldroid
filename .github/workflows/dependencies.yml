@@ -11,6 +11,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
       - name: Submit dependencies
         uses: mikepenz/gradle-dependency-submission@v0.9.1
         with:
