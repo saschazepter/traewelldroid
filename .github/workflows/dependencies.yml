@@ -21,6 +21,4 @@ jobs:
         with:
           use-gradlew: true
           gradle-build-module: |-
-            :
-          gradle-build-configuration: |-
-            implementationClasspath
+            :app
