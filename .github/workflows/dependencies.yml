@@ -23,3 +23,5 @@ jobs:
           gradle-build-module: |-
             :
             :app
+          gradle-build-configuration: |-
+            compileClasspath
