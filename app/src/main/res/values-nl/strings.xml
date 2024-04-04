@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="ok">oké</string>
     <string name="input_username">Gebruikersnaam</string>
     <string name="input_password">Wachtwoord</string>
@@ -41,4 +41,17 @@
     <string name="title_select_time">Selecteer de vertrektijd</string>
     <string name="business_private">Privaat</string>
     <string name="delete_status">Weet u zeker dat u deze check-in wilt verwijderen\?</string>
+    <string name="input_stop">Halte / Ril100</string>
+    <string name="yes">Ja</string>
+    <string name="data_loading" tools:ignore="TypographyEllipsis">Data laden …</string>
+    <string name="home">Thuis</string>
+    <string name="product_type_regional">Regionaal</string>
+    <string name="product_type_bus">Bus</string>
+    <string name="product_type_subway">Metro</string>
+    <string name="title_notifications">Meldingen</string>
+    <string name="no">Nee</string>
+    <string name="settings">Instellingen</string>
+    <string name="abort">Afbreken</string>
+    <string name="logout">Uitloggen</string>
+    <string name="request_url_verification_text">Träwelldroid kan nu URL\'s van traewelling.de openen. Wilt u opzetten? Dit kan ook op elk moment worden gewijzigd in de systeeminstellingen.</string>
 </resources>
