@@ -22,9 +22,8 @@ aboutLibraries {
 
 android {
     def packageName = "de.hbch.traewelling"
-    def name = "2.9.0"
-    def code = 151
-
+    def name = "2.10.0"
+    def code = 152
     compileSdk 34
 
     defaultConfig {
