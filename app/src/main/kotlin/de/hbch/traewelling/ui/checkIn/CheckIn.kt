@@ -42,15 +42,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.canopas.lib.showcase.IntroShowcase
+import com.canopas.lib.showcase.component.ShowcaseStyle
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.event.Event
+import de.hbch.traewelling.api.models.mastodon.CustomEmoji
 import de.hbch.traewelling.api.models.status.StatusBusiness
 import de.hbch.traewelling.api.models.status.StatusVisibility
 import de.hbch.traewelling.api.models.user.User
 import de.hbch.traewelling.shared.BottomSearchViewModel
 import de.hbch.traewelling.shared.CheckInViewModel
 import de.hbch.traewelling.shared.EventViewModel
+import de.hbch.traewelling.shared.LoggedInUserViewModel
+import de.hbch.traewelling.shared.MastodonEmojis
 import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.theme.AppTypography
 import de.hbch.traewelling.theme.LocalColorScheme
@@ -63,9 +69,11 @@ import de.hbch.traewelling.ui.composables.ProfilePicture
 import de.hbch.traewelling.ui.composables.SwitchWithIconAndText
 import de.hbch.traewelling.ui.selectDestination.FromToTextRow
 import de.hbch.traewelling.util.checkAnyUsernames
+import de.hbch.traewelling.util.checkCustomEmojis
 import de.hbch.traewelling.util.getLocalDateString
 import de.hbch.traewelling.util.useDebounce
 import kotlinx.coroutines.launch
+import java.net.URL
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,14 +81,24 @@ import java.time.ZonedDateTime
 fun CheckIn(
     modifier: Modifier = Modifier,
     checkInViewModel: CheckInViewModel,
+    loggedInUserViewModel: LoggedInUserViewModel,
     eventViewModel: EventViewModel,
     checkInAction: (Boolean, Boolean) -> Unit = { _, _ -> },
     initText: String = "",
     isEditMode: Boolean = false,
     changeDestinationAction: () -> Unit = { }
 ) {
-    val secureStorage = SecureStorage(LocalContext.current)
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val secureStorage = remember { SecureStorage(context) }
+    val loggedInUser by loggedInUserViewModel.loggedInUser.observeAsState()
+    var introduceEmoji by remember { mutableStateOf(
+        !(secureStorage.getObject(SharedValues.SS_EMOJI_SHOWCASE, Boolean::class.java) ?: false) &&
+        loggedInUser?.mastodonUrl != null
+    ) }
+
+    val mastodonEmojis = remember { MastodonEmojis.getInstance(context) }
+    val instanceEmojis by remember { derivedStateOf { mastodonEmojis.emojis[URL(loggedInUser?.mastodonUrl).host] ?: listOf() } }
     val bottomSearchViewModel: BottomSearchViewModel = viewModel()
 
     var enableTrwlCheckIn by rememberSaveable { mutableStateOf(secureStorage.getObject(SharedValues.SS_TRWL_AUTO_LOGIN, Boolean::class.java) ?: true) }
@@ -96,7 +114,13 @@ fun CheckIn(
         val matches = statusText.text.checkAnyUsernames()
         matches.firstOrNull { it.range.contains(statusText.selection.min - 1) || it.range.contains(statusText.selection.max + 1) }?.value?.replace("@", "")
     } }
+    val customEmojiQuery by remember { derivedStateOf {
+        val matches = statusText.text.checkCustomEmojis()
+        matches.firstOrNull { it.range.contains(statusText.selection.min - 1) || it.range.contains(statusText.selection.max + 1) }?.value?.replace(":", "")
+    } }
+
     val userResults = remember { mutableStateListOf<User>() }
+    val customEmojiResults = remember { mutableStateListOf<CustomEmoji>() }
     var usersQuerying by remember { mutableStateOf(false) }
     var displayUserResults by remember { mutableStateOf(false) }
     userSearchQuery.useDebounce(
@@ -116,6 +140,19 @@ fun CheckIn(
             }
         },
         delayMillis = 500L
+    )
+    customEmojiQuery.useDebounce(
+        onChange = { query ->
+            if (query == null) {
+                customEmojiResults.clear()
+            } else {
+                customEmojiResults.clear()
+                coroutineScope.launch {
+                    customEmojiResults.addAll(instanceEmojis.filter { it.shortcode.contains(query, ignoreCase = true) })
+                }
+            }
+        },
+        delayMillis = 250L
     )
 
     val selectedVisibility by checkInViewModel.statusVisibility.observeAsState()
@@ -197,74 +234,136 @@ fun CheckIn(
                 )
 
                 // Text field
-                Column(
-                    horizontalAlignment = Alignment.End
+                IntroShowcase(
+                    showIntroShowCase = introduceEmoji,
+                    onShowCaseCompleted = {
+                        introduceEmoji = false
+                        secureStorage.storeObject(SharedValues.SS_EMOJI_SHOWCASE, true)
+                    },
+                    dismissOnClickOutside = true
                 ) {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .widthIn(
-                                min = 72.dp,
-                                max = Dp.Unspecified
-                            ),
-                        value = statusText,
-                        onValueChange = {
-                            if (it.text.count() > 280)
-                                return@OutlinedTextField
-                            statusText = it
-                            checkInViewModel.message.postValue(it.text)
-                        },
-                        label = {
-                            Text(
-                                text = stringResource(id = R.string.status_message)
-                            )
-                        }
-                    )
-                    Text(
-                        modifier = Modifier.padding(4.dp),
-                        text = "${statusText.text.count()}/280",
-                        style = AppTypography.labelSmall
-                    )
-                    AnimatedVisibility(displayUserResults) {
-                        Row(
+                    Column(
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        OutlinedTextField(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .horizontalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            if (usersQuerying) {
+                                .widthIn(
+                                    min = 72.dp,
+                                    max = Dp.Unspecified
+                                ),
+                            value = statusText,
+                            onValueChange = {
+                                if (it.text.count() > 280)
+                                    return@OutlinedTextField
+                                statusText = it
+                                checkInViewModel.message.postValue(it.text)
+                            },
+                            label = {
                                 Text(
-                                    text = stringResource(id = R.string.data_loading)
-                                )
-                            } else {
-                                if (userResults.isEmpty()) {
-                                    Text(
-                                        text = stringResource(id = R.string.no_results_found)
-                                    )
-                                } else {
-                                    userResults.forEach {
-                                        val username = "@${it.username}"
-                                        AssistChip(
-                                            onClick = {
-                                                val firstMatch = statusText.text.checkAnyUsernames().first { it.range.contains(statusText.selection.min - 1) || it.range.contains(statusText.selection.max + 1) }
-                                                statusText = statusText.copy(
-                                                    text = statusText.text.replaceRange(firstMatch.range.first, firstMatch.range.last + 1, "@${it.username} "),
-                                                    selection = TextRange(firstMatch.range.first + it.username.length + 2)
-                                                )
-                                            },
-                                            label = {
+                                    text = stringResource(id = R.string.status_message),
+                                    modifier = Modifier
+                                        .introShowCaseTarget(
+                                            index = 0,
+                                            style = ShowcaseStyle.Default.copy(
+                                                backgroundColor = LocalColorScheme.current.primary,
+                                                backgroundAlpha = 0.95f,
+                                                targetCircleColor = LocalColorScheme.current.onPrimary
+                                            )
+                                        ) {
+                                            Column {
                                                 Text(
-                                                    text = username
+                                                    text = stringResource(id = R.string.mastodon_emoji),
+                                                    style = AppTypography.titleLarge,
+                                                    color = LocalColorScheme.current.onPrimary
                                                 )
-                                            },
-                                            leadingIcon = {
-                                                ProfilePicture(
-                                                    user = it,
-                                                    modifier = Modifier.size(24.dp)
+                                                Text(
+                                                    text = stringResource(id = R.string.mastodon_emoji_description),
+                                                    color = LocalColorScheme.current.onPrimary
                                                 )
                                             }
+                                        }
+                                )
+                            }
+                        )
+                        Text(
+                            modifier = Modifier.padding(4.dp),
+                            text = "${statusText.text.count()}/280",
+                            style = AppTypography.labelSmall
+                        )
+                        AnimatedVisibility(displayUserResults) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                if (usersQuerying) {
+                                    Text(
+                                        text = stringResource(id = R.string.data_loading)
+                                    )
+                                } else {
+                                    if (userResults.isEmpty()) {
+                                        Text(
+                                            text = stringResource(id = R.string.no_results_found)
                                         )
+                                    } else {
+                                        userResults.forEach {
+                                            val username = "@${it.username}"
+                                            AssistChip(
+                                                onClick = {
+                                                    val firstMatch = statusText.text.checkAnyUsernames().first { it.range.contains(statusText.selection.min - 1) || it.range.contains(statusText.selection.max + 1) }
+                                                    statusText = statusText.copy(
+                                                        text = statusText.text.replaceRange(firstMatch.range.first, firstMatch.range.last + 1, "@${it.username} "),
+                                                        selection = TextRange(firstMatch.range.first + it.username.length + 2)
+                                                    )
+                                                },
+                                                label = {
+                                                    Text(
+                                                        text = username
+                                                    )
+                                                },
+                                                leadingIcon = {
+                                                    ProfilePicture(
+                                                        user = it,
+                                                        modifier = Modifier.size(24.dp)
+                                                    )
+                                                }
+                                            )
+                                        }
                                     }
+                                }
+                            }
+                        }
+                        AnimatedVisibility(customEmojiResults.isNotEmpty()) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                customEmojiResults.forEach { emoji ->
+                                    AssistChip(
+                                        onClick = {
+                                            val firstMatch = statusText.text.checkCustomEmojis().first { it.range.contains(statusText.selection.min - 1) || it.range.contains(statusText.selection.max + 1) }
+                                            statusText = statusText.copy(
+                                                text = statusText.text.replaceRange(firstMatch.range.first, firstMatch.range.last + 1, ":${emoji.shortcode}: "),
+                                                selection = TextRange(firstMatch.range.first + emoji.shortcode.length + 3)
+                                            )
+                                        },
+                                        label = {
+                                            Text(
+                                                text = emoji.shortcode
+                                            )
+                                        },
+                                        leadingIcon = {
+                                            AsyncImage(
+                                                model = emoji.url,
+                                                contentDescription = emoji.shortcode,
+                                                modifier = Modifier.size(24.dp)
+                                            )
+                                        }
+                                    )
                                 }
                             }
                         }
