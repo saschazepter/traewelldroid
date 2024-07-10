@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="ok">oké</string>
+    <string name="ok">Oké</string>
     <string name="input_username">Gebruikersnaam</string>
     <string name="input_password">Wachtwoord</string>
-    <string name="login">aanmelden</string>
+    <string name="login">Aanmelden</string>
     <string name="title_dashboard">Start</string>
-    <string name="title_active_checkins">onderweg</string>
-    <string name="title_user">profiel</string>
-    <string name="title_search_connection">zoek verbinding</string>
+    <string name="title_active_checkins">Onderweg</string>
+    <string name="title_user">Profiel</string>
+    <string name="title_search_connection">Zoek verbinding</string>
     <string name="title_select_destination">Selecteer bestemming</string>
     <string name="display_points">%1$d punten</string>
     <string name="display_travel_time_minutes">%1$dmin</string>
     <string name="display_travel_time_hours_minutes">%1$du %2$dm</string>
     <string name="display_average_speed">%1$.2f km/u</string>
     <string name="where_are_you">Waar ben je\?</string>
-    <string name="search">zoeken</string>
+    <string name="search">Zoeken</string>
     <string name="next_station">Volgend station: %1$s</string>
     <string name="previous">Vorig</string>
     <string name="next">Volgende</string>
@@ -56,4 +56,16 @@
     <string name="request_url_verification_text">Träwelldroid kan nu URL\'s van traewelling.de openen. Wilt u opzetten? Dit kan ook op elk moment worden gewijzigd in de systeeminstellingen.</string>
     <string name="check_in_trwl">Check-in met Träwelling</string>
     <string name="check_in_travelynx">Check-in met travelynx</string>
+    <string name="cancelled">Geannuleerd</string>
+    <string name="change_destination">Bestemming wijzigen</string>
+    <string name="product_type_ferry">Veerboot</string>
+    <string name="open_with_bahnexpert">Met <b>bahn.expert</b> openen</string>
+    <string name="title_edit">Bewerken</string>
+    <string name="tag_locomotive_class_title">Materieel</string>
+    <string name="tag_vehicle_number_title">Treinstel</string>
+    <string name="tag_staff_role_example">Machinist, conducteur, …</string>
+    <string name="travel_time">reisduur</string>
+    <string name="or">of</string>
+    <string name="stops">Tussenstops</string>
+    <string name="tag_locomotive_class_example">bijv. VIRM, SNG, …</string>
 </resources>
