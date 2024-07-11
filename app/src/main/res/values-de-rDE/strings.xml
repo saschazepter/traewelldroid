@@ -80,19 +80,10 @@
     <string name="travel_time">Reisezeit</string>
     <string name="check_in_count">Anzahl Check-Ins</string>
     <string name="title_notifications">Mitteilung</string>
-    <string name="notifications_not_implemented_text">
-        Diese Funktion ist aktuell nicht implementiert. Bitte nutze die Träwelling-Webseite,
-        um deine Benachrichtigungen anzusehen oder zu löschen.
-    </string>
+    <string name="notifications_not_implemented_text">Diese Funktion ist aktuell nicht implementiert. Bitte nutze die Träwelling-Webseite, um deine Benachrichtigungen anzusehen oder zu löschen.</string>
     <string name="request_url_verification">Links öffnen</string>
-    <string name="request_url_verification_text">
-        Träwelldroid kann nun Links von traewelling.de öffnen. Möchtest du das einrichten?
-        Dies kann jederzeit in den Systemeinstellungen geändert werden.
-    </string>
-    <string name="request_url_login_verification">
-        Damit du Dich mit Träwelling einloggen kannst, musst du Träwelldroid so konfigurieren, dass Links automatisch geöffnet werden können.
-        Bitte tu dies in den Einstellung.
-    </string>
+    <string name="request_url_verification_text">Träwelldroid kann nun Links von traewelling.de öffnen. Möchtest du das einrichten? Dies kann jederzeit in den Systemeinstellungen geändert werden.</string>
+    <string name="request_url_login_verification">Damit du Dich mit Träwelling einloggen kannst, musst du Träwelldroid so konfigurieren, dass Links automatisch geöffnet werden können. Bitte tu dies in den Einstellung.</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="title_also_check_in">Auch einchecken</string>
@@ -116,22 +107,10 @@
     <string name="view_on_github">Projekt auf GitHub anzeigen</string>
     <string name="legal">Impressum und Datenschutzerklärung</string>
     <string name="title_edit">Bearbeiten</string>
-    <string name="point_reason_good_enough">
-        Weil du ein klein wenig zu spät eingecheckt hast, hast du nicht alle Punkte erhalten.
-        Versuche nächstes Mal, kurz vor der Abfahrt oder während der Reise einzuchecken, um alle
-        Punkte zu erhalten.
-    </string>
-    <string name="point_reason_not_sufficient">
-        Weil du zu früh oder zu spät eingecheckt hast, hast du nicht alle Punkte erhalten.
-        Versuche nächstes Mal, kurz vor der Abfahrt oder während der Reise einzuchecken, um alle
-        Punkte zu erhalten.
-    </string>
-    <string name="point_reason_forced">
-        Weil du diesen Check-In erzwungen hast, hast du nicht alle Punkte erhalten.
-    </string>
-    <string name="point_reason_manual">
-        Weil du in eine manuell erstellte Fahrt eingecheckt hast, hast du keine Punkte erhalten.
-    </string>
+    <string name="point_reason_good_enough">Weil du ein klein wenig zu spät eingecheckt hast, hast du nicht alle Punkte erhalten. Versuche nächstes Mal, kurz vor der Abfahrt oder während der Reise einzuchecken, um alle Punkte zu erhalten.</string>
+    <string name="point_reason_not_sufficient">Weil du zu früh oder zu spät eingecheckt hast, hast du nicht alle Punkte erhalten. Versuche nächstes Mal, kurz vor der Abfahrt oder während der Reise einzuchecken, um alle Punkte zu erhalten.</string>
+    <string name="point_reason_forced">Weil du diesen Check-In erzwungen hast, hast du nicht alle Punkte erhalten.</string>
+    <string name="point_reason_manual">Weil du in eine manuell erstellte Fahrt eingecheckt hast, hast du keine Punkte erhalten.</string>
     <string name="title_share">Teilen</string>
     <string name="or">oder</string>
     <string name="login_oauth">Mit Träwelling anmelden</string>
@@ -258,4 +237,12 @@
     <string name="settings_display_tags_in_card">Tags in der Check-In-Karte anzeigen</string>
     <string name="settings_display_journey_number">Fahrtnummern in der Check-In-Karte und der Verbindungssuche anzeigen</string>
     <string name="mastodon_emoji_description">Da du deinen Mastodon-Account mit Träwelling verbunden hast, kannst du nun auch die Emoji deiner Mastodon-Instanz anzeigen und in deinen Check-Ins verwenden. Probiers doch mal aus! 😄</string>
+    <string name="app_name" translatable="false"></string>
+    <string name="share_text_with_body" translatable="false"></string>
+    <string name="openrailwaymap" translatable="false"></string>
+    <string name="check_in_user_time" translatable="false"></string>
+    <string name="date_range" translatable="false"></string>
+    <string name="mastodon_emoji" translatable="false"></string>
+    <string name="hashtag" translatable="false"></string>
+    <string name="version_with_code" translatable="false"></string>
 </resources>
