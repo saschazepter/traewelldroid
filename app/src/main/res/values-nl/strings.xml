@@ -68,4 +68,11 @@
     <string name="or">of</string>
     <string name="stops">Tussenstops</string>
     <string name="tag_locomotive_class_example">bijv. VIRM, SNG, …</string>
+    <string name="from_station">vert %1$s</string>
+    <string name="locate">Plaatsen</string>
+    <string name="check_in">Check in</string>
+    <string name="status_message">Status bericht</string>
+    <string name="departures_at">Vertrek in %1$s</string>
+    <string name="visibility_unlisted">Niet-gelist</string>
+    <string name="display_travel_time_days_hours_minutes">%1$dd %2$du %3$dmin</string>
 </resources>
