@@ -13,7 +13,7 @@
     <string name="display_travel_time_minutes">%1$dmin</string>
     <string name="display_travel_time_hours_minutes">%1$du %2$dm</string>
     <string name="display_average_speed">%1$.2f km/u</string>
-    <string name="where_are_you">Waar ben je\?</string>
+    <string name="where_are_you">Waar ben je?</string>
     <string name="search">Zoeken</string>
     <string name="next_station">Volgend station: %1$s</string>
     <string name="previous">Vorig</string>
@@ -40,7 +40,7 @@
     <string name="error_missing_location_permission">Om deze functie te gebruiken, moet u de locatietoestemming inschakelen in uw apparaatinstellingen.</string>
     <string name="title_select_time">Selecteer de vertrektijd</string>
     <string name="business_private">Privaat</string>
-    <string name="delete_status">Weet u zeker dat u deze check-in wilt verwijderen\?</string>
+    <string name="delete_status">Weet u zeker dat u deze check-in wilt verwijderen?</string>
     <string name="input_stop">Halte / Ril100</string>
     <string name="yes">Ja</string>
     <string name="data_loading" tools:ignore="TypographyEllipsis">Data laden …</string>
@@ -68,4 +68,11 @@
     <string name="or">of</string>
     <string name="stops">Tussenstops</string>
     <string name="tag_locomotive_class_example">bijv. VIRM, SNG, …</string>
+    <string name="from_station">vert %1$s</string>
+    <string name="locate">Plaatsen</string>
+    <string name="check_in">Check in</string>
+    <string name="status_message">Status bericht</string>
+    <string name="departures_at">Vertrek in %1$s</string>
+    <string name="visibility_unlisted">Niet-gelist</string>
+    <string name="display_travel_time_days_hours_minutes">%1$dd %2$du %3$dmin</string>
 </resources>

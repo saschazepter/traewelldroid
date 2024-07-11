@@ -77,19 +77,10 @@
     <string name="travel_time">Reiseziit</string>
     <string name="check_in_count">Azahl Check-Ins</string>
     <string name="title_notifications">Benachrichtigunge</string>
-    <string name="notifications_not_implemented_text">
-        Die Funktion isch aktuell nöd implementiert. Bitte nutz d\'Träwelling-Websiitä,
-        um dini Benachrichtigunge azluegä oder zu löschä.
-    </string>
+    <string name="notifications_not_implemented_text">Die Funktion isch aktuell nöd implementiert. Bitte nutz d\'Träwelling-Websiitä, um dini Benachrichtigunge azluegä oder zu löschä.</string>
     <string name="request_url_verification">Links öffnä</string>
-    <string name="request_url_verification_text">
-        Träwelldroid cha jetzt Links vo traewelling.de öffnen. Willsch das so irichtä?
-        Chasch\'s jederziit i dä Syschtemischtelligä zruggänderä.
-    </string>
-    <string name="request_url_login_verification">
-        Dämit dich mit Träwelling amäldä chasch, muesch Träwelldroid so konfigurierä, dass Links automatisch göffnet werde chönd.
-        Bitte mach das i dä Ischtelligä.
-    </string>
+    <string name="request_url_verification_text">Träwelldroid cha jetzt Links vo traewelling.de öffnen. Willsch das so irichtä? Chasch\'s jederziit i dä Syschtemischtelligä zruggänderä.</string>
+    <string name="request_url_login_verification">Dämit dich mit Träwelling amäldä chasch, muesch Träwelldroid so konfigurierä, dass Links automatisch göffnet werde chönd. Bitte mach das i dä Ischtelligä.</string>
     <string name="yes">Ja</string>
     <string name="no">Nei</string>
     <string name="title_also_check_in">Au itscheggä</string>
@@ -113,19 +104,9 @@
     <string name="view_on_github">S\'Projekt auf GitHub azeigä</string>
     <string name="legal">Impressum und Datäschutzerklärig</string>
     <string name="title_edit">Bearbeitä</string>
-    <string name="point_reason_good_enough">
-        Weil Du chli z\'schpat itscheggt häsch, häsch nöd all Pünkt übercho.
-        Versuech s\'nächscht Mal, kurz vor dä Abfahrt oder während dä Reis iiztscheggä, um all
-        Pünkt überzcho.
-    </string>
-    <string name="point_reason_not_sufficient">
-        Will z\'früeh oder z\'schpat itscheggt häsch, häsch nöd all Pünkt übercho.
-        Versuech s\'nächscht Mal, kurz vor dä Abfahrt oder während dä Reis iiztscheggä, um all
-        Pünkt überzcho.
-    </string>
-    <string name="point_reason_forced">
-        Will Du das Check-In erzwungä häsch, häsch nur 0 Pünkt übercho.
-    </string>
+    <string name="point_reason_good_enough">Weil Du chli z\'schpat itscheggt häsch, häsch nöd all Pünkt übercho. Versuech s\'nächscht Mal, kurz vor dä Abfahrt oder während dä Reis iiztscheggä, um all Pünkt überzcho.</string>
+    <string name="point_reason_not_sufficient">Will z\'früeh oder z\'schpat itscheggt häsch, häsch nöd all Pünkt übercho. Versuech s\'nächscht Mal, kurz vor dä Abfahrt oder während dä Reis iiztscheggä, um all Pünkt überzcho.</string>
+    <string name="point_reason_forced">Will Du das Check-In erzwungä häsch, häsch nur 0 Pünkt übercho.</string>
     <string name="title_share">Teilä</string>
     <string name="or">oder</string>
     <string name="login_oauth">Mit Träwelling amäldä</string>
