@@ -83,8 +83,6 @@
     <string name="status_delete_failure">Det var et feil med å slette innsjekkingen.</string>
     <string name="no_departures">Det finnes ingen avganger i denne tiden.</string>
     <string name="product_type_bus">Buss</string>
-    <string name="product_type_regional"></string>
-    <string name="product_type_express"></string>
     <string name="cancelled">innstillt</string>
     <string name="settings">Innstillinger</string>
     <string name="title_edit">Redigere</string>
