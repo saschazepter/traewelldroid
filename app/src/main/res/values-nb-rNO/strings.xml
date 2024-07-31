@@ -202,4 +202,61 @@
     <string name="push_hint_title">Motta meldinger! 🎉</string>
     <string name="downloading_line_colors">Laster ned linjefarger</string>
     <string name="line_icons">Linjeikoner</string>
+    <string name="title_share"></string>
+    <string name="edit_tag"></string>
+    <string name="date_range" translatable="false"></string>
+    <string name="settings_display_journey_number"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="signed_in_as"></string>
+    <string name="jwt_expiration"></string>
+    <string name="checked_in_with"></string>
+    <string name="title_report"></string>
+    <string name="report_reason_description"></string>
+    <string name="no_browser_title"></string>
+    <string name="report_reason_inappropriate"></string>
+    <string name="report_reason_other"></string>
+    <string name="check_in_user_time" translatable="false"></string>
+    <string name="unsupported_notification_hint"></string>
+    <string name="travelynx_limited_functionality"></string>
+    <string name="tag_passenger_rights_example"></string>
+    <string name="embedded_up_distributor"></string>
+    <string name="report_success"></string>
+    <string name="data_loading" tools:ignore="TypographyEllipsis"></string>
+    <string name="open_source_licenses"></string>
+    <string name="openrailwaymap" translatable="false"></string>
+    <string name="locate"></string>
+    <string name="hashtag" translatable="false"></string>
+    <string name="error_logout"></string>
+    <string name="settings_display_description"></string>
+    <string name="no_up_distributor_found"></string>
+    <string name="error_credentials"></string>
+    <string name="settings_display"></string>
+    <string name="settings_display_tags_in_card"></string>
+    <string name="error_missing_location_permission"></string>
+    <string name="title_user"></string>
+    <string name="select_tag_type"></string>
+    <string name="renew_login_success"></string>
+    <string name="renew_login"></string>
+    <string name="version_with_code" translatable="false"></string>
+    <string name="renew_login_failed"></string>
+    <string name="planned"></string>
+    <string name="share_text_with_body" translatable="false"></string>
+    <string name="add_tag"></string>
+    <string name="channel_description_mastodon_errors"></string>
+    <string name="all_tags_already_added"></string>
+    <string name="tag_passenger_rights_title"></string>
+    <string name="mastodon_emoji" translatable="false"></string>
+    <string name="settings_display_divergent_stop"></string>
+    <string name="mastodon_emoji_description"></string>
+    <string name="report_reason_illegal"></string>
+    <string name="create_report"></string>
+    <string name="report_reason_spam"></string>
+    <string name="report_error"></string>
+    <string name="additional_information"></string>
+    <string name="report_reason_implausible"></string>
+    <string name="push_hint_text"></string>
+    <string name="selected_up_distributor"></string>
+    <string name="no_browser_description"></string>
+    <string name="auto_check_in"></string>
+    <string name="travelynx_token"></string>
 </resources>
