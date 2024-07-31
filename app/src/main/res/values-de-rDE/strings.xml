@@ -251,12 +251,4 @@
     <string name="report_success">Danke für deine Meldung! Das Träwelling-Team wird diese so schnell wie möglich bearbeiten.</string>
     <string name="report_error">Die Meldung konnte nicht erstellt werden. Wenn dein Anliegen dringend ist, kontaktiere bitte den Träwelling-Support über die Webseite.</string>
     <string name="unsupported_notification_hint">Bitte nutze die Träwelling-Webseite, um diese Benachrichtigung zu sehen.</string>
-    <string name="share_text_with_body" translatable="false"></string>
-    <string name="version_with_code" translatable="false"></string>
-    <string name="app_name" translatable="false"></string>
-    <string name="openrailwaymap" translatable="false"></string>
-    <string name="check_in_user_time" translatable="false"></string>
-    <string name="date_range" translatable="false"></string>
-    <string name="hashtag" translatable="false"></string>
-    <string name="mastodon_emoji" translatable="false"></string>
 </resources>
