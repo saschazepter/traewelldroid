@@ -9,8 +9,11 @@ import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -79,6 +83,7 @@ import de.hbch.traewelling.shared.SettingsViewModel
 import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.theme.LocalColorScheme
 import de.hbch.traewelling.theme.MainTheme
+import de.hbch.traewelling.ui.include.status.ActiveStatusBar
 import de.hbch.traewelling.ui.notifications.NotificationsViewModel
 import de.hbch.traewelling.util.popBackStackAndNavigate
 import de.hbch.traewelling.util.publishStationShortcuts
@@ -197,6 +202,7 @@ fun TraewelldroidApp(
         val loggedInUser by loggedInUserViewModel.loggedInUser.observeAsState()
         val lastVisitedStations by loggedInUserViewModel.lastVisitedStations.observeAsState()
         val homelandStation by loggedInUserViewModel.home.observeAsState()
+        val currentStatus by loggedInUserViewModel.currentStatus.observeAsState()
 
         LaunchedEffect(lastVisitedStations, homelandStation) {
             context.publishStationShortcuts(homelandStation, lastVisitedStations)
@@ -329,55 +335,73 @@ fun TraewelldroidApp(
                     enter = slideInVertically(initialOffsetY = { it }),
                     exit = slideOutVertically(targetOffsetY = { it })
                 ) {
-                    NavigationBar {
-                        BOTTOM_NAVIGATION.forEach { destination ->
-                            NavigationBarItem(
-                                icon = {
-                                    BadgedBox(
-                                        badge = {
-                                            if (destination == Notifications && unreadNotificationCount > 0) {
-                                                Badge {
-                                                    Text(
-                                                        text = unreadNotificationCount.toString()
-                                                    )
+                    Column {
+                        AnimatedVisibility(visible = currentStatus != null) {
+                            BottomAppBar(
+                                windowInsets = WindowInsets(bottom = 0.dp, left = 0.dp, right = 0.dp)
+                            ) {
+                                ActiveStatusBar(
+                                    status = currentStatus,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                        navController.navigate(
+                                            "status-details/${currentStatus?.id}"
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                        NavigationBar {
+                            BOTTOM_NAVIGATION.forEach { destination ->
+                                NavigationBarItem(
+                                    icon = {
+                                        BadgedBox(
+                                            badge = {
+                                                if (destination == Notifications && unreadNotificationCount > 0) {
+                                                    Badge {
+                                                        Text(
+                                                            text = unreadNotificationCount.toString()
+                                                        )
+                                                    }
                                                 }
                                             }
-                                        }
-                                    ) {
-                                        val user = loggedInUser
-                                        if (
-                                            destination == PersonalProfile &&
-                                            user != null
                                         ) {
-                                            AsyncImage(
-                                                model = user.avatarUrl,
-                                                contentDescription = user.name,
-                                                modifier = Modifier
-                                                    .size(24.dp)
-                                                    .clip(CircleShape),
-                                                placeholder = painterResource(id = destination.icon)
-                                            )
-                                        } else {
-                                            Icon(
-                                                painter = painterResource(id = destination.icon),
-                                                contentDescription = null
-                                            )
+                                            val user = loggedInUser
+                                            if (
+                                                destination == PersonalProfile &&
+                                                user != null
+                                            ) {
+                                                AsyncImage(
+                                                    model = user.avatarUrl,
+                                                    contentDescription = user.name,
+                                                    modifier = Modifier
+                                                        .size(24.dp)
+                                                        .clip(CircleShape),
+                                                    placeholder = painterResource(id = destination.icon)
+                                                )
+                                            } else {
+                                                Icon(
+                                                    painter = painterResource(id = destination.icon),
+                                                    contentDescription = null
+                                                )
+                                            }
                                         }
+                                    },
+                                    label = {
+                                        Text(
+                                            text = stringResource(id = destination.label),
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    },
+                                    selected = currentScreen == destination,
+                                    onClick = {
+                                        navController.popBackStackAndNavigate(destination.route)
+                                        appBarState.contentOffset = 0f
                                     }
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = destination.label),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                },
-                                selected = currentScreen == destination,
-                                onClick = {
-                                    navController.popBackStackAndNavigate(destination.route)
-                                    appBarState.contentOffset = 0f
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }
