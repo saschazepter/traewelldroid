@@ -14,6 +14,10 @@ sentry {
     }
 
     ignoredFlavors = ["foss"]
+
+    debug = true
+    telemetry = false
+    autoUpload = false
 }
 
 aboutLibraries {
@@ -56,7 +60,7 @@ android {
     buildTypes {
         release {
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            minifyEnabled false
+            minifyEnabled true
 
             buildConfigField "String", "OAUTH_REDIRECT_URL", "\"https://app.traewelldroid.de/oauth2redirect\""
             buildConfigField "String", "OAUTH_CLIENT_ID", "\"43\""
