@@ -1,5 +1,6 @@
 package de.hbch.traewelling.api.interceptors
 
+import android.util.Log
 import de.hbch.traewelling.logging.Logger
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -10,6 +11,8 @@ class LogInterceptor : Interceptor {
         val request = chain.request()
         val copy = request.newBuilder().build()
         val response = chain.proceed(request)
+
+        Log.i("LogInterceptor", copy.url.toString())
 
         val ignoredCodes = listOf(401, 409, 404)
         val path = request.url.encodedPath
