@@ -51,8 +51,8 @@
     <string name="product_type_subway">T-bane</string>
     <string name="product_type_tram">Trikk</string>
     <string name="product_type_ferry">Ferje</string>
-    <string name="product_type_national_express">Fjerntog</string>
-    <string name="product_type_national">Regiontog</string>
+    <string name="product_type_national_express">Ekspresstog</string>
+    <string name="product_type_national">Fjerntog</string>
     <string name="product_type_taxi">Taxi</string>
     <string name="product_type_regional_express">Regional Ekspresstog</string>
     <string name="check_in_successful">Du er sjekket inn!</string>
