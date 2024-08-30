@@ -85,11 +85,12 @@ fun MainTheme(
     ) {
         CompositionLocalProvider(
             LocalColorScheme provides colorScheme,
-            content = content
-        )
-        CompositionLocalProvider(
-            LocalFont provides chosenFont,
-            content = content
+            content = {
+                CompositionLocalProvider(
+                    LocalFont provides chosenFont,
+                    content = content
+                )
+            }
         )
     }
 }
