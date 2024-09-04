@@ -277,6 +277,41 @@ interface UserService {
         @Body settings: SaveUserSettings
     ): Response<Data<UserSettings>>
 
+    @GET("user/self/followers")
+    suspend fun getFollowers(
+        @Query("page") page: Int
+    ): Response<Data<List<User>>>
+
+    @DELETE("user/self/followers/{userId}")
+    suspend fun removeFollower(
+        @Path("userId") userId: Int
+    ): Response<Unit>
+
+    @GET("user/self/followings")
+    suspend fun getFollowings(
+        @Query("page") page: Int
+    ): Response<Data<List<User>>>
+
+    @GET("user/self/follow-requests")
+    suspend fun getFollowRequests(
+        @Query("page") page: Int
+    ): Response<Data<List<User>>>
+
+    @PUT("user/self/follow-requests/{userId}")
+    suspend fun acceptFollowRequest(
+        @Path("userId") userId: Int
+    ): Response<Unit>
+
+    @DELETE("user/self/follow-requests/{userId}")
+    suspend fun declineFollowRequest(
+        @Path("userId") userId: Int
+    ): Response<Unit>
+
+    @DELETE("user/{userId}/follow")
+    suspend fun removeFollowing(
+        @Path("userId") userId: Int
+    ): Response<Unit>
+
     @GET("user/self/trusted")
     suspend fun getTrustedUsers(): Response<Data<List<TrustedUser>>>
 

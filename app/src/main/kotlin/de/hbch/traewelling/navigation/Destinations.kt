@@ -166,6 +166,22 @@ object ProfileEdit : Destination {
     override val route = "edit-profile"
 }
 
+object ManageFollowers: ArgumentDestination, DeepLinkedDestination {
+    override val label = R.string.manage_followers
+    override val route = "manage-followers/?followRequests={followRequests}"
+    override val arguments = listOf(
+        navArgument("followRequests") {
+            type = NavType.BoolType
+            defaultValue = false
+        }
+    )
+    override val deepLinks = listOf(
+        navDeepLink {
+            uriPattern = "$TRAEWELLDROID_BASE_URI/manage-followers/?followRequests={followRequests}"
+        }
+    )
+}
+
 object TrustedUsers : Destination {
     override val label = R.string.trusted
     override val route = "trusted-users"
@@ -184,6 +200,8 @@ val SCREENS = listOf(
     CheckInResult,
     StatusDetails,
     Settings,
+    ProfileEdit,
+    ManageFollowers,
     ProfileEdit,
     TrustedUsers
 )

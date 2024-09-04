@@ -46,7 +46,8 @@ fun UserCard(
     modifier: Modifier = Modifier,
     userViewModel: UserStatusViewModel,
     loggedInUserViewModel: LoggedInUserViewModel,
-    editProfile: () -> Unit = { }
+    editProfile: () -> Unit = { },
+    manageFollowerAction: () -> Unit = { }
 ) {
     val stateUser by userViewModel.user.observeAsState()
     val stateLoggedInUser by loggedInUserViewModel.user.observeAsState()
@@ -59,6 +60,7 @@ fun UserCard(
                 modifier = modifier,
                 followAction = { userViewModel.handleFollowButton() },
                 muteAction = { userViewModel.handleMuteButton() },
+                manageFollowerAction = manageFollowerAction,
                 editProfile = editProfile
             )
         }
@@ -72,6 +74,7 @@ private fun UserCardContent(
     modifier: Modifier = Modifier,
     followAction: () -> Unit = { },
     muteAction: () -> Unit = { },
+    manageFollowerAction: () -> Unit = { },
     editProfile: () -> Unit = { }
 ) {
     val context = LocalContext.current
@@ -243,17 +246,24 @@ private fun UserCardContent(
                         )
                     }
                 }
-                if (!isOwnProfile) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val buttonModifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = 4.dp)
+                Row(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val buttonModifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 4.dp)
+                    if (isOwnProfile) {
+                        ButtonWithIconAndText(
+                            stringId = R.string.followers,
+                            drawableId = R.drawable.ic_group,
+                            onClick = manageFollowerAction,
+                            modifier = buttonModifier
+                        )
+                    } else {
                         FollowButton(user = user, onClick = followAction, modifier = buttonModifier)
                         MuteButton(user = user, onClick = muteAction, modifier = buttonModifier)
                     }

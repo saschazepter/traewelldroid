@@ -283,7 +283,19 @@
     <string name="only_check_in_persons">Bitte checke nur Mitreisende ein, die auch tatsächlich mit dir fahren.</string>
     <string name="no_person_allowed_check_in">Niemand hat dir erlaubt, für sie einzuchecken.</string>
     <string name="checked_in_by">Du wurdest von %1$s eingecheckt</string>
+    <string name="manage_followers">Follower verwalten</string>
+    <string name="followers">Follower</string>
+    <string name="followings">Folgend</string>
+    <string name="follow_requests">Folgeanfragen</string>
+    <string name="accept">Akzeptieren</string>
+    <string name="decline">Ablehnen</string>
+    <string name="follow_request_accepted">Folgeanfrage erfolgreich akzeptiert</string>
+    <string name="follow_request_declined">Folgeanfrage erfolgreich abgelehnt</string>
+    <string name="remove_follower">Follower entfernen</string>
+    <string name="remove_follower_success">Follower erfolgreich entfernt</string>
+    <string name="remove_follower_error">Follower konnte nicht entfernt werden. Bitte später erneut versuchen.</string>
     <string name="share_as_image">Als Bild teilen</string>
     <string name="share_tags_on_image">Tags auf Bild zeigen</string>
     <string name="use_system_font">Systemschriftart verwenden (Neustart erforderlich)</string>
+    <string name="error_occurred">Ein Fehler ist aufgetreten. Bitte versuche es erneut.</string>
 </resources>
