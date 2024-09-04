@@ -29,6 +29,7 @@ import de.hbch.traewelling.ui.activeCheckins.EnRoute
 import de.hbch.traewelling.ui.checkIn.CheckIn
 import de.hbch.traewelling.ui.checkInResult.CheckInResultView
 import de.hbch.traewelling.ui.dashboard.Dashboard
+import de.hbch.traewelling.ui.followers.ManageFollowers
 import de.hbch.traewelling.ui.info.InfoActivity
 import de.hbch.traewelling.ui.main.MainActivity
 import de.hbch.traewelling.ui.notifications.Notifications
@@ -270,6 +271,11 @@ fun TraewelldroidNavHost(
                     navController.navigate(ProfileEdit.route) {
                         launchSingleTop = true
                     }
+                },
+                manageFollowerAction = {
+                    navController.navigate(ManageFollowers.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
 
@@ -283,6 +289,13 @@ fun TraewelldroidNavHost(
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+        composable(ManageFollowers.route, deepLinks = ManageFollowers.deepLinks) {
+            val showFollowRequests = it.arguments?.getString("followRequests")?.toBooleanStrictOrNull() ?: false
+            ManageFollowers(
+                snackbarHostState = snackbarHostState,
+                showFollowRequests = showFollowRequests
             )
         }
         composable(TrustedUsers.route) {
