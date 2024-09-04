@@ -158,7 +158,8 @@ private fun Followers(
                 state = columnState,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp)
+                    .padding(top = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(users, key = { it.id }) { user ->
                     var isRemoving by remember { mutableStateOf(false) }
@@ -246,7 +247,8 @@ private fun FollowRequests(
                 state = columnState,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp)
+                    .padding(top = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(users, key = { it.id }) { user ->
                     var isRemoving by remember { mutableStateOf(false) }
@@ -336,13 +338,13 @@ private fun UserRow(
             Column {
                 Text(
                     text = user.name,
-                    style = AppTypography.labelLarge,
+                    style = AppTypography.bodyLarge,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = "(@${user.username})",
-                    style = AppTypography.labelSmall,
+                    style = AppTypography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
