@@ -24,8 +24,8 @@ aboutLibraries {
 
 android {
     def packageName = "de.hbch.traewelling"
-    def name = "2.15.6"
-    def code = 172
+    def name = "2.15.7"
+    def code = 173
     compileSdk 35
 
     dependenciesInfo {
