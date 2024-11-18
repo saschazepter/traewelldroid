@@ -39,7 +39,7 @@ import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.DataLoading
 import de.hbch.traewelling.ui.composables.DateTimeSelection
-import de.hbch.traewelling.ui.composables.Dialog
+import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.ProfilePicture
 import de.hbch.traewelling.ui.composables.SwitchWithIconAndText
 import de.hbch.traewelling.ui.search.SearchViewModel
@@ -73,7 +73,7 @@ fun TrustedUsers(
     }
 
     if (addDialogVisible) {
-        Dialog(
+        ContentDialog(
             onDismissRequest = {
                 addDialogVisible = false
             },

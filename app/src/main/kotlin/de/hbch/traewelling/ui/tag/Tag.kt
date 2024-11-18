@@ -45,7 +45,7 @@ import de.hbch.traewelling.api.models.status.TagType
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.MainTheme
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
-import de.hbch.traewelling.ui.composables.Dialog
+import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.OutlinedButtonWithIconAndText
 import kotlinx.coroutines.launch
 
@@ -82,7 +82,7 @@ fun StatusTags(
     }
 
     if (tagFormVisible) {
-        Dialog(
+        ContentDialog(
             onDismissRequest = { tagFormVisible = false }
         ) {
             Box(

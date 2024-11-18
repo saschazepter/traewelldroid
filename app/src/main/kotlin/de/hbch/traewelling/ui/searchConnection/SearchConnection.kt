@@ -60,7 +60,7 @@ import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.MainTheme
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.DataLoading
-import de.hbch.traewelling.ui.composables.Dialog
+import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.FilterChipGroup
 import de.hbch.traewelling.ui.composables.LineIcon
 import de.hbch.traewelling.ui.composables.OutlinedButtonWithIconAndText
@@ -220,7 +220,7 @@ fun SearchConnection(
     )
 
     if (datePickerVisible) {
-        Dialog(
+        ContentDialog(
             modifier = Modifier.fillMaxWidth(0.85f),
             onDismissRequest = { datePickerVisible = false }
         ) {
@@ -248,7 +248,7 @@ fun SearchConnection(
     }
 
     if (timePickerVisible) {
-        Dialog(
+        ContentDialog(
             modifier = Modifier.fillMaxWidth(0.85f),
             onDismissRequest = { timePickerVisible = false }
         ) {

@@ -69,7 +69,7 @@ import de.hbch.traewelling.theme.MainTheme
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.DataLoading
 import de.hbch.traewelling.ui.composables.DateTimeSelection
-import de.hbch.traewelling.ui.composables.Dialog
+import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.OutlinedButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.ProfilePicture
 import de.hbch.traewelling.ui.composables.SwitchWithIconAndText
@@ -181,7 +181,7 @@ fun CheckIn(
     val dialogModifier = Modifier.fillMaxWidth(0.99f)
 
     if (businessSelectionVisible) {
-        Dialog(
+        ContentDialog(
             modifier = dialogModifier,
             onDismissRequest = {
                 businessSelectionVisible = false
@@ -197,7 +197,7 @@ fun CheckIn(
     }
 
     if (visibilitySelectionVisible) {
-        Dialog(
+        ContentDialog(
             modifier = dialogModifier,
             onDismissRequest = {
                 visibilitySelectionVisible = false
@@ -213,7 +213,7 @@ fun CheckIn(
     }
 
     if (eventSelectionVisible && activeEvents !== null) {
-        Dialog(
+        ContentDialog(
             modifier = dialogModifier,
             onDismissRequest = {
                 eventSelectionVisible = false
@@ -230,7 +230,7 @@ fun CheckIn(
     }
 
     if (coTravellerSelectionVisible) {
-        Dialog(
+        ContentDialog(
             modifier = dialogModifier,
             onDismissRequest = {
                 coTravellerSelectionVisible = false

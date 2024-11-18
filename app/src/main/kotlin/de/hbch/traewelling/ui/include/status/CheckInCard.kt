@@ -69,7 +69,7 @@ import de.hbch.traewelling.theme.LocalColorScheme
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.StarYellow
 import de.hbch.traewelling.ui.composables.CustomClickableText
-import de.hbch.traewelling.ui.composables.Dialog
+import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.LineIcon
 import de.hbch.traewelling.ui.composables.ProfilePicture
 import de.hbch.traewelling.ui.composables.SharePicDialog
@@ -470,7 +470,7 @@ private fun CheckInCardFooter(
     var shareVisible by remember { mutableStateOf(false) }
 
     if (reportFormVisible) {
-        Dialog(
+        ContentDialog(
             onDismissRequest = {
                 reportFormVisible = false
             }
@@ -483,7 +483,7 @@ private fun CheckInCardFooter(
     }
 
     if (shareVisible) {
-        Dialog(
+        ContentDialog(
             onDismissRequest = {
                 shareVisible = false
             }
