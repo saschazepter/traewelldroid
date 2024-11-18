@@ -42,7 +42,7 @@ import de.hbch.traewelling.theme.LocalColorScheme
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.MainTheme
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
-import de.hbch.traewelling.ui.composables.Dialog
+import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.ProfilePicture
 import de.hbch.traewelling.ui.followers.ManageFollowersViewModel
 import de.hbch.traewelling.util.openLink
@@ -102,7 +102,7 @@ private fun UserCardContent(
 
     if (unfollowDialogVisible) {
         var isRemoving by remember { mutableStateOf(false) }
-        Dialog(
+        ContentDialog(
             onDismissRequest = { unfollowDialogVisible = false },
         ) {
             Column(

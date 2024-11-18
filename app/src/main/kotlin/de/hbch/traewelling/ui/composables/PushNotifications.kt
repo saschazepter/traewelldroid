@@ -52,7 +52,7 @@ fun EnablePushNotificationsCard(
     var selectedDistributor by remember { mutableStateOf(getDistributor(context)) }
 
     if (upDistributorSelectionVisible) {
-        Dialog(
+        ContentDialog(
             onDismissRequest = {
                 upDistributorSelectionVisible = false
                 saveDistributor(context, unifiedPushDistributors[0])

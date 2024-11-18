@@ -40,7 +40,7 @@ import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.StarYellow
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
-import de.hbch.traewelling.ui.composables.Dialog
+import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.OutlinedButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.ProfilePicture
 import de.hbch.traewelling.ui.composables.SharePicDialog
@@ -159,7 +159,7 @@ private fun SuccessfulCheckInResult(
     var shareVisible by remember { mutableStateOf(false) }
 
     if (shareVisible) {
-        Dialog(
+        ContentDialog(
             onDismissRequest = { shareVisible = false }
         ) {
             SharePicDialog(
