@@ -362,7 +362,7 @@ fun TagForm(
                                 deleting = true
                                 tagViewModel.deleteTag(
                                     statusId,
-                                    tagData!!,
+                                    tagData,
                                     { onSaveSucceeded() },
                                     { }
                                 )

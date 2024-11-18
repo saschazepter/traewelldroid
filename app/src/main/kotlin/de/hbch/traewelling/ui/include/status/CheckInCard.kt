@@ -716,7 +716,7 @@ private fun CheckInCardFooter(
                 contentDescription = null
             )
             Text(
-                text = status.event!!.name,
+                text = status.event.name,
                 style = LocalFont.current.labelMedium
             )
         }

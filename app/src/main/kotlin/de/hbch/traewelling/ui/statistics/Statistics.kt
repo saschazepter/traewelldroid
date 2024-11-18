@@ -146,13 +146,13 @@ fun Statistics(
         )
         val unitMap = mutableMapOf<StatisticsUnit, String>()
         unitMap.putAll(
-            StatisticsUnit.values().map {
+            StatisticsUnit.entries.map {
                 Pair(it, stringResource(id = it.getStringId()))
             }
         )
         val typeMap = mutableMapOf<StatisticsType, String>()
         typeMap.putAll(
-            StatisticsType.values().map {
+            StatisticsType.entries.map {
                 Pair(it, stringResource(id = it.getStringId()))
             }
         )
