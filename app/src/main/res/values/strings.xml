@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name" translatable="false">Träwelldroid</string>
     <string name="ok">OK</string>
     <string name="abort">Abort</string>
@@ -244,7 +244,7 @@
     <string name="last_updated">Last updated: %1$s</string>
     <string name="refresh">Refresh</string>
     <string name="greeting_morning">Good morning zZz</string>
-    <string name="greeting_day">Have a nice day</string>
+    <string name="greeting_day">Have a nice day!</string>
     <string name="greeting_evening">Good evening :)</string>
     <string name="greeting_night">You are awake long :O</string>
     <string name="stops">Stops</string>
