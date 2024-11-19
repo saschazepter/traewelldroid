@@ -218,7 +218,7 @@
     <string name="last_updated">Zuletzt aktualisiert: %1$s</string>
     <string name="refresh">Aktualisieren</string>
     <string name="greeting_morning">Guten Morgen zZz</string>
-    <string name="greeting_day">Hab einen schönen Tag</string>
+    <string name="greeting_day">Hab einen schönen Tag!</string>
     <string name="greeting_evening">Guten Abend :)</string>
     <string name="greeting_night">Du bist ja lang wach :O</string>
     <string name="stops">Haltestellen</string>
