@@ -25,7 +25,7 @@
     <string name="edit_status">Rediger status</string>
     <string name="change_destination">Rediger destinasjonen</string>
     <string name="status_message">Status melding</string>
-    <string name="departures_at">Avgang kl %1$s</string>
+    <string name="departures_at">Avganger på %1$s</string>
     <string name="title_select_date">Velg avgangsdato</string>
     <string name="title_select_time">Velg avgangstid</string>
     <string name="title_search_connection">Søk reise</string>
@@ -102,7 +102,7 @@
     <string name="tag_staff_role_title">Rolle på jobben</string>
     <string name="tag_staff_role_example">Lokfører, konduktør, …</string>
     <string name="greeting_morning">God morgen zZz</string>
-    <string name="greeting_day">Ha en bra dag</string>
+    <string name="greeting_day">Ha en bra dag!</string>
     <string name="greeting_night">Du er veldig lenge våken :O</string>
     <string name="stops">Stoppesteder</string>
     <string name="users">Brukere</string>
@@ -225,4 +225,9 @@
     <string name="only_check_in_persons">Vennligst sjekk inn bare medreisende som reiser faktisk sammen med deg.</string>
     <string name="no_person_allowed_check_in">Ingen har tillatt deg å sjekke dem inn.</string>
     <string name="checked_in_by">Du har blit sjekket inn av %1$s</string>
+    <plurals name="days">
+        <item quantity="one">dag</item>
+        <item quantity="other">dager</item>
+    </plurals>
+    <string name="planned">Planlagt: %1$s</string>
 </resources>
