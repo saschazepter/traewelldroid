@@ -10,13 +10,9 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.shared.SharedValues
 
@@ -48,9 +44,7 @@ fun MainTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val view = LocalView.current
     val context = LocalContext.current
-    val systemUiController = rememberSystemUiController()
     val darkTheme = isSystemInDarkTheme()
     val secureStorage = remember { SecureStorage(context) }
     val chosenFont: Typography =
@@ -67,16 +61,6 @@ fun MainTheme(
         }
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
-    }
-    if (!view.isInEditMode) {
-        DisposableEffect(systemUiController, darkTheme) {
-            systemUiController.setSystemBarsColor(
-                color = Color.Transparent,
-                darkIcons = !darkTheme
-            )
-
-            onDispose {}
-        }
     }
 
     MaterialTheme(
