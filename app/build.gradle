@@ -100,11 +100,11 @@ android {
         buildConfig true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
     namespace "de.hbch.traewelling"
     flavorDimensions = [ "libs" ]
@@ -127,16 +127,15 @@ aboutLibraries {
 
 dependencies {
     // Jetpack Compose
-    def composeVersion = '1.7.3'
+    def composeVersion = '1.7.5'
     implementation "androidx.compose.runtime:runtime:$composeVersion"
     implementation "androidx.compose.ui:ui:$composeVersion"
     implementation "androidx.compose.foundation:foundation:$composeVersion"
     implementation "androidx.compose.foundation:foundation-layout:$composeVersion"
     implementation "androidx.compose.material:material:$composeVersion"
-    implementation "androidx.compose.runtime:runtime-livedata:1.7.5"
+    implementation "androidx.compose.runtime:runtime-livedata:$composeVersion"
     implementation "androidx.compose.ui:ui-tooling:$composeVersion"
     implementation 'com.google.accompanist:accompanist-themeadapter-material3:0.36.0'
-    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.36.0'
     implementation 'com.google.accompanist:accompanist-permissions:0.36.0'
     implementation "androidx.compose.material3:material3:1.3.1"
     implementation "androidx.activity:activity-compose:1.9.3"
@@ -163,7 +162,7 @@ dependencies {
     implementation "com.github.jcloquell:android-secure-storage:0.1.3"
 
     // Navigation Component
-    implementation "androidx.navigation:navigation-compose:2.8.3"
+    implementation "androidx.navigation:navigation-compose:2.8.4"
 
     // Retrofit
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
