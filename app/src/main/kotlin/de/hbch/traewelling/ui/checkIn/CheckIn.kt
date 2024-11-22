@@ -57,6 +57,7 @@ import de.hbch.traewelling.api.models.status.StatusBusiness
 import de.hbch.traewelling.api.models.status.StatusVisibility
 import de.hbch.traewelling.api.models.user.TrustedUser
 import de.hbch.traewelling.api.models.user.User
+import de.hbch.traewelling.logging.Logger
 import de.hbch.traewelling.shared.BottomSearchViewModel
 import de.hbch.traewelling.shared.CheckInViewModel
 import de.hbch.traewelling.shared.EventViewModel
@@ -175,10 +176,27 @@ fun CheckIn(
 
     val selectedVisibility by checkInViewModel.statusVisibility.observeAsState()
     val selectedBusiness by checkInViewModel.statusBusiness.observeAsState()
-    val activeEvents by eventViewModel.activeEvents.observeAsState()
+    var eventsLoaded by remember { mutableStateOf(false) }
+    val activeEvents = remember { mutableStateListOf<Event>() }
     val selectedEvent by checkInViewModel.event.observeAsState()
     val selectedCoTravellers by checkInViewModel.coTravellers.observeAsState()
     val dialogModifier = Modifier.fillMaxWidth(0.99f)
+
+    LaunchedEffect(eventsLoaded) {
+        if (!eventsLoaded) {
+            eventsLoaded = true
+            coroutineScope.launch {
+                try {
+                    val events = eventViewModel.getEvents(checkInViewModel.departureTime!!)
+                    activeEvents.clear()
+                    activeEvents.addAll(events)
+                } catch (ex: Exception) {
+                    Logger.captureException(ex)
+                    eventsLoaded = false
+                }
+            }
+        }
+    }
 
     if (businessSelectionVisible) {
         ContentDialog(
@@ -212,7 +230,7 @@ fun CheckIn(
         }
     }
 
-    if (eventSelectionVisible && activeEvents !== null) {
+    if (eventSelectionVisible) {
         ContentDialog(
             modifier = dialogModifier,
             onDismissRequest = {
@@ -220,7 +238,7 @@ fun CheckIn(
             }
         ) {
             SelectEventDialog(
-                activeEvents = activeEvents!!,
+                activeEvents = activeEvents,
                 eventSelectedAction = {
                     checkInViewModel.event.postValue(it)
                     eventSelectionVisible = false
@@ -586,7 +604,7 @@ fun CheckIn(
                             }
 
                             // Event button
-                            if (!isEditMode && activeEvents?.isNotEmpty() == true) {
+                            if (activeEvents.isNotEmpty()) {
                                 OutlinedButtonWithIconAndText(
                                     modifier = Modifier.fillMaxWidth(),
                                     drawableId = if (selectedEvent == null)

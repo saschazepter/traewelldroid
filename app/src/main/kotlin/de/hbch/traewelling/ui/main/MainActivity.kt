@@ -94,9 +94,6 @@ import de.hbch.traewelling.util.publishStationShortcuts
 import io.getunleash.UnleashClient
 import io.getunleash.UnleashConfig
 import io.getunleash.polling.PollingModes
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -138,11 +135,6 @@ class MainActivity : ComponentActivity()
         emojiPackItemAdapter = EmojiPackItemAdapter.get(this)
         TraewellingApi.jwt = secureStorage.getObject(SharedValues.SS_JWT, String::class.java)!!
         SharedValues.TRAVELYNX_TOKEN = secureStorage.getObject(SharedValues.SS_TRAVELYNX_TOKEN, String::class.java) ?: ""
-
-        val coroutineScope = CoroutineScope(Dispatchers.IO)
-        coroutineScope.launch {
-            eventViewModel.activeEvents()
-        }
 
         settingsViewModel.loadSettings(this)
 
