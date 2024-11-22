@@ -109,6 +109,7 @@ fun TraewelldroidNavHost(
         checkInViewModel.tripId = it.journey.hafasTripId
         checkInViewModel.editStatusId = it.id
         checkInViewModel.category = it.journey.safeProductType
+        checkInViewModel.event.postValue(it.event)
 
         navController.navigate(
             CheckIn(true)
