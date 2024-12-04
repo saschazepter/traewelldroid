@@ -331,7 +331,7 @@
     <string name="wrapped_unpunctual_trip">Unpünktlich wie die Bundesbahn! 😴</string>
     <string name="wrapped_your_unpunctual_trip">Deine bei Ankunft unpünktlichste Fahrt war am %1$s</string>
     <string name="wrapped_most_liked">Herzensbrecher! 💘</string>
-    <string name="wrapped_your_most_liked_trip">Du hast deine meisten Gefällt-mir Angaben (%1$d) am %2$s erhalten.</string>
+    <string name="wrapped_your_most_liked_trip">Du hast deine meisten Gefällt-mir-Angaben (%1$d) am %2$s erhalten.</string>
     <string name="wrapped_top_destinations">Gewohnheitstier 🦥</string>
     <string name="wrapped_your_top_destinations">Du hast diese Orte besonders oft besucht…</string>
     <string name="wrapped_lonely_destinations">Entdecker! 🧑🏼‍🔬</string>
