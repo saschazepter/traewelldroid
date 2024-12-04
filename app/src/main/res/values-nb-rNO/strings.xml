@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="ok">Ok</string>
     <string name="abort">Avbryt</string>
     <string name="input_username">Brukernavn</string>
@@ -232,7 +232,7 @@
     <string name="planned">Planlagt: %1$s</string>
     <string name="take_me_back">Ta meg tilbake!</string>
     <string name="wrapped_is_being_prepared">Ditt tilbakeblikk på året blir forberedt. Det kan ta noen sekunder – vennligst vær talmodig. 😊</string>
-    <string name="wrapped_hey">Hey %1$s! 👋🏼</string>
+    <string name="wrapped_hey">Hei %1$s! 👋🏼</string>
     <string name="wrapped_title">Tilbakeblikk på året</string>
     <string name="wrapped_times">ganger …</string>
     <string name="wrapped_times_checked_in">… du har sjekket inn! Til sammen ble det …</string>
@@ -259,7 +259,7 @@
     <string name="wrapped_thank_you">Takk 💙</string>
     <string name="discover_recap">Oppdag ditt sist år %1$d med ditt personligt tilbakeblikk på året! 🚂</string>
     <string name="wrapped_your_longest_trip">Din mest tidkrevende reise var den %1$s</string>
-    <string name="year_is_over">%%1$d er over</string>
+    <string name="year_is_over">%1$d er over</string>
     <string name="wrapped_favorite_operator">Alle har sin favoritt! ♥️</string>
     <string name="wrapped_intro">Vi har opplevet mye sammen. La oss se tilbake på reiseåret %1$d ditt og oppdage ditt tilbakeblikk! ⏳</string>
     <string name="and">og</string>
@@ -268,5 +268,5 @@
     <string name="wrapped_top_destinations">Vanemenneske 🦥</string>
     <string name="wrapped_your_top_destinations">Disse stedene har du besøkt oftest…</string>
     <string name="wrapped_favorite_lines">Dine favorittlinjer! 🤗</string>
-    <string name="wrapped_thank_you_description">… for å bruke Träwelldroid! God fornøyelse på dine fremtidige reiser og og la oss starte et flott år %1$d sammen! 🚀</string>
+    <string name="wrapped_thank_you_description">… for å bruke Träwelldroid! God fornøyelse på dine fremtidige reiser og la oss starte et flott år %1$d sammen! 🚀</string>
 </resources>
