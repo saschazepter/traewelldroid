@@ -6,9 +6,11 @@ import androidx.compose.ui.text.font.FontFamily
 import de.hbch.traewelling.R
 
 val RalewayFont = Font(R.font.raleway)
-val TwindexxFont = Font(R.font.ae_matrix16_btmodern_standard)
+val BTModernStandardFont = Font(R.font.ae_matrix16_btmodern_standard)
+val BTModernUmlautFont = Font(R.font.ae_matrix16_btmodern_umlaut)
 val Raleway = FontFamily(RalewayFont)
-val BTModern = FontFamily(TwindexxFont)
+val BTModernUmlaut = FontFamily(BTModernUmlautFont)
+val BTModernStandard = FontFamily(BTModernStandardFont)
 
 val DefaultTypography = Typography()
 val AppTypography = Typography(
@@ -30,3 +32,10 @@ val AppTypography = Typography(
 )
 
 val LineIconStyle = DefaultTypography.bodyMedium
+
+fun getBTModern(text: String): FontFamily {
+    return if (text.contains("[ÄÖÜ]".toRegex()))
+            BTModernUmlaut
+        else
+            BTModernStandard
+}
