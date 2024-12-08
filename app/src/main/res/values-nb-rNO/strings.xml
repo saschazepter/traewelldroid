@@ -265,6 +265,7 @@
     <string name="and">og</string>
     <string name="wrapped_line_distance">Den linjen du reiste lengst med var</string>
     <string name="wrapped_your_most_liked_trip">Du fikk flest \"Liker det\"-meldinger (%1$d) den %2$s</string>
+    <string name="wrapped_no_likes">Du fikk ingen \"Liker det\"-meldinger i året.</string>
     <string name="wrapped_top_destinations">Vanemenneske 🦥</string>
     <string name="wrapped_your_top_destinations">Disse stedene har du besøkt oftest…</string>
     <string name="wrapped_favorite_lines">Dine favorittlinjer! 🤗</string>
