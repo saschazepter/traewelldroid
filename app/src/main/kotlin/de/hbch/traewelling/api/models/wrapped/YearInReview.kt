@@ -28,7 +28,7 @@ data class YearInReviewSumStats(
 )
 
 data class TopByDistance(
-    val operator: String,
+    val operator: String?,
     val distance: Long,
     val line: String?
 )

@@ -359,6 +359,7 @@
     <string name="wrapped_your_unpunctual_trip">Your most unpunctual trip on arrival was at %1$s</string>
     <string name="wrapped_most_liked">Heartbreaker! 💘</string>
     <string name="wrapped_your_most_liked_trip">You received the most likes (%1$d) at %2$s</string>
+    <string name="wrapped_no_likes">You received no likes this year.</string>
     <string name="wrapped_top_destinations">Creature of habit 🦥</string>
     <string name="wrapped_your_top_destinations">You visited those places a lot…</string>
     <string name="wrapped_lonely_destinations">Explorer! 🧑🏼‍🔬</string>
