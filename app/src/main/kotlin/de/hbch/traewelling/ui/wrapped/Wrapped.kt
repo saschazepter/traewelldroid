@@ -209,7 +209,7 @@ fun WrappedOperatorDistance(
         val annotatedString = buildAnnotatedString {
             appendLine(stringResource(R.string.wrapped_farest_travels))
             appendLine()
-            val distanceOperator = yearInReviewData.operators.topByDistance.operator
+            val distanceOperator = yearInReviewData.operators.topByDistance.operator ?: stringResource(R.string.unknown)
             withStyle(primarySpanStyle.merge(largeSpanStyle).merge(SpanStyle(fontFamily = getBTModern(distanceOperator)))) {
                 withStyle(centerAlignedStyle) {
                     appendLine(distanceOperator)
@@ -481,7 +481,7 @@ fun WrappedMostLikedTrip(
     yearInReviewData: YearInReviewData,
     modifier: Modifier = Modifier
 ) {
-    val status = yearInReviewData.mostLikedStatuses.first().status
+    val status = yearInReviewData.mostLikedStatuses.firstOrNull()?.status
     WrappedScaffold(
         graphicsLayer = graphicsLayer,
         modifier = modifier,
@@ -494,9 +494,13 @@ fun WrappedMostLikedTrip(
             )
         }
     ) {
+        val text = if (status == null)
+                stringResource(id = R.string.wrapped_no_likes)
+            else
+                stringResource(id = R.string.wrapped_your_most_liked_trip, status.likes ?: 0, getLocalDateString(status.journey.origin.departurePlanned))
         Text(
             modifier = it,
-            text = stringResource(id = R.string.wrapped_your_most_liked_trip, status.likes ?: 0, getLocalDateString(status.journey.origin.departurePlanned)),
+            text = text,
             style = AppTypography.titleLarge,
             textAlign = TextAlign.Center
         )
