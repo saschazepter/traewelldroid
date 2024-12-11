@@ -14,9 +14,9 @@ data class YearInReviewData(
     val operators: TopBy?,
     val lines: TopBy?,
     val longestTrips: LongestTrips,
-    @SerializedName("fastestTrips") val fastestTrip: Status,
-    @SerializedName("slowestTrips") val slowestTrip: Status,
-    @SerializedName("mostDelayedArrivals") val mostDelayedArrival: Status,
+    @SerializedName("fastestTrips") val fastestTrip: Status?,
+    @SerializedName("slowestTrips") val slowestTrip: Status?,
+    @SerializedName("mostDelayedArrivals") val mostDelayedArrival: Status?,
     val topDestinations: List<TopStation>,
     val lonelyStations: List<TopStation>,
     val mostLikedStatuses: List<MostLikedStatus>
