@@ -410,9 +410,14 @@ fun WrappedFastestTrip(
             )
         }
     ) {
+        val text = if (status == null)
+                stringResource(R.string.unknown)
+            else
+                stringResource(R.string.wrapped_your_fastest_trip, getLocalDateString(status.journey.origin.departurePlanned))
+
         Text(
             modifier = it,
-            text = stringResource(R.string.wrapped_your_fastest_trip, getLocalDateString(status.journey.origin.departurePlanned)),
+            text = text,
             style = AppTypography.titleLarge,
             textAlign = TextAlign.Center
         )
@@ -438,9 +443,14 @@ fun WrappedSlowestTrip(
             )
         }
     ) {
+        val text = if (status == null)
+            stringResource(R.string.unknown)
+        else
+            stringResource(R.string.wrapped_your_slowest_trip, getLocalDateString(status.journey.origin.departurePlanned))
+
         Text(
             modifier = it,
-            text = stringResource(R.string.wrapped_your_slowest_trip, getLocalDateString(status.journey.origin.departurePlanned)),
+            text = text,
             style = AppTypography.titleLarge,
             textAlign = TextAlign.Center
         )
@@ -466,9 +476,14 @@ fun WrappedMostUnpunctualTrip(
             )
         }
     ) {
+        val text = if (status == null)
+            stringResource(R.string.unknown)
+        else
+            stringResource(R.string.wrapped_your_unpunctual_trip, getLocalDateString(status.journey.origin.departurePlanned))
+
         Text(
             modifier = it,
-            text = stringResource(R.string.wrapped_your_unpunctual_trip, getLocalDateString(status.journey.origin.departurePlanned)),
+            text = text,
             style = AppTypography.titleLarge,
             textAlign = TextAlign.Center
         )
