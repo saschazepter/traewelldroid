@@ -339,4 +339,5 @@
     <string name="wrapped_your_lonely_destinations">Diese Orte hast nur du besucht!</string>
     <string name="wrapped_thank_you">Danke 💙</string>
     <string name="wrapped_thank_you_description">… dass du Träwelldroid nutzt! Genieße deine künftigen Fahrten und lass uns gemeinsam in ein tolles Jahr %1$d starten! 🚀</string>
+    <string name="timetable_api_error">Der Dienst, der die Fahrplandaten bereitstellt, konnte nicht erreicht werden oder antwortet nicht. Bitte versuche es später erneut.</string>
 </resources>
