@@ -207,7 +207,7 @@ interface TravelService {
         @Path("id") stationId: Int,
         @Query("when") time: ZonedDateTime,
         @Query("travelType") filter: String
-    ): HafasTripPage
+    ): Response<HafasTripPage>
 
     @GET("trains/station/autocomplete/{station}")
     suspend fun autoCompleteStationSearch(
