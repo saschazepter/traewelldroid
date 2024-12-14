@@ -86,6 +86,7 @@ fun SearchConnection(
     val viewModel: SearchConnectionViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
 
+    var timeTableError by remember { mutableStateOf(false) }
     var hafasTripPage by remember { mutableStateOf<HafasTripPage?>(null) }
     var stationId by rememberSaveable { mutableIntStateOf(station) }
     val stationName by remember { derivedStateOf { hafasTripPage?.meta?.station?.name ?: "" } }
@@ -99,11 +100,13 @@ fun SearchConnection(
 
     LaunchedEffect(stationId, searchDate, selectedFilter) {
         loading = true
+        timeTableError = false
 
         coroutineScope.launch {
             val tripPage = viewModel.searchConnections(stationId, searchDate, selectedFilter)
             loading = false
-            hafasTripPage = tripPage
+            hafasTripPage = tripPage.second
+            timeTableError = tripPage.first == 502
         }
     }
 
@@ -111,7 +114,8 @@ fun SearchConnection(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CardSearch(
             onStationSelected = { station ->
@@ -121,67 +125,83 @@ fun SearchConnection(
             recentStationsData = loggedInUserViewModel.lastVisitedStations,
             queryUsers = false
         )
-        ElevatedCard {
-            Column {
-                Text(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    text = stringResource(id = R.string.departures_at, stationName),
-                    style = LocalFont.current.headlineSmall
-                )
-                HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth()
-                )
-                if (loading) {
-                    DataLoading()
-                } else {
-                    SearchConnection(
-                        stationId = stationId,
-                        searchTime = searchDate,
-                        trips = trips,
-                        onPreviousTime = {
-                            val time = times?.previous
-                            time?.let {
-                                searchDate = it
-                            }
-                        },
-                        onNextTime = {
-                            val time = times?.next
-                            time?.let {
-                                searchDate = it
-                            }
-                        },
-                        onTripSelection = { trip ->
-                            checkInViewModel.reset()
-                            checkInViewModel.lineName = trip.line?.name ?: trip.line?.journeyNumber?.toString() ?: ""
-                            checkInViewModel.lineId = trip.line?.id
-                            checkInViewModel.operatorCode = trip.line?.operator?.id
-                            checkInViewModel.tripId = trip.tripId
-                            checkInViewModel.startStationId = trip.station?.id ?: -1
-                            checkInViewModel.departureTime = trip.plannedDeparture
-                            checkInViewModel.category = trip.line?.safeProductType ?: ProductType.UNKNOWN
-                            checkInViewModel.origin = trip.station?.name ?: ""
-
-                            onTripSelected()
-                        },
-                        onTimeSelection = {
-                            searchDate = it
-                        },
-                        onHomelandStationSelection = {
-                            coroutineScope.launch {
-                                val s = viewModel.setUserHomelandStation(stationId)
-                                if (s != null) {
-                                    loggedInUserViewModel.setHomelandStation(s)
-                                    onHomelandSelected(s)
-                                }
-                            }
-                        },
-                        appliedFilter = selectedFilter,
-                        onFilter = {
-                            selectedFilter = it
-                        }
+        if (timeTableError) {
+            Icon(
+                painter = painterResource(R.drawable.ic_error),
+                contentDescription = null,
+                tint = Color.Red,
+                modifier = Modifier.size(48.dp)
+            )
+            Text(
+                text = stringResource(R.string.timetable_api_error),
+                textAlign = TextAlign.Center,
+                style = LocalFont.current.bodyLarge
+            )
+        } else {
+            ElevatedCard {
+                Column {
+                    Text(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        text = stringResource(id = R.string.departures_at, stationName),
+                        style = LocalFont.current.headlineSmall
                     )
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    if (loading) {
+                        DataLoading()
+                    } else {
+                        SearchConnection(
+                            stationId = stationId,
+                            searchTime = searchDate,
+                            trips = trips,
+                            onPreviousTime = {
+                                val time = times?.previous
+                                time?.let {
+                                    searchDate = it
+                                }
+                            },
+                            onNextTime = {
+                                val time = times?.next
+                                time?.let {
+                                    searchDate = it
+                                }
+                            },
+                            onTripSelection = { trip ->
+                                checkInViewModel.reset()
+                                checkInViewModel.lineName =
+                                    trip.line?.name ?: trip.line?.journeyNumber?.toString() ?: ""
+                                checkInViewModel.lineId = trip.line?.id
+                                checkInViewModel.operatorCode = trip.line?.operator?.id
+                                checkInViewModel.tripId = trip.tripId
+                                checkInViewModel.startStationId = trip.station?.id ?: -1
+                                checkInViewModel.departureTime = trip.plannedDeparture
+                                checkInViewModel.category =
+                                    trip.line?.safeProductType ?: ProductType.UNKNOWN
+                                checkInViewModel.origin = trip.station?.name ?: ""
+
+                                onTripSelected()
+                            },
+                            onTimeSelection = {
+                                searchDate = it
+                            },
+                            onHomelandStationSelection = {
+                                coroutineScope.launch {
+                                    val s = viewModel.setUserHomelandStation(stationId)
+                                    if (s != null) {
+                                        loggedInUserViewModel.setHomelandStation(s)
+                                        onHomelandSelected(s)
+                                    }
+                                }
+                            },
+                            appliedFilter = selectedFilter,
+                            onFilter = {
+                                selectedFilter = it
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -347,8 +367,8 @@ fun SearchConnection(
                 isCancelled = trip.isCancelled,
                 destination = getLastDestination(trip),
                 departureStation =
-                    if (!trip.station?.name.isNullOrBlank() && stationId != null && trip.station.id != stationId && displayDivergentStop)
-                        trip.station.name
+                    if (!trip.station?.name.isNullOrBlank() && stationId != null && trip.station?.id != stationId && displayDivergentStop)
+                        trip.station?.name
                     else
                         null,
                 hafasLine = trip.line,

@@ -366,4 +366,5 @@
     <string name="wrapped_your_lonely_destinations">These places were only visited by you!</string>
     <string name="wrapped_thank_you">Thank you 💙</string>
     <string name="wrapped_thank_you_description">… for using Träwelldroid! Enjoy your future travels and let\'s get started together in a nice year of %1$d! 🚀</string>
+    <string name="timetable_api_error">The service providing timetable data could not be reached or is not responding. Please try again later.</string>
 </resources>
