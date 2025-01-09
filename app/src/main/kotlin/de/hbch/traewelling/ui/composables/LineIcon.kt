@@ -32,7 +32,7 @@ import de.hbch.traewelling.util.getSwitzerlandLineName
 @Composable
 fun LineIcon(
     lineName: String,
-    journeyNumber: Int?,
+    journeyNumber: String?,
     modifier: Modifier = Modifier,
     operatorCode: String? = null,
     lineId: String? = null,
@@ -134,8 +134,8 @@ fun LineIcon(
         }
         if (displayJourneyNumber
             && displayJourneyNumberSetting
-            && !displayedName.contains(journeyNumber.toString())
-            && journeyNumber != null && journeyNumber != 0
+            && !displayedName.contains(journeyNumber ?: "")
+            && journeyNumber != null && journeyNumber != ""
         ) {
             Text(
                 text = "($journeyNumber)",
