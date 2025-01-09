@@ -352,7 +352,7 @@ fun CheckInCardContent(
     modifier: Modifier = Modifier,
     productType: ProductType,
     line: String,
-    journeyNumber: Int?,
+    journeyNumber: String?,
     kilometers: Int,
     duration: Int,
     statusBusiness: StatusBusiness,
@@ -408,7 +408,7 @@ fun CheckInCardContent(
 fun StatusDetailsRow(
     productType: ProductType,
     line: String,
-    journeyNumber: Int?,
+    journeyNumber: String?,
     kilometers: Int,
     duration: Int,
     statusBusiness: StatusBusiness,
