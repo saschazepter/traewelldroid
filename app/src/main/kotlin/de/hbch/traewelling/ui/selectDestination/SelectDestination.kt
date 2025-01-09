@@ -126,7 +126,8 @@ fun SelectDestination(
                             lineName = trip!!.lineName,
                             lineId = checkInViewModel.lineId,
                             operatorCode = checkInViewModel.operatorCode,
-                            destination = trip!!.destination.name
+                            destination = trip!!.destination.name,
+                            modifier = Modifier.fillMaxWidth()
                         )
                         Column(
                             modifier = Modifier.padding(top = 16.dp)
