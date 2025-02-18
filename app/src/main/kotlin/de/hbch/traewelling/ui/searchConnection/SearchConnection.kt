@@ -180,7 +180,7 @@ fun SearchConnection(
                             onTripSelection = { trip ->
                                 checkInViewModel.reset()
                                 checkInViewModel.lineName =
-                                    trip.line?.name ?: trip.line?.journeyNumber?.toString() ?: ""
+                                    trip.line?.name ?: trip.line?.journeyNumber ?: ""
                                 checkInViewModel.lineId = trip.line?.id
                                 checkInViewModel.operatorCode = trip.line?.operator?.id
                                 checkInViewModel.tripId = trip.tripId
@@ -375,8 +375,8 @@ fun SearchConnection(
                 isCancelled = trip.isCancelled,
                 destination = getLastDestination(trip),
                 departureStation =
-                    if (!trip.station?.name.isNullOrBlank() && stationId != null && trip.station.id != stationId && displayDivergentStop)
-                        trip.station.name
+                    if (!trip.station?.name.isNullOrBlank() && stationId != null && trip.station?.id != stationId && displayDivergentStop)
+                        trip.station?.name
                     else
                         null,
                 hafasLine = trip.line,
@@ -521,7 +521,7 @@ fun Platform(
     planned: String?,
     real: String?
 ) {
-    if (planned != null || real != null) {
+    if (!planned.isNullOrBlank() || !real.isNullOrBlank()) {
         val color = if (real != null && planned != null && real != planned) Color.Red else Color.Blue
         Box(
             modifier = Modifier
