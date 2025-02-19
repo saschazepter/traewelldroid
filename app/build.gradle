@@ -197,9 +197,6 @@ dependencies {
     playImplementation 'com.google.android.play:review:2.0.2'
     playImplementation 'com.google.android.play:review-ktx:2.0.2'
 
-    // Showcase
-    implementation 'com.canopas.intro-showcase-view:introshowcaseview:2.0.1'
-
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0'
 }
 
