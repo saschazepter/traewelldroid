@@ -3,19 +3,10 @@ plugins {
     id "kotlin-android"
     id "kotlin-kapt"
     id "androidx.navigation.safeargs.kotlin"
-    id "io.sentry.android.gradle" version "4.11.0"
     id "com.mikepenz.aboutlibraries.plugin"
     id "com.google.gms.google-services"
     id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.20'
     id "org.jetbrains.kotlin.plugin.compose" version "2.0.0"
-}
-
-sentry {
-    autoInstallation {
-        enabled = false
-    }
-
-    ignoredFlavors = ["foss"]
 }
 
 aboutLibraries {
@@ -75,8 +66,10 @@ android {
             buildConfigField "String", "UNLEASH_KEY", "\"default:production.286fca3aac1497f85ed886b3339c65cdfea9d5f52450524325398461\""
             buildConfigField "String", "WEBHOOK_URL", "\"https://webhook.traewelldroid.de\""
             buildConfigField "String", "UP_FCM_PROXY", "\"https://push.traewelldroid.de/FCM\""
-            manifestPlaceholders["SENTRY_DSN"] = "https://6d3e121491134a8ea8ed3f560b03b5ec@bugs.traewelldroid.de/1"
-            manifestPlaceholders["SENTRY_ENV"] = "production"
+            buildConfigField "String", "ACRA_ENDPOINT", "\"https://bugs.traewelldroid.de/report\""
+            buildConfigField "String", "ACRA_USERNAME", "\"59iEVqcvTqy1M9rr\""
+            buildConfigField "String", "ACRA_PASSWORD", "\"tA4VekBGnHuWQuGS\""
+            buildConfigField "String", "ACRA_REPORT_MAIL", "\"bugs@traewelldroid.de\""
 
             signingConfig signingConfigs.release
         }
@@ -89,8 +82,10 @@ android {
             buildConfigField "String", "UNLEASH_KEY", "\"default:development.52c54a43ebad9b9a668a69410b57cc19e44e19ab1ee40b4dd3f49b38\""
             buildConfigField "String", "WEBHOOK_URL", "\"https://webhooktest.traewelldroid.de\""
             buildConfigField "String", "UP_FCM_PROXY", "\"https://push.traewelldroid.de/FCM\""
-            manifestPlaceholders["SENTRY_DSN"] = "https://6d3e121491134a8ea8ed3f560b03b5ec@bugs.traewelldroid.de/1"
-            manifestPlaceholders["SENTRY_ENV"] = "development"
+            buildConfigField "String", "ACRA_ENDPOINT", "\"https://bugs.traewelldroid.de/report\""
+            buildConfigField "String", "ACRA_USERNAME", "\"59iEVqcvTqy1M9rr\""
+            buildConfigField "String", "ACRA_PASSWORD", "\"tA4VekBGnHuWQuGS\""
+            buildConfigField "String", "ACRA_REPORT_MAIL", "\"bugs@traewelldroid.de\""
         }
     }
     buildFeatures {
@@ -179,9 +174,6 @@ dependencies {
     // Feature flags
     implementation 'io.getunleash:unleash-android-proxy-sdk:1.0.0'
 
-    // Sentry
-    playImplementation 'io.sentry:sentry-android:7.14.0'
-
     // Unified Push
     implementation 'com.github.UnifiedPush:android-connector:2.1.1'
     playImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.2.0') {
@@ -198,6 +190,10 @@ dependencies {
     playImplementation 'com.google.android.play:review-ktx:2.0.2'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0'
+
+    def acraVersion = '5.12.0'
+    playImplementation "ch.acra:acra-http:$acraVersion"
+    fossImplementation "ch.acra:acra-mail:$acraVersion"
 }
 
 
