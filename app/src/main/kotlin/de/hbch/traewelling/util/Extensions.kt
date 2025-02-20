@@ -99,7 +99,8 @@ fun LazyListScope.checkInList(
     @Suppress("UNUSED_VARIABLE") val featureFlags = FeatureFlags.getInstance()
 
     itemsIndexed(
-        items = checkIns
+        items = checkIns,
+        key = { _, status -> status.id }
     ) { index, status ->
         val previousStatus = checkIns.getOrNull(index - 1)
         if (
