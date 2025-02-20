@@ -1,6 +1,11 @@
 package de.hbch.traewelling.logging
 
-import android.util.Log
+import android.app.Application
+import de.hbch.traewelling.BuildConfig
+import org.acra.ACRA
+import org.acra.config.mailSender
+import org.acra.ktx.initAcra
+import org.acra.ktx.sendWithAcra
 
 class Logger private constructor(): ILogger {
 
@@ -23,11 +28,24 @@ class Logger private constructor(): ILogger {
         }
     }
 
+    override fun initialize(application: Application) {
+        application.initAcra {
+            buildConfigClass = BuildConfig::class.java
+            mailSender {
+                mailTo = BuildConfig.ACRA_REPORT_MAIL
+                subject = "[Bug report]"
+            }
+        }
+    }
+
     override fun captureException(t: Throwable) {
-        Log.e("Error", t.stackTraceToString())
+        t.sendWithAcra()
     }
 
     override fun captureMessage(message: String, additionalInfo: Map<String, String>) {
-        Log.i("Info", message)
+        additionalInfo.forEach {
+            ACRA.errorReporter.putCustomData(it.key, it.value)
+        }
+        Exception(message).sendWithAcra()
     }
 }
