@@ -2,7 +2,6 @@ package de.hbch.traewelling.logging
 
 import android.app.Application
 import de.hbch.traewelling.BuildConfig
-import org.acra.ACRA
 import org.acra.config.mailSender
 import org.acra.ktx.initAcra
 import org.acra.ktx.sendWithAcra
@@ -42,10 +41,5 @@ class Logger private constructor(): ILogger {
         t.sendWithAcra()
     }
 
-    override fun captureMessage(message: String, additionalInfo: Map<String, String>) {
-        additionalInfo.forEach {
-            ACRA.errorReporter.putCustomData(it.key, it.value)
-        }
-        Exception(message).sendWithAcra()
-    }
+    override fun captureMessage(message: String, additionalInfo: Map<String, String>) { }
 }
