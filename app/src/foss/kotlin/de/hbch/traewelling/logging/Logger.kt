@@ -38,7 +38,9 @@ class Logger private constructor(): ILogger {
     }
 
     override fun captureException(t: Throwable) {
-        t.sendWithAcra()
+        if (needsToBeLogged(t)) {
+            t.sendWithAcra()
+        }
     }
 
     override fun captureMessage(message: String, additionalInfo: Map<String, String>) { }
