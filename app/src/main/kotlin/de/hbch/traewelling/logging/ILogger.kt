@@ -6,6 +6,7 @@ import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.net.ssl.SSLHandshakeException
+import kotlin.coroutines.cancellation.CancellationException
 
 interface ILogger {
     val ignoredExceptions get() = listOf(
@@ -13,7 +14,8 @@ interface ILogger {
         SocketTimeoutException::class,
         UnknownHostException::class,
         ConnectException::class,
-        SSLHandshakeException::class
+        SSLHandshakeException::class,
+        CancellationException::class
     )
 
     fun initialize(application: Application)
