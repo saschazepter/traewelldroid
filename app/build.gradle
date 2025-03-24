@@ -131,15 +131,15 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$composeVersion"
     implementation "androidx.compose.ui:ui-tooling:$composeVersion"
     implementation 'com.google.accompanist:accompanist-themeadapter-material3:0.36.0'
-    implementation 'com.google.accompanist:accompanist-permissions:0.37.0'
+    implementation 'com.google.accompanist:accompanist-permissions:0.37.2'
     implementation "androidx.compose.material3:material3:1.3.1"
-    implementation "androidx.activity:activity-compose:1.10.0"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0"
+    implementation "androidx.activity:activity-compose:1.10.1"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.1.1"
 
     implementation "androidx.core:core-ktx:1.15.0"
     implementation "androidx.appcompat:appcompat:1.7.0"
     implementation "com.google.android.material:material:1.12.0"
-    implementation "androidx.constraintlayout:constraintlayout:2.2.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.2.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.7"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7"
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
@@ -157,19 +157,20 @@ dependencies {
     implementation "com.github.jcloquell:android-secure-storage:0.1.3"
 
     // Navigation Component
-    implementation "androidx.navigation:navigation-compose:2.8.7"
+    implementation "androidx.navigation:navigation-compose:2.8.9"
 
     // Retrofit
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
 
     // Coil for image loading
     implementation 'io.coil-kt:coil-compose:2.7.0'
+    implementation 'io.coil-kt:coil-gif:2.7.0'
 
     // Emoji pack support
     implementation 'de.c1710:filemojicompat-autoinit:3.2.7'
 
     // OSS licenses
-    implementation 'com.mikepenz:aboutlibraries-compose:11.6.2'
+    implementation 'com.mikepenz:aboutlibraries-compose:11.6.3'
 
     // Feature flags
     implementation 'io.getunleash:unleash-android-proxy-sdk:1.0.0'

@@ -5,6 +5,8 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -20,6 +22,7 @@ import com.auth0.android.jwt.JWT
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.station.Station
 import de.hbch.traewelling.api.models.trip.HafasTrip
+import de.hbch.traewelling.shared.FeatureFlags
 import java.lang.Exception
 import java.time.Duration
 import java.time.Instant
@@ -30,6 +33,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
+import kotlin.random.Random
 
 fun getLocalTimeString(date: ZonedDateTime): String
     = DateTimeFormatter
@@ -179,6 +183,9 @@ fun getStationNameWithRL100(station: Station): String =
 @Composable
 fun getGreeting(): String {
     val time = LocalDateTime.now()
+    val userTest by FeatureFlags.getInstance().userTest.observeAsState(false)
+
+    if (userTest) return "April, April! :-)"
 
     return when (time.hour) {
         in 5..11 -> stringResource(id = R.string.greeting_morning)
@@ -186,5 +193,22 @@ fun getGreeting(): String {
         in 18..22 -> stringResource(id = R.string.greeting_evening)
         23, in 0..4 -> stringResource(id = R.string.greeting_night)
         else -> "WTF"
+    }
+}
+
+fun getRandomClippyResource(): Int {
+    val randomIndex = Random.nextInt(1, 24) // Zufallszahl zwischen 1 und 23
+    val resourceName = "clippy_black_$randomIndex"
+
+    return getResourceId(resourceName)
+}
+
+fun getResourceId(resourceName: String): Int {
+    return try {
+        val resId = R.drawable::class.java.getField(resourceName).getInt(null)
+        resId
+    } catch (e: Exception) {
+        e.printStackTrace()
+        R.drawable.clippy_black_1
     }
 }
