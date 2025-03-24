@@ -10,10 +10,13 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import com.jcloquell.androidsecurestorage.SecureStorage
+import de.hbch.traewelling.shared.FeatureFlags
 import de.hbch.traewelling.shared.SharedValues
 
 private val DarkColorScheme = darkColorScheme(
@@ -26,16 +29,6 @@ private val LightColorScheme = lightColorScheme(
     primary = Traewelldroid,
     secondary = Traewelldroid,
     tertiary = Traewelldroid
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
 
 @Composable
@@ -45,7 +38,8 @@ fun MainTheme(
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
-    val darkTheme = isSystemInDarkTheme()
+    val userTest by FeatureFlags.getInstance().userTest.observeAsState(false)
+    val darkTheme = if (userTest) !isSystemInDarkTheme() else isSystemInDarkTheme()
     val secureStorage = remember { SecureStorage(context) }
     val chosenFont: Typography =
         if (secureStorage.getObject(SharedValues.SS_USE_SYSTEM_FONT, Boolean::class.java) == true) DefaultTypography else AppTypography
