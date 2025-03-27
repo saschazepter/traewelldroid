@@ -189,7 +189,8 @@ fun SearchConnection(
                                 checkInViewModel.lineId = trip.line?.id
                                 checkInViewModel.operatorCode = trip.line?.operator?.id
                                 checkInViewModel.tripId = trip.tripId
-                                checkInViewModel.startStationId = trip.station?.id ?: -1
+                                checkInViewModel.originId = trip.station?.id ?: -1
+                                checkInViewModel.originEvaIdentifier = trip.station?.evaIdentifier
                                 checkInViewModel.departureTime = trip.plannedDeparture
                                 checkInViewModel.category =
                                     trip.line?.safeProductType ?: ProductType.UNKNOWN

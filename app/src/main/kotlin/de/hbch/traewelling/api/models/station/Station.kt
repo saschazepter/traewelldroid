@@ -7,6 +7,6 @@ data class Station(
     @SerializedName("name") val name: String,
     @SerializedName("latitude") val latitude: Double,
     @SerializedName("longitude") val longitude: Double,
-    @SerializedName("ibnr") val ibnr: String,
+    @SerializedName("ibnr") val evaIdentifier: Long?,
     @SerializedName("rilIdentifier") val ds100: String?
 )
