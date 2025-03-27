@@ -64,13 +64,13 @@ fun SelectDestination(
             selectDestinationViewModel.getTrip(
                 checkInViewModel.tripId,
                 checkInViewModel.lineName,
-                checkInViewModel.startStationId,
+                checkInViewModel.originId,
                 { tripData ->
                     dataLoading = false
                     val relevantStations = tripData.stopovers.subList(
                         tripData.stopovers.indexOf(
                             tripData.stopovers.find {
-                                it.id == checkInViewModel.startStationId
+                                it.id == checkInViewModel.originId
                                     && it.departurePlanned.isEqual(checkInViewModel.departureTime)
                             }
                         ) + 1, tripData.stopovers.lastIndex + 1)
@@ -139,7 +139,8 @@ fun SelectDestination(
                                             checkInViewModel.arrivalTime =
                                                 tripStation.arrivalPlanned
                                             checkInViewModel.destination = tripStation.name
-                                            checkInViewModel.destinationStationId = tripStation.id
+                                            checkInViewModel.destinationId = tripStation.id
+                                            checkInViewModel.destinationEvaIdentifier = tripStation.evaIdentifier
                                             onStationSelected(tripStation)
                                         }
                                     }),
