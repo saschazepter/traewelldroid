@@ -1,7 +1,6 @@
 package de.hbch.traewelling.ui.main
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
@@ -114,6 +113,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import de.hbch.traewelling.util.readOrDownloadCustomEmoji
+import de.hbch.traewelling.widget.updateWidgetState
 import kotlinx.coroutines.delay
 import java.net.URL
 import java.time.Duration
@@ -126,7 +126,6 @@ class MainActivity : ComponentActivity()
     private val checkInViewModel: CheckInViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
 
-    private var newIntentReceived: ((Intent?) -> Unit)? = null
     private lateinit var secureStorage: SecureStorage
     lateinit var emojiPackItemAdapter: EmojiPackItemAdapter
 
@@ -161,9 +160,8 @@ class MainActivity : ComponentActivity()
         setContent {
             val navController = rememberNavController()
 
-            newIntentReceived = {
-                navController.handleDeepLink(it)
-            }
+            loggedInUserViewModel.getLoggedInUser()
+            loggedInUserViewModel.getLastVisitedStations {  }
 
             MainTheme {
                 ChangeSystemBarsTheme(!isSystemInDarkTheme())
@@ -176,11 +174,6 @@ class MainActivity : ComponentActivity()
             }
         }
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        newIntentReceived?.invoke(intent)
     }
 
     private fun initUnleash() {
@@ -241,6 +234,7 @@ fun TraewelldroidApp(
 
     LaunchedEffect(lastVisitedStations, homelandStation) {
         context.publishStationShortcuts(homelandStation, lastVisitedStations)
+        context.updateWidgetState(homelandStation, lastVisitedStations)
     }
 
     LaunchedEffect(loggedInUser) {

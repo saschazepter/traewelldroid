@@ -80,8 +80,6 @@ fun Dashboard(
         if (dashboardViewModel.checkIns.size > 0) {
             dashboardViewModel.loadCheckIns(++currentPage)
         } else {
-            loggedInUserViewModel.getLoggedInUser()
-            loggedInUserViewModel.getLastVisitedStations {  }
             coroutineScope.launch {
                 loggedInUserViewModel.updateCurrentStatus()
             }
