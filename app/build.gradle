@@ -149,6 +149,11 @@ dependencies {
     implementation "net.openid:appauth:0.11.1"
     implementation "org.greenrobot:eventbus:3.3.1"
 
+    // Widgets
+    def glanceVersion = "1.1.1"
+    implementation "androidx.glance:glance-appwidget:$glanceVersion"
+    implementation "androidx.glance:glance-material3:$glanceVersion"
+
     // OSM integration
     implementation 'org.osmdroid:osmdroid-android:6.1.20'
 
