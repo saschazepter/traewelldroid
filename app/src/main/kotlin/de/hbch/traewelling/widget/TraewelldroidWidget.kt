@@ -14,12 +14,11 @@ import androidx.glance.ImageProvider
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.appWidgetBackground
+import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
-import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
@@ -65,13 +64,11 @@ class TraewelldroidWidget : GlanceAppWidget() {
                     )
                 }
             ) {
-                Box(
+                Scaffold(
                     modifier = GlanceModifier
                         .fillMaxSize()
-                        .appWidgetBackground()
-                        .background(GlanceTheme.colors.widgetBackground)
                         .cornerRadius(16.dp)
-                        .clickable(actionStartActivity<LauncherActivity>()),
+                        .clickable(actionStartActivity<LauncherActivity>())
                 ) {
                     MainWidget(
                         stations = stations
@@ -86,7 +83,7 @@ class TraewelldroidWidget : GlanceAppWidget() {
         stations: WidgetStationsState? = null
     ) {
         Row(
-            modifier = GlanceModifier.padding(6.dp).fillMaxSize(),
+            modifier = GlanceModifier.padding(vertical = 6.dp).fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -115,7 +112,7 @@ class TraewelldroidWidget : GlanceAppWidget() {
                                 .defaultWeight()
                                 .padding(6.dp)
                                 .background(GlanceTheme.colors.primaryContainer)
-                                .cornerRadius(10.dp)
+                                .cornerRadius(16.dp)
                                 .clickable(androidx.glance.appwidget.action.actionStartActivity(intent)),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
