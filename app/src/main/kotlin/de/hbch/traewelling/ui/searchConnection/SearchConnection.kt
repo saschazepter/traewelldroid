@@ -56,7 +56,6 @@ import de.hbch.traewelling.api.models.trip.HafasTrip
 import de.hbch.traewelling.api.models.trip.HafasTripPage
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.shared.CheckInViewModel
-import de.hbch.traewelling.shared.FeatureFlags
 import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.shared.SettingsViewModel
 import de.hbch.traewelling.theme.LocalFont
@@ -87,7 +86,6 @@ fun SearchConnection(
     val viewModel: SearchConnectionViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
 
-    val userTest by FeatureFlags.getInstance().userTest.observeAsState(false)
     var timeTableError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var hafasTripPage by remember { mutableStateOf<HafasTripPage?>(null) }
@@ -95,7 +93,7 @@ fun SearchConnection(
     val stationName by remember { derivedStateOf { hafasTripPage?.meta?.station?.name ?: "" } }
     val trips by remember { derivedStateOf {
         val data = hafasTripPage?.data ?: listOf()
-        if (userTest) data.shuffled() else data
+        data
     } }
     val times by remember { derivedStateOf { hafasTripPage?.meta?.times } }
 
