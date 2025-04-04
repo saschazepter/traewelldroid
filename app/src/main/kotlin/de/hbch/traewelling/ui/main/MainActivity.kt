@@ -1,30 +1,22 @@
 package de.hbch.traewelling.ui.main
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -58,26 +50,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.c1710.filemojicompat_ui.views.picker.EmojiPackItemAdapter
 import de.hbch.traewelling.BuildConfig
@@ -103,7 +87,6 @@ import de.hbch.traewelling.theme.LocalColorScheme
 import de.hbch.traewelling.theme.MainTheme
 import de.hbch.traewelling.ui.include.status.ActiveStatusBar
 import de.hbch.traewelling.ui.notifications.NotificationsViewModel
-import de.hbch.traewelling.util.getRandomClippyResource
 import de.hbch.traewelling.util.popBackStackAndNavigate
 import de.hbch.traewelling.util.publishStationShortcuts
 import io.getunleash.UnleashClient
@@ -114,7 +97,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import de.hbch.traewelling.util.readOrDownloadCustomEmoji
 import de.hbch.traewelling.widget.updateWidgetState
-import kotlinx.coroutines.delay
 import java.net.URL
 import java.time.Duration
 import java.time.LocalDateTime
@@ -164,7 +146,6 @@ class MainActivity : ComponentActivity()
             loggedInUserViewModel.getLastVisitedStations {  }
 
             MainTheme {
-                ChangeSystemBarsTheme(!isSystemInDarkTheme())
                 TraewelldroidApp(
                     navController = navController,
                     loggedInUserViewModel = loggedInUserViewModel,
@@ -191,25 +172,6 @@ class MainActivity : ComponentActivity()
                 .httpClientReadTimeout(1000)
                 .build()
             flags.init(UnleashClient(config))
-        }
-    }
-
-    @Composable
-    private fun ChangeSystemBarsTheme(lightTheme: Boolean) {
-        var light = lightTheme
-        val barColor = LocalColorScheme.current.background.toArgb()
-        val userTest by FeatureFlags.getInstance().userTest.observeAsState(false)
-        LaunchedEffect(lightTheme, userTest) {
-            if (userTest) light = !light
-            val style = if (light) SystemBarStyle.light(
-                Color.TRANSPARENT, barColor,
-            ) else SystemBarStyle.dark(
-                Color.TRANSPARENT,
-            )
-            enableEdgeToEdge(
-                statusBarStyle = style,
-                navigationBarStyle = style
-            )
         }
     }
 }
@@ -268,14 +230,6 @@ fun TraewelldroidApp(
     var lastNotificationRequest by remember { mutableStateOf<LocalDateTime>(LocalDateTime.MIN) }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val gifEnabledLoader = ImageLoader.Builder(context)
-        .components {
-            if (SDK_INT >= 28) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
-        }.build()
 
     navController.addOnDestinationChangedListener { _, _, _ ->
         val lastRequest = lastNotificationRequest
@@ -286,45 +240,6 @@ fun TraewelldroidApp(
         }
     }
     Box {
-        val userTest by FeatureFlags.getInstance().userTest.observeAsState(false)
-        var navBarTop by remember { mutableIntStateOf(0) }
-        val navBarHeight = WindowInsets.systemBars.getBottom(LocalDensity.current)
-        var calcPadding by remember { mutableIntStateOf(0) }
-        var clippy by remember { mutableIntStateOf(getRandomClippyResource()) }
-        if (userTest) {
-            LaunchedEffect(navBarTop, currentBackStack) {
-                var padding = navBarTop
-                if (navController.previousBackStackEntry != null) {
-                    padding = navBarHeight
-                }
-                calcPadding = padding
-            }
-            LaunchedEffect(true) {
-                while (true) {
-                    delay(30000)
-                    clippy = getRandomClippyResource()
-                }
-            }
-            val animPadding by animateIntAsState(targetValue = calcPadding)
-            var size by remember { mutableStateOf(64.dp) }
-            val animSize by animateDpAsState(size)
-            AsyncImage(
-                imageLoader = gifEnabledLoader,
-                contentDescription = null,
-                model = clippy,
-                modifier = Modifier
-                    .zIndex(99999f)
-                    .align(Alignment.BottomStart)
-                    .size(animSize)
-                    .offset {
-                        IntOffset(0, animPadding * -1)
-                    }
-                    .clickable {
-                        size += 16.dp
-                        if (size > 200.dp) size = 64.dp
-                    }
-            )
-        }
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
@@ -409,10 +324,7 @@ fun TraewelldroidApp(
                 AnimatedVisibility(
                     visible = navController.previousBackStackEntry == null,
                     enter = slideInVertically(initialOffsetY = { it }),
-                    exit = slideOutVertically(targetOffsetY = { it }),
-                    modifier = Modifier.onGloballyPositioned {
-                        navBarTop = it.size.height
-                    }
+                    exit = slideOutVertically(targetOffsetY = { it })
                 ) {
                     Column {
                         AnimatedVisibility(visible = currentStatus != null) {
