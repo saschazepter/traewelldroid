@@ -127,6 +127,7 @@ fun TraewelldroidNavHost(
         checkInViewModel.arrivalTime = status.journey.destination.arrivalPlanned
         checkInViewModel.category = status.journey.safeProductType
         checkInViewModel.destination = status.journey.destination.name
+        checkInViewModel.event.postValue(status.event)
 
         navController.navigate(
             CheckIn()
