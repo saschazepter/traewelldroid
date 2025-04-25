@@ -54,7 +54,6 @@ import de.hbch.traewelling.api.models.status.StatusBusiness
 import de.hbch.traewelling.api.models.status.StatusVisibility
 import de.hbch.traewelling.api.models.user.TrustedUser
 import de.hbch.traewelling.api.models.user.User
-import de.hbch.traewelling.logging.Logger
 import de.hbch.traewelling.shared.BottomSearchViewModel
 import de.hbch.traewelling.shared.CheckInViewModel
 import de.hbch.traewelling.shared.EventViewModel
@@ -179,8 +178,7 @@ fun CheckIn(
                     val events = eventViewModel.getEvents(checkInViewModel.departureTime!!)
                     activeEvents.clear()
                     activeEvents.addAll(events)
-                } catch (ex: Exception) {
-                    Logger.captureException(ex)
+                } catch (_: Exception) {
                     eventsLoaded = false
                 }
             }
