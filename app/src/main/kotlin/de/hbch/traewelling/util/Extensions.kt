@@ -44,7 +44,6 @@ import de.hbch.traewelling.api.models.lineIcons.LineIcon
 import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.logging.Logger
 import de.hbch.traewelling.navigation.Destination
-import de.hbch.traewelling.shared.FeatureFlags
 import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.theme.LocalFont
@@ -68,6 +67,8 @@ import java.nio.file.StandardCopyOption
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.UUID
+import androidx.core.graphics.toColorInt
+import androidx.core.net.toUri
 
 fun NavHostController.popBackStackAndNavigate(
     destination: Destination,
@@ -96,8 +97,6 @@ fun LazyListScope.checkInList(
     dailyStatisticsSelectedAction: (LocalDate) -> Unit = { },
     showDate: Boolean = true
 ) {
-    @Suppress("UNUSED_VARIABLE") val featureFlags = FeatureFlags.getInstance()
-
     itemsIndexed(
         items = checkIns,
         key = { _, status -> status.id }
@@ -302,7 +301,7 @@ fun TraewelldroidUriBuilder(): Uri.Builder {
 
 fun colorFromHex(color: String)
     = try {
-        Color(android.graphics.Color.parseColor(color))
+        Color(color.toColorInt())
     } catch (_: Exception) {
         null
     }
@@ -332,7 +331,7 @@ fun Context.refreshJwt(onTokenReceived: (String) -> Unit = { }) {
 }
 
 fun Context.openLink(url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     try {
         startActivity(intent)
     } catch (_: Exception) { }
