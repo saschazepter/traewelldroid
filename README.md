@@ -1,5 +1,8 @@
 # Träwelldroid
 
+> [!IMPORTANT]
+> Currently the development of this app is discontinued until further notice.
+
 This is a community app for the open source project
 [Träwelling](https://github.com/Traewelling/traewelling).
 
