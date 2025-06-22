@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.Status
+import de.hbch.traewelling.api.models.status.TagType
 import de.hbch.traewelling.logging.Logger
 import de.hbch.traewelling.providers.checkin.CheckInResult
 import de.hbch.traewelling.shared.CheckInViewModel
@@ -193,7 +194,7 @@ private fun SuccessfulCheckInResult(
             StatusDetailsRow(
                 productType = journey.safeProductType,
                 line = journey.line,
-                journeyNumber = journey.journeyNumber,
+                journeyNumber = journey.manualJourneyNumber ?: journey.journeyNumber,
                 kilometers = journey.distance,
                 duration = journey.duration,
                 statusBusiness = checkInResponse.data.status.business,

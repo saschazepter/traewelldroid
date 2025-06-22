@@ -62,6 +62,7 @@ import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.api.models.status.StatusBusiness
 import de.hbch.traewelling.api.models.status.StatusVisibility
+import de.hbch.traewelling.api.models.status.TagType
 import de.hbch.traewelling.api.models.trip.HafasTrainTripStation
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.shared.LoggedInUserViewModel
@@ -230,7 +231,7 @@ fun CheckInCard(
                         duration = status.journey.duration,
                         statusBusiness = status.business,
                         message = status.getStatusBody(),
-                        journeyNumber = status.journey.journeyNumber,
+                        journeyNumber = status.journey.manualJourneyNumber ?: status.journey.journeyNumber,
                         operatorCode = status.journey.operator?.id,
                         lineId = status.journey.lineId,
                         userSelected = userSelected,

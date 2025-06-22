@@ -374,4 +374,6 @@
     <string name="now">Now</string>
     <string name="development_discontinued">The development of Träwelldroid is currently discontinued until further notice.</string>
     <string name="fediverse" translatable="false">Fediverse</string>
+    <string name="tag_journey_number_title">Journey number</string>
+    <string name="tag_journey_number_example" translatable="false">ICE 109</string>
 </resources>
