@@ -68,7 +68,8 @@ android {
             buildConfigField("String", "UNLEASH_URL", "\"https://unleash.traewelldroid.de/api/frontend\"")
             buildConfigField("String", "UNLEASH_KEY", "\"default:production.286fca3aac1497f85ed886b3339c65cdfea9d5f52450524325398461\"")
             buildConfigField("String", "WEBHOOK_URL", "\"https://webhook.traewelldroid.de\"")
-            buildConfigField("String", "UP_FCM_PROXY", "\"https://push.traewelldroid.de/FCM\"")
+            buildConfigField("String", "UP_FCM_PROXY", "\"https://push.traewelldroid.de/wpfcm\"")
+            buildConfigField("String", "FCM_VAPID", "\"TODO\"")
             buildConfigField("Boolean", "ENABLE_ACRA", "true")
             buildConfigField("String", "ACRA_ENDPOINT", "\"https://bugs.traewelldroid.de/report\"")
             buildConfigField("String", "ACRA_USERNAME", "\"59iEVqcvTqy1M9rr\"")
@@ -85,7 +86,8 @@ android {
             buildConfigField("String", "UNLEASH_URL", "\"https://unleash.traewelldroid.de/api/frontend\"")
             buildConfigField("String", "UNLEASH_KEY", "\"default:development.52c54a43ebad9b9a668a69410b57cc19e44e19ab1ee40b4dd3f49b38\"")
             buildConfigField("String", "WEBHOOK_URL", "\"https://webhook.traewelldroid.de\"")
-            buildConfigField("String", "UP_FCM_PROXY", "\"https://push.traewelldroid.de/FCM\"")
+            buildConfigField("String", "UP_FCM_PROXY", "\"https://push.traewelldroid.de/wpfcm\"")
+            buildConfigField("String", "FCM_VAPID", "\"TODO\"")
             buildConfigField("Boolean", "ENABLE_ACRA", "false")
             buildConfigField("String", "ACRA_ENDPOINT", "\"https://bugs.traewelldroid.de/report\"")
             buildConfigField("String", "ACRA_USERNAME", "\"59iEVqcvTqy1M9rr\"")
@@ -179,12 +181,8 @@ dependencies {
     implementation("io.getunleash:unleash-android-proxy-sdk:1.0.0")
 
     // Unified Push
-    implementation("com.github.UnifiedPush:android-connector:2.1.1")
-    "playImplementation"("com.github.UnifiedPush:android-embedded_fcm_distributor:2.2.0") {
-        exclude("com.google.firebase", "firebase-core")
-        exclude("com.google.firebase", "firebase-analytics")
-        exclude("com.google.firebase", "firebase-measurement-connector")
-    }
+    implementation("org.unifiedpush.android:connector:3.0.10")
+    "playImplementation"("org.unifiedpush.android:embedded-fcm-distributor:3.0.0")
 
     // CSV reader
     implementation("com.jsoizo:kotlin-csv-jvm:1.10.0")

@@ -118,7 +118,7 @@ class LoggedInUserViewModel : ViewModel() {
         secureStorage.removeObject(SharedValues.SS_NOTIFICATIONS_ENABLED)
         secureStorage.removeObject(SharedValues.SS_REFRESH_TOKEN)
         secureStorage.removeObject(SharedValues.SS_TRWL_WEBHOOK_ID)
-        UnifiedPush.unregisterApp(context)
+        UnifiedPush.unregister(context)
         context.removeDynamicShortcuts()
         context.startActivity(Intent(context, LoginActivity::class.java))
         (context as? Activity)?.finish()

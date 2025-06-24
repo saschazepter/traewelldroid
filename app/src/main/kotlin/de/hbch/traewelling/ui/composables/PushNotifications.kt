@@ -34,11 +34,9 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import de.hbch.traewelling.R
 import de.hbch.traewelling.theme.LocalFont
-import org.unifiedpush.android.connector.UnifiedPush.getDistributor
+import org.unifiedpush.android.connector.UnifiedPush
 import org.unifiedpush.android.connector.UnifiedPush.getDistributors
-import org.unifiedpush.android.connector.UnifiedPush.registerApp
 import org.unifiedpush.android.connector.UnifiedPush.saveDistributor
-import org.unifiedpush.android.connector.UnifiedPush.unregisterApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +47,9 @@ fun EnablePushNotificationsCard(
     val context = LocalContext.current
     val unifiedPushDistributors = getDistributors(context)
     var upDistributorSelectionVisible by remember { mutableStateOf(false) }
-    var selectedDistributor by remember { mutableStateOf(getDistributor(context)) }
+    var selectedDistributor by remember {
+        mutableStateOf(UnifiedPush.getAckDistributor(context) ?: "")
+    }
 
     if (upDistributorSelectionVisible) {
         ContentDialog(
@@ -66,7 +66,7 @@ fun EnablePushNotificationsCard(
                     distributors = unifiedPushDistributors,
                     distributorSelected = {
                         saveDistributor(context, it)
-                        registerApp(context)
+                        UnifiedPush.register(context)
                         upDistributorSelectionVisible = false
                         selectedDistributor = it
                     }
@@ -91,13 +91,13 @@ fun EnablePushNotificationsCard(
                             if (unifiedPushDistributors.size == 1) {
                                 val distributor = unifiedPushDistributors[0]
                                 saveDistributor(context, distributor)
-                                registerApp(context)
+                                UnifiedPush.register(context)
                                 selectedDistributor = distributor
                             } else {
                                 upDistributorSelectionVisible = true
                             }
                         } else {
-                            unregisterApp(context)
+                            UnifiedPush.unregister(context)
                             selectedDistributor = ""
                         }
                     }
