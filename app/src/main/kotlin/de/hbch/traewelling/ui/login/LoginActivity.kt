@@ -4,8 +4,10 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Base64
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -186,6 +188,19 @@ class LoginActivity : ComponentActivity() {
                     redirectToMainActivity()
                 }
             )
+        } else {
+            val toast = Toast.makeText(this,
+                getString(R.string.push_registration_no_endpoint_error), Toast.LENGTH_SHORT)
+            toast.show()
+            if (Build.VERSION.SDK_INT >= 30) {
+                toast.addCallback(object : Toast.Callback() {
+                    override fun onToastHidden() {
+                        redirectToMainActivity()
+                    }
+                })
+            } else {
+                redirectToMainActivity()
+            }
         }
     }
 
