@@ -5,8 +5,8 @@ plugins {
     id "androidx.navigation.safeargs.kotlin"
     id "com.mikepenz.aboutlibraries.plugin"
     id "com.google.gms.google-services"
-    id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.20'
-    id "org.jetbrains.kotlin.plugin.compose" version "2.0.0"
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.2.0'
+    id "org.jetbrains.kotlin.plugin.compose" version "2.2.0"
 }
 
 aboutLibraries {
@@ -98,9 +98,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     namespace "de.hbch.traewelling"
     flavorDimensions = [ "libs" ]
     productFlavors {
@@ -132,16 +129,16 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling:$composeVersion"
     implementation 'com.google.accompanist:accompanist-themeadapter-material3:0.36.0'
     implementation 'com.google.accompanist:accompanist-permissions:0.37.2'
-    implementation "androidx.compose.material3:material3:1.3.1"
+    implementation "androidx.compose.material3:material3:1.3.2"
     implementation "androidx.activity:activity-compose:1.10.1"
     implementation "androidx.constraintlayout:constraintlayout-compose:1.1.1"
 
-    implementation "androidx.core:core-ktx:1.15.0"
-    implementation "androidx.appcompat:appcompat:1.7.0"
+    implementation "androidx.core:core-ktx:1.16.0"
+    implementation "androidx.appcompat:appcompat:1.7.1"
     implementation "com.google.android.material:material:1.12.0"
     implementation "androidx.constraintlayout:constraintlayout:2.2.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.7"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.9.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1"
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "androidx.browser:browser:1.8.0"
     implementation "androidx.core:core-splashscreen:1.0.1"
@@ -162,7 +159,7 @@ dependencies {
     implementation "com.github.jcloquell:android-secure-storage:0.1.3"
 
     // Navigation Component
-    implementation "androidx.navigation:navigation-compose:2.8.9"
+    implementation "androidx.navigation:navigation-compose:2.9.0"
 
     // Retrofit
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
@@ -189,7 +186,7 @@ dependencies {
     }
 
     // CSV reader
-    implementation 'com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0'
+    implementation 'com.jsoizo:kotlin-csv-jvm:1.10.0'
 
     // Reviews
     playImplementation 'com.google.android.play:review:2.0.2'
