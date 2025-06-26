@@ -130,7 +130,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
     implementation("com.google.accompanist:accompanist-themeadapter-material3:0.36.0")
-    implementation("com.google.accompanist:accompanist-permissions:0.37.2")
+    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
     implementation("androidx.compose.material3:material3:1.3.2")
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
