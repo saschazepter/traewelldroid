@@ -157,7 +157,7 @@ dependencies {
     implementation("org.osmdroid:osmdroid-android:6.1.20")
 
     // Secure Storage
-    implementation("com.google.code.gson:gson:2.12.1")
+    implementation("com.google.code.gson:gson:2.13.1")
     implementation("com.github.jcloquell:android-secure-storage:0.1.3")
 
     // Navigation Component
