@@ -321,7 +321,7 @@ private fun StatusLikes(
     val likeUsers = remember { mutableStateListOf<User>() }
 
     LaunchedEffect(cardExpanded) {
-        if (cardExpanded && likeUsers.size == 0) {
+        if (cardExpanded && likeUsers.isEmpty()) {
             statusDetailViewModel.getLikesForStatus(
                 statusId,
                 {
@@ -375,7 +375,7 @@ private fun StatusLikes(
                 if (isLoading) {
                     DataLoading()
                 } else {
-                    if (likeUsers.size > 0) {
+                    if (likeUsers.isNotEmpty()) {
                         Column(
                             modifier = Modifier.fillMaxWidth()
                         ) {

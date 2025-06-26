@@ -398,11 +398,11 @@ private fun UserCardPreview() {
         false,
         null,
         null,
-        false,
-        false,
-        false,
-        null,
-        false
+        following = false,
+        followRequestPending = false,
+        muted = false,
+        defaultStatusVisibility = null,
+        followedBy = false
     )
     val user2 = User(
         1,
@@ -416,11 +416,11 @@ private fun UserCardPreview() {
         true,
         null,
         null,
-        false,
-        false,
-        false,
-        null,
-        true
+        following = false,
+        followRequestPending = false,
+        muted = false,
+        defaultStatusVisibility = null,
+        followedBy = true
     )
 
     MainTheme {

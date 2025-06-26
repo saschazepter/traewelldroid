@@ -11,7 +11,6 @@ data class Tag(
     val safeKey get() = key ?: TagType.UNKNOWN
 }
 
-@Suppress("unused")
 enum class TagType {
     @SerializedName("trwl:travel_class")
     TRAVEL_CLASS {

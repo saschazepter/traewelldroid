@@ -84,7 +84,7 @@ fun Dashboard(
     var displayDiscontinuityNotice by remember { mutableStateOf(secureStorage.getObject(SharedValues.SS_DISPLAY_DISCONTINUITY_NOTICE, Boolean::class.java) ?: true) }
 
     checkInListState.OnBottomReached {
-        if (dashboardViewModel.checkIns.size > 0) {
+        if (dashboardViewModel.checkIns.isNotEmpty()) {
             dashboardViewModel.loadCheckIns(++currentPage)
         } else {
             coroutineScope.launch {

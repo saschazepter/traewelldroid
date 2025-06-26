@@ -98,7 +98,7 @@ fun getLastDestination(trip: HafasTrip): String {
 
 fun getSwitzerlandLineName(productName: String, lineId: String): Pair<AnnotatedString?, Map<String, InlineTextContent>>? {
     // Switzerland lines start with 85 in the second block of line id
-    val match = "\\w+-85\\w*-(\\w+)\$".toRegex().find(lineId)
+    val match = "\\w+-85\\w*-(\\w+)$".toRegex().find(lineId)
     if (match != null) {
         val inlineTextContent = mutableMapOf<String, InlineTextContent>()
         val builder = AnnotatedString.Builder()

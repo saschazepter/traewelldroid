@@ -34,6 +34,7 @@ import net.openid.appauth.AuthorizationService
 import net.openid.appauth.ResponseTypeValues
 import java.security.MessageDigest
 import java.security.SecureRandom
+import androidx.core.net.toUri
 
 class LoginActivity : ComponentActivity() {
 
@@ -98,7 +99,7 @@ class LoginActivity : ComponentActivity() {
             SharedValues.AUTH_SERVICE_CONFIG,
             BuildConfig.OAUTH_CLIENT_ID,
             ResponseTypeValues.CODE,
-            Uri.parse(BuildConfig.OAUTH_REDIRECT_URL)
+            BuildConfig.OAUTH_REDIRECT_URL.toUri()
         )
         builder
             .setCodeVerifier(
