@@ -194,7 +194,7 @@ dependencies {
     "playImplementation"("com.google.android.play:review:2.0.2")
     "playImplementation"("com.google.android.play:review-ktx:2.0.2")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
     val acraVersion = "5.12.0"
     "playImplementation"("ch.acra:acra-http:$acraVersion")
