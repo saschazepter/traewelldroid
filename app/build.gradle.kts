@@ -12,7 +12,8 @@ plugins {
 }
 
 aboutLibraries {
-    excludeFields += "generated"
+    export.excludeFields.add("generated")
+    collect.configPath.set(rootProject.file("config"))
 }
 
 android {
@@ -115,10 +116,6 @@ android {
     }
 }
 
-aboutLibraries {
-    configPath = "config"
-}
-
 dependencies {
     // Jetpack Compose
     val composeVersion = "1.7.8"
@@ -174,7 +171,7 @@ dependencies {
     implementation("de.c1710:filemojicompat-autoinit:3.2.7")
 
     // OSS licenses
-    implementation("com.mikepenz:aboutlibraries-compose:11.6.3")
+    implementation("com.mikepenz:aboutlibraries-compose:12.2.3")
 
     // Feature flags
     implementation("io.getunleash:unleash-android-proxy-sdk:1.0.0")
