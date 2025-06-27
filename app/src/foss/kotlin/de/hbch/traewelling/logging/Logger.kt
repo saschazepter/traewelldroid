@@ -28,11 +28,13 @@ class Logger private constructor(): ILogger {
     }
 
     override fun initialize(application: Application) {
-        application.initAcra {
-            buildConfigClass = BuildConfig::class.java
-            mailSender {
-                mailTo = BuildConfig.ACRA_REPORT_MAIL
-                subject = "[Bug report]"
+        if (BuildConfig.ENABLE_ACRA) {
+            application.initAcra {
+                buildConfigClass = BuildConfig::class.java
+                mailSender {
+                    mailTo = BuildConfig.ACRA_REPORT_MAIL
+                    subject = "[Bug report]"
+                }
             }
         }
     }
