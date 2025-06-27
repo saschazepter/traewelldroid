@@ -61,6 +61,7 @@ fun EditProfile(
 
     var username by rememberSaveable { mutableStateOf("") }
     var displayName by rememberSaveable { mutableStateOf("") }
+    var bio by rememberSaveable { mutableStateOf("") }
     var privateProfile by rememberSaveable { mutableStateOf(false) }
     var collectPoints by rememberSaveable { mutableStateOf(false) }
     var allowLikes by rememberSaveable { mutableStateOf(false) }
@@ -79,6 +80,7 @@ fun EditProfile(
         if (userSettings != null) {
             username = userSettings!!.username
             displayName = userSettings!!.displayName
+            bio = userSettings!!.bio
             privateProfile = userSettings!!.privateProfile
             collectPoints = userSettings!!.pointsEnabled
             allowLikes = userSettings!!.likesEnabled
@@ -144,6 +146,29 @@ fun EditProfile(
                 )
             },
             isError = formErrorString?.contains("displayName") == true
+        )
+        OutlinedTextField(
+            value = bio,
+            onValueChange = { bio = it },
+            modifier = formModifier,
+            singleLine = false,
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_quote),
+                    contentDescription = null
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.bio)
+                )
+            },
+            label = {
+                Text(
+                    text = stringResource(id = R.string.bio)
+                )
+            },
+            isError = formErrorString?.contains("bio") == true
         )
         SwitchWithIconAndText(
             modifier = formModifier,
@@ -412,6 +437,7 @@ fun EditProfile(
                         SaveUserSettings(
                             username,
                             displayName,
+                            bio,
                             privateProfile,
                             defaultStatusVisibility.ordinal,
                             hideDays,

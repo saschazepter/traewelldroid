@@ -377,4 +377,5 @@
     <string name="tag_journey_number_title">Journey number</string>
     <string name="tag_journey_number_example" translatable="false">ICE 109</string>
     <string name="push_registration_no_endpoint_error">Failed to register for push notifications.</string>
+    <string name="bio">Bio</string>
 </resources>
