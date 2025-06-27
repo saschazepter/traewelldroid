@@ -44,6 +44,7 @@ import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.OutlinedButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.SwitchWithIconAndText
 import kotlinx.coroutines.launch
+import java.util.TimeZone
 
 @Composable
 fun EditProfile(
@@ -61,6 +62,8 @@ fun EditProfile(
 
     var username by rememberSaveable { mutableStateOf("") }
     var displayName by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var timezone by rememberSaveable { mutableStateOf("") }
     var bio by rememberSaveable { mutableStateOf("") }
     var privateProfile by rememberSaveable { mutableStateOf(false) }
     var collectPoints by rememberSaveable { mutableStateOf(false) }
@@ -75,11 +78,17 @@ fun EditProfile(
     var allowedPersonsToCheckInSelectionVisible by remember { mutableStateOf(false) }
     var isSaving by remember { mutableStateOf(false) }
     var formErrorString by remember { mutableStateOf<String?>(null) }
+    var timezoneSelectionVisible by remember { mutableStateOf(false) }
+    val timezones = remember {
+        TimeZone.getAvailableIDs()
+    }
 
     LaunchedEffect(userSettings) {
         if (userSettings != null) {
             username = userSettings!!.username
             displayName = userSettings!!.displayName
+            email = userSettings!!.email
+            timezone = userSettings!!.timezone
             bio = userSettings!!.bio
             privateProfile = userSettings!!.privateProfile
             collectPoints = userSettings!!.pointsEnabled
@@ -147,6 +156,69 @@ fun EditProfile(
             },
             isError = formErrorString?.contains("displayName") == true
         )
+        OutlinedTextField(
+            value = email,
+            onValueChange = { displayName = it },
+            modifier = formModifier,
+            singleLine = true,
+            maxLines = 1,
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_email),
+                    contentDescription = null
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.email)
+                )
+            },
+            label = {
+                Text(
+                    text = stringResource(id = R.string.email)
+                )
+            },
+            isError = formErrorString?.contains("email") == true
+        )
+        Box {
+            val timezoneInteractionSource = remember { MutableInteractionSource() }
+            val timezoneFieldPressed by timezoneInteractionSource.collectIsPressedAsState()
+            if (timezoneFieldPressed) {
+                timezoneSelectionVisible = true
+            }
+            OutlinedTextField(
+                value = timezone,
+                onValueChange = { },
+                modifier = formModifier.clickable(timezoneInteractionSource, null) { },
+                singleLine = true,
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_timezone),
+                        contentDescription = null
+                    )
+                },
+                label = {
+                    Text(text = stringResource(id = R.string.time_zone))
+                },
+                isError = formErrorString?.contains("timezone") == true,
+                readOnly = true,
+                interactionSource = timezoneInteractionSource
+            )
+            DropdownMenu(
+                expanded = timezoneSelectionVisible,
+                onDismissRequest = { timezoneSelectionVisible = false },
+            ) {
+                for (zone in timezones) {
+                    DropdownMenuItem(
+                        text = { Text(text = zone) },
+                        onClick = {
+                            timezone = zone
+                            timezoneSelectionVisible = false
+                        },
+                    )
+                }
+            }
+        }
         OutlinedTextField(
             value = bio,
             onValueChange = { bio = it },
@@ -444,7 +516,9 @@ fun EditProfile(
                             defaultMastodonVisibility.ordinal,
                             allowedPersonsToCheckIn,
                             allowLikes,
-                            collectPoints
+                            collectPoints,
+                            email,
+                            timezone
                         )
                     )
                     if (response != null) {

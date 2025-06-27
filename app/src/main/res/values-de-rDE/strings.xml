@@ -347,4 +347,5 @@
     <string name="development_discontinued">Die Entwicklung von Träwelldroid ist aktuell bis auf weiteres pausiert.</string>
     <string name="tag_journey_number_title">Fahrtnummer</string>
     <string name="push_registration_no_endpoint_error">Konnte nicht für Push-Benachrichtigungen registrieren</string>
+    <string name="time_zone">Zeitzone</string>
 </resources>

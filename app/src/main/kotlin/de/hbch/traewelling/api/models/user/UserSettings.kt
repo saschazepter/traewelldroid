@@ -13,6 +13,7 @@ data class UserSettings(
     val defaultStatusVisibility: StatusVisibility,
     val privacyHideDays: Int,
     val email: String,
+    val timezone: String,
     @SerializedName("mastodon") val mastodonUrl: String?,
     val mastodonVisibility: StatusVisibility?,
     @SerializedName("friendCheckin") val allowedPersonsToCheckIn: AllowedPersonsToCheckIn,
@@ -30,5 +31,7 @@ data class SaveUserSettings(
     val mastodonVisibility: Int,
     @SerializedName("friendCheckin") val allowedPersonsToCheckIn: AllowedPersonsToCheckIn,
     val likesEnabled: Boolean,
-    val pointsEnabled: Boolean
+    val pointsEnabled: Boolean,
+    val email: String,
+    val timezone: String,
 )
