@@ -69,6 +69,12 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        authorizationService.dispose()
+    }
+
     private fun initAuthInitial() {
         authorizationService = AuthorizationService(application)
 
