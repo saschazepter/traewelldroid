@@ -25,8 +25,8 @@ import retrofit2.Response
 import java.time.ZonedDateTime
 
 class CheckInViewModel : ViewModel() {
-    val trwlProvider: TrwlCheckInProvider
-    val travelynxProvider: TravelynxCheckInProvider
+    val trwlProvider: TrwlCheckInProvider = TrwlCheckInProvider()
+    val travelynxProvider: TravelynxCheckInProvider = TravelynxCheckInProvider()
 
     var lineName: String = ""
     var lineId: String? = null
@@ -56,8 +56,6 @@ class CheckInViewModel : ViewModel() {
     var coTravellers = MutableLiveData(listOf<TrustedUser>())
 
     init {
-        trwlProvider = TrwlCheckInProvider()
-        travelynxProvider = TravelynxCheckInProvider()
         reset()
     }
 

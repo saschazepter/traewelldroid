@@ -12,6 +12,7 @@ data class Journey(
     val category: ProductType?,
     @SerializedName("lineName") val line: String,
     val journeyNumber: String?,
+    val manualJourneyNumber: String?,
     val distance: Int,
     val points: Int,
     val duration: Int,

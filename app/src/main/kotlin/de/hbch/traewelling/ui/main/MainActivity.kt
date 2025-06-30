@@ -123,7 +123,7 @@ class MainActivity : ComponentActivity()
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onUnauthorizedEvent(@Suppress("UNUSED_PARAMETER") unauthorizedEvent: UnauthorizedEvent) {
+    fun onUnauthorizedEvent(unauthorizedEvent: UnauthorizedEvent) {
         loggedInUserViewModel.resetApplication(this)
     }
 
