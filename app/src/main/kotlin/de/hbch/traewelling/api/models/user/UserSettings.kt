@@ -7,11 +7,13 @@ import de.hbch.traewelling.api.models.status.StatusVisibility
 data class UserSettings(
     val username: String,
     val displayName: String,
+    val bio: String,
     val profilePicture: String,
     val privateProfile: Boolean,
     val defaultStatusVisibility: StatusVisibility,
     val privacyHideDays: Int,
     val email: String,
+    val timezone: String,
     @SerializedName("mastodon") val mastodonUrl: String?,
     val mastodonVisibility: StatusVisibility?,
     @SerializedName("friendCheckin") val allowedPersonsToCheckIn: AllowedPersonsToCheckIn,
@@ -22,11 +24,14 @@ data class UserSettings(
 data class SaveUserSettings(
     val username: String,
     val displayName: String,
+    val bio: String,
     val privateProfile: Boolean,
     val defaultStatusVisibility: Int,
     val privacyHideDays: Int?,
     val mastodonVisibility: Int,
     @SerializedName("friendCheckin") val allowedPersonsToCheckIn: AllowedPersonsToCheckIn,
     val likesEnabled: Boolean,
-    val pointsEnabled: Boolean
+    val pointsEnabled: Boolean,
+    val email: String,
+    val timezone: String,
 )

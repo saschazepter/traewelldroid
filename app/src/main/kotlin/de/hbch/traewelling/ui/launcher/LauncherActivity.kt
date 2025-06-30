@@ -44,7 +44,7 @@ class LauncherActivity : AppCompatActivity() {
     private fun createNotificationChannels() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager?
         if (notificationManager != null) {
-            val channels = NotificationChannelType.values().map { channel ->
+            val channels = NotificationChannelType.entries.map { channel ->
                 val channelName = getString(channel.title)
                 val channelDescription = getString(channel.description)
 

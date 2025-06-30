@@ -209,6 +209,14 @@ private fun UserCardContent(
                         text = "@${user.username}"
                     )
                 }
+                if (user.bio != null) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(style = LocalFont.current.bodyMedium, text = user.bio)
+                    }
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -398,11 +406,12 @@ private fun UserCardPreview() {
         false,
         null,
         null,
-        false,
-        false,
-        false,
-        null,
-        false
+        following = false,
+        followRequestPending = false,
+        muted = false,
+        defaultStatusVisibility = null,
+        followedBy = false,
+        bio = "hello world, meow"
     )
     val user2 = User(
         1,
@@ -416,11 +425,12 @@ private fun UserCardPreview() {
         true,
         null,
         null,
-        false,
-        false,
-        false,
-        null,
-        true
+        following = false,
+        followRequestPending = false,
+        muted = false,
+        defaultStatusVisibility = null,
+        followedBy = true,
+        bio = null,
     )
 
     MainTheme {

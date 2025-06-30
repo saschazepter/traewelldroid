@@ -2,6 +2,7 @@ package de.hbch.traewelling.shared
 
 import android.net.Uri
 import net.openid.appauth.AuthorizationServiceConfiguration
+import androidx.core.net.toUri
 
 object SharedValues {
     const val SS_JWT = "JWT"
@@ -53,7 +54,7 @@ object SharedValues {
     const val URL_TOKEN_EXCHANGE = "https://traewelling.de/oauth/token"
 
     val AUTH_SERVICE_CONFIG = AuthorizationServiceConfiguration(
-        Uri.parse(URL_AUTHORIZATION),
-        Uri.parse(URL_TOKEN_EXCHANGE)
+        URL_AUTHORIZATION.toUri(),
+        URL_TOKEN_EXCHANGE.toUri()
     )
 }

@@ -31,15 +31,17 @@ class Logger private constructor(): ILogger {
     }
 
     override fun initialize(application: Application) {
-        application.initAcra {
-            buildConfigClass = BuildConfig::class.java
-            reportFormat = StringFormat.JSON
+        if (BuildConfig.ENABLE_ACRA) {
+            application.initAcra {
+                buildConfigClass = BuildConfig::class.java
+                reportFormat = StringFormat.JSON
 
-            httpSender {
-                uri = BuildConfig.ACRA_ENDPOINT
-                basicAuthLogin = BuildConfig.ACRA_USERNAME
-                basicAuthPassword = BuildConfig.ACRA_PASSWORD
-                httpMethod = HttpSender.Method.POST
+                httpSender {
+                    uri = BuildConfig.ACRA_ENDPOINT
+                    basicAuthLogin = BuildConfig.ACRA_USERNAME
+                    basicAuthPassword = BuildConfig.ACRA_PASSWORD
+                    httpMethod = HttpSender.Method.POST
+                }
             }
         }
     }

@@ -395,7 +395,7 @@ private fun HashtagSettings(
 ) {
     val context = LocalContext.current
     var hashtagText by remember { mutableStateOf("") }
-    @Suppress("CanBeVal") var secureStorage: SecureStorage?
+    var secureStorage: SecureStorage?
     var saveHashtagAction: () -> Unit = { }
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
