@@ -3,6 +3,8 @@ package de.hbch.traewelling.navigation
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.ShortcutManager
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -12,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -137,6 +140,15 @@ fun TraewelldroidNavHost(
     NavHost(
         navController = navController,
         startDestination = Dashboard,
+        popExitTransition = {
+            scaleOut(
+                targetScale = 0.9f,
+                transformOrigin = TransformOrigin(pivotFractionX = 0.5f, pivotFractionY = 0.5f)
+            )
+        },
+        popEnterTransition = {
+            EnterTransition.None
+        },
         modifier = modifier
     ) {
         composable<Dashboard> {

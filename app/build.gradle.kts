@@ -20,7 +20,7 @@ android {
     val packageName = "de.hbch.traewelling"
     val name = "2.19.3"
     val code = 197
-    compileSdk = 35
+    compileSdk = 36
 
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId = packageName
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = code
         versionName = name
 
@@ -173,7 +173,7 @@ dependencies {
     implementation("de.c1710:filemojicompat-autoinit:3.2.7")
 
     // OSS licenses
-    implementation("com.mikepenz:aboutlibraries-compose:12.2.3")
+    implementation("com.mikepenz:aboutlibraries-compose:12.2.4")
 
     // Feature flags
     implementation("io.getunleash:unleash-android-proxy-sdk:1.0.0")
@@ -193,7 +193,7 @@ dependencies {
     "playImplementation"("com.google.android.play:review:2.0.2")
     "playImplementation"("com.google.android.play:review-ktx:2.0.2")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
     val acraVersion = "5.12.0"
     "playImplementation"("ch.acra:acra-http:$acraVersion")
