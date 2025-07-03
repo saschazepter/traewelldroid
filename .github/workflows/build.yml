@@ -89,13 +89,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: foss-release-apk
-          path: app/build/outputs/apk/foss/release/app-foss-release.apk
+          path: ${{ runner.temp }}/app-foss-release.apk
 
       - name: Upload Play Release APK
         uses: actions/upload-artifact@v4
         with:
           name: play-release-apk
-          path: app/build/outputs/apk/play/release/app-play-release.apk
+          path: ${{ runner.temp }}/app-play-release.apk
 
       - name: Upload GitHub Release Assets
         uses: softprops/action-gh-release@v2
@@ -113,4 +113,3 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName: de.hbch.traewelling
           releaseFiles: app/build/outputs/bundle/playRelease/app-play-release.aab
-          debugSymbols: app/build/intermediates/merged_native_libs/playRelease/out/lib
