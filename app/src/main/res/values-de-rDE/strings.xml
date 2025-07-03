@@ -346,7 +346,6 @@
     <string name="trwl_api_error">Aktuell gibt es vermehrt Probleme bei Träwelling (traewelling.de), daher ist die Funktionalität eingeschränkt. Bitte prüfe die Träwelling-Webseite.</string>
     <string name="no_map_for_check_in">Für diesen Check-In steht moment leider keine Kartenansicht zur Verfügung.</string>
     <string name="now">Jetzt</string>
-    <string name="development_discontinued">Die Entwicklung von Träwelldroid ist aktuell bis auf weiteres pausiert.</string>
     <string name="push_registration_no_endpoint_error">Konnte nicht für Push-Benachrichtigungen registrieren</string>
     <string name="time_zone">Zeitzone</string>
 </resources>

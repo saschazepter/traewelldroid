@@ -1,8 +1,5 @@
 # Träwelldroid
 
-> [!IMPORTANT]
-> Currently the development of this app is discontinued until further notice.
-
 This is a community app for the open source project
 [Träwelling](https://github.com/Traewelling/traewelling).
 
@@ -13,7 +10,6 @@ This is a community app for the open source project
 
 - [traewelldroid.de](https://traewelldroid.de)
 - <a href="https://zug.network/@traewelldroid" rel="nofollow me">Mastodon</a>
-- [Twitter](https://twitter.com/@traewelldroid)
 
 ## Download the app
 

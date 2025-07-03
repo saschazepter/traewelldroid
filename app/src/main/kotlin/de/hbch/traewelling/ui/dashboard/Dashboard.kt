@@ -14,13 +14,11 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -32,12 +30,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.shared.FeatureFlags
 import de.hbch.traewelling.shared.LoggedInUserViewModel
-import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.getBTModern
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
@@ -61,8 +57,6 @@ fun Dashboard(
     statusDeletedAction: () -> Unit = { },
     statusEditAction: (Status) -> Unit = { }
 ) {
-    val context = LocalContext.current
-    val secureStorage = remember { SecureStorage(context) }
     val dashboardViewModel: DashboardFragmentViewModel = viewModel()
     val checkInCardViewModel : CheckInCardViewModel = viewModel()
     val refreshing by dashboardViewModel.isRefreshing.observeAsState(false)
@@ -81,7 +75,6 @@ fun Dashboard(
     val featureFlags = remember { FeatureFlags.getInstance() }
     val wrappedActive by featureFlags.wrappedActive.observeAsState(false)
     val trwlDown by featureFlags.trwlDown.observeAsState(false)
-    var displayDiscontinuityNotice by remember { mutableStateOf(secureStorage.getObject(SharedValues.SS_DISPLAY_DISCONTINUITY_NOTICE, Boolean::class.java) ?: true) }
 
     checkInListState.OnBottomReached {
         if (dashboardViewModel.checkIns.isNotEmpty()) {
@@ -116,72 +109,6 @@ fun Dashboard(
                         userSelectedAction(it.username, it.privateProfile, it.following)
                     }
                 )
-            }
-
-            if (displayDiscontinuityNotice) {
-                item {
-                    ElevatedCard(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Box {
-                            IconButton(
-                                modifier = Modifier.align(Alignment.TopEnd),
-                                onClick = {
-                                    secureStorage.storeObject(SharedValues.SS_DISPLAY_DISCONTINUITY_NOTICE, false)
-                                    displayDiscontinuityNotice = false
-                                }
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_close),
-                                    contentDescription = null
-                                )
-                            }
-                            Column(
-                                modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Column(
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    val text = stringResource(R.string.notice)
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_error),
-                                            contentDescription = null,
-                                            tint = Color.Red
-                                        )
-                                        Text(
-                                            text = text,
-                                            fontFamily = getBTModern(text),
-                                            style = LocalFont.current.headlineSmall,
-                                            color = Color.Red
-                                        )
-                                    }
-                                    Text(
-                                        text = stringResource(R.string.development_discontinued),
-                                        style = LocalFont.current.bodyMedium
-                                    )
-                                }
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End
-                                ) {
-                                    ButtonWithIconAndText(
-                                        stringId = R.string.fediverse,
-                                        drawableId = R.drawable.ic_arrow_right,
-                                        onClick = {
-                                            context.openLink("https://zug.network/@traewelldroid")
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
             }
 
             if (trwlDown) {
