@@ -14,6 +14,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -210,11 +212,19 @@ private fun UserCardContent(
                     )
                 }
                 if (user.bio != null) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    OutlinedCard(
+                        modifier = Modifier.padding(8.dp)
                     ) {
-                        Text(style = LocalFont.current.bodyMedium, text = user.bio)
+                        Column(
+                            modifier = Modifier.padding(8.dp).fillMaxWidth()
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                style = LocalFont.current.bodyMedium,
+                                text = user.bio,
+                                textAlign = TextAlign.Justify
+                            )
+                        }
                     }
                 }
                 Row(
