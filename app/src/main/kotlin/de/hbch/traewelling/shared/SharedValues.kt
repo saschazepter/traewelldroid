@@ -1,6 +1,5 @@
 package de.hbch.traewelling.shared
 
-import android.net.Uri
 import net.openid.appauth.AuthorizationServiceConfiguration
 import androidx.core.net.toUri
 
@@ -22,7 +21,6 @@ object SharedValues {
     const val SS_DISPLAY_DIVERGENT_STOP = "DISPLAY_DIVERGENT_STOP"
     const val SS_USE_SYSTEM_FONT = "USE_SYSTEM_FONT"
     const val SS_WIDGET_STATIONS_STATE = "WIDGET_STATIONS_STATE"
-    const val SS_DISPLAY_DISCONTINUITY_NOTICE = "DISPLAY_DISCONTINUITY_NOTICE"
 
     var TRAVELYNX_TOKEN = ""
 
