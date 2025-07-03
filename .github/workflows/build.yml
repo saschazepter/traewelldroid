@@ -113,5 +113,4 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName: de.hbch.traewelling
           releaseFiles: app/build/outputs/bundle/playRelease/app-play-release.aab
-          mappingFile: app/build/outputs/mapping/playRelease/mapping.txt
           debugSymbols: app/build/intermediates/merged_native_libs/playRelease/out/lib

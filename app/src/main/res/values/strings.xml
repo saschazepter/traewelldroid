@@ -376,8 +376,6 @@
     <string name="traewelling_de" translatable="false">traewelling.de</string>
     <string name="no_map_for_check_in">Currently there is no map view available for this check-in.</string>
     <string name="now">Now</string>
-    <string name="development_discontinued">The development of Träwelldroid is currently discontinued until further notice.</string>
-    <string name="fediverse" translatable="false">Fediverse</string>
     <string name="push_registration_no_endpoint_error">Failed to register for push notifications.</string>
     <string name="bio">Bio</string>
     <string name="email">E-Mail</string>
