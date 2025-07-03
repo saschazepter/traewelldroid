@@ -183,6 +183,8 @@
     <string name="tag_staff_role_example">Tf, Zf, Gastro, …</string>
     <string name="tag_passenger_rights_title">Fahrgastrechte</string>
     <string name="tag_passenger_rights_example">z.B. Beantragt, Ausgezahlt, Fall-ID, …</string>
+    <string name="tag_price_title">Preis</string>
+    <string name="tag_journey_number_title">Fahrtnummer</string>
     <string name="add_tag">Tag hinzufügen</string>
     <string name="edit_tag">Tag bearbeiten</string>
     <string name="select_tag_type">Tagart auswählen</string>
@@ -345,7 +347,6 @@
     <string name="no_map_for_check_in">Für diesen Check-In steht moment leider keine Kartenansicht zur Verfügung.</string>
     <string name="now">Jetzt</string>
     <string name="development_discontinued">Die Entwicklung von Träwelldroid ist aktuell bis auf weiteres pausiert.</string>
-    <string name="tag_journey_number_title">Fahrtnummer</string>
     <string name="push_registration_no_endpoint_error">Konnte nicht für Push-Benachrichtigungen registrieren</string>
     <string name="time_zone">Zeitzone</string>
 </resources>
