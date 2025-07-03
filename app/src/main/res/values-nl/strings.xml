@@ -83,4 +83,7 @@
     <string name="nobody">Niemand</string>
     <string name="friends">Vrienden (volgden elkaar)</string>
     <string name="remove">Verwijderen</string>
+    <string name="product_type_tram">Tram</string>
+    <string name="status_delete_success">Je check-in is succesvol verwijderd.</string>
+    <string name="business">Zakelijk</string>
 </resources>
