@@ -1,6 +1,5 @@
 package de.hbch.traewelling.shared
 
-import android.net.Uri
 import net.openid.appauth.AuthorizationServiceConfiguration
 import androidx.core.net.toUri
 
