@@ -348,4 +348,6 @@
     <string name="now">Jetzt</string>
     <string name="push_registration_no_endpoint_error">Konnte nicht für Push-Benachrichtigungen registrieren</string>
     <string name="time_zone">Zeitzone</string>
+    <string name="bio">Bio</string>
+    <string name="email">E-Mail-Adresse</string>
 </resources>
