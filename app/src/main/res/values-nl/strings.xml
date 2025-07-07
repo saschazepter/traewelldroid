@@ -86,4 +86,23 @@
     <string name="product_type_tram">Tram</string>
     <string name="status_delete_success">Je check-in is succesvol verwijderd.</string>
     <string name="business">Zakelijk</string>
+    <string name="product_type_regional_express">Sneltrein</string>
+    <string name="title_statistics">Statistieken</string>
+    <string name="check_in_count">Aantal check ins</string>
+    <string name="title_also_check_in">Ook inchecken</string>
+    <string name="reset_selection">Keuze terugzetten</string>
+    <string name="tag_seat_example">bijv. 142</string>
+    <string name="tag_travel_class_title">Klassen</string>
+    <string name="tag_ticket_title">Kaart</string>
+    <string name="tag_coach_title">Wagon</string>
+    <string name="operators">Vervoerders</string>
+    <string name="tag_seat_title">Plaats</string>
+    <string name="status_details">Statusdetails</string>
+    <string name="product_type_plane">Vliegtuig</string>
+    <string name="title_select_event">Evenement kiezen</string>
+    <string name="tag_ticket_example">bijv. Dagkaart, …</string>
+    <string name="product_type_taxi">Taxi</string>
+    <string name="tag_coach_example">bijv. 7</string>
+    <string name="tag_price_title">Prijs</string>&gt;
+    <string name="tag_travel_class_example">bijv. 1e klas, 2e klas, Business, …</string>
 </resources>
