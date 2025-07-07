@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="ok">Ok</string>
     <string name="abort">Avbryt</string>
     <string name="input_username">Brukernavn</string>
@@ -270,4 +270,22 @@
     <string name="wrapped_your_top_destinations">Disse stedene har du besøkt oftest…</string>
     <string name="wrapped_favorite_lines">Dine favorittlinjer! 🤗</string>
     <string name="wrapped_thank_you_description">… for å bruke Träwelldroid! God fornøyelse på dine fremtidige reiser og la oss starte et flott år %1$d sammen! 🚀</string>
+    <string name="edit_tag">Rediger tagg</string>
+    <string name="data_loading" tools:ignore="TypographyEllipsis">Henter data…</string>
+    <string name="title_share">Del</string>
+    <string name="add_tag">Tilsett tagg</string>
+    <string name="share_as_image">Del som bilde</string>
+    <string name="notice">Henvisning</string>
+    <string name="trwl_api_error">Det finnes økt tjenesteproblemer hos Träwelling (traewelling.de). Vennligst sjekk Träwelling-nettstedet.</string>
+    <string name="all_tags_already_added">Alle tagger har allerede blitt tilsettet. Du kan redigere en tagg hvis du velger det ut fra oversiktet.</string>
+    <string name="now">Nå</string>
+    <string name="no_map_for_check_in">Det er ikke mulig å vise kortsynet til denne innsjekkingen akkurat nå.</string>
+    <string name="time_zone">Tidssone</string>
+    <string name="email">E-post</string>
+    <string name="tag_journey_number_title">Turnummer</string>
+    <string name="tag_price_title">Pris av billetten</string>&gt;
+    <string name="select_tag_type">Velg taggtype</string>
+    <string name="share_tags_on_image">Vis tagger på bildet</string>
+    <string name="use_system_font">Bruk systemskrift (trenger å starte på nytt)</string>
+    <string name="timetable_api_error">Tjenesten som tilfører ruteplandata kunne ikke nåes eller svarer ikke. Vennligst prøv igjen senere.</string>
 </resources>
