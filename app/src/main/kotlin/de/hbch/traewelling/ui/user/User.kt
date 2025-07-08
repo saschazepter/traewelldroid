@@ -211,7 +211,7 @@ private fun UserCardContent(
                         text = "@${user.username}"
                     )
                 }
-                if (user.bio != null) {
+                if (user.bio != null && user.bio.isNotEmpty()) {
                     OutlinedCard(
                         modifier = Modifier.padding(8.dp)
                     ) {
