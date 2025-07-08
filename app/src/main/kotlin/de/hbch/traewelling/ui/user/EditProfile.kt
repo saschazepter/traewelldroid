@@ -78,19 +78,20 @@ fun EditProfile(
     var formErrorString by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(userSettings) {
-        if (userSettings != null) {
-            username = userSettings!!.username
-            displayName = userSettings!!.displayName
-            email = userSettings!!.email
-            bio = userSettings!!.bio
-            privateProfile = userSettings!!.privateProfile
-            collectPoints = userSettings!!.pointsEnabled
-            allowLikes = userSettings!!.likesEnabled
-            showHideCheckInsAfter = userSettings!!.privacyHideDays > 0
-            hideCheckInsAfter = userSettings!!.privacyHideDays.toString()
-            defaultStatusVisibility = userSettings!!.defaultStatusVisibility
-            defaultMastodonVisibility = userSettings!!.mastodonVisibility ?: StatusVisibility.PUBLIC
-            allowedPersonsToCheckIn = userSettings!!.allowedPersonsToCheckIn
+        val settings = userSettings
+        if (settings != null) {
+            username = settings.username
+            displayName = settings.displayName
+            email = settings.email
+            bio = settings.bio ?: ""
+            privateProfile = settings.privateProfile
+            collectPoints = settings.pointsEnabled
+            allowLikes = settings.likesEnabled
+            showHideCheckInsAfter = settings.privacyHideDays > 0
+            hideCheckInsAfter = settings.privacyHideDays.toString()
+            defaultStatusVisibility = settings.defaultStatusVisibility
+            defaultMastodonVisibility = settings.mastodonVisibility ?: StatusVisibility.PUBLIC
+            allowedPersonsToCheckIn = settings.allowedPersonsToCheckIn
         }
     }
 
