@@ -18,8 +18,8 @@ aboutLibraries {
 
 android {
     val packageName = "de.hbch.traewelling"
-    val name = "2.20.1"
-    val code = 199
+    val name = "2.20.2"
+    val code = 200
     compileSdk = 36
 
     dependenciesInfo {
@@ -113,7 +113,8 @@ android {
         }
         create("foss") {
             dimension = "libs"
-            versionNameSuffix = "-foss"
+            // Breaks F-Droid build
+            // versionNameSuffix = "-foss"
         }
     }
 }
