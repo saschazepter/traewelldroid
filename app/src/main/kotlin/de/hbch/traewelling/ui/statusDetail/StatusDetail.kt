@@ -183,35 +183,41 @@ fun StatusDetail(
                         )
                     }
                 }
-                ButtonWithIconAndText(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.open_with_bahnexpert),
-                    drawableId = R.drawable.ic_train,
-                    onClick = {
-                        val dStatus = status
-                        if (dStatus != null) {
+                val dStatus = status
+                val journeyNumber = dStatus?.journey?.manualJourneyNumber ?: dStatus?.journey?.journeyNumber
+                if (dStatus != null && journeyNumber != null) {
+                    ButtonWithIconAndText(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(id = R.string.open_with_bahnexpert),
+                        drawableId = R.drawable.ic_train,
+                        onClick = {
                             val intent = CustomTabsIntent.Builder()
                                 .setShowTitle(false)
                                 .build()
 
-                            val isoDate = DateTimeFormatter.ISO_INSTANT.format(dStatus.journey.origin.departurePlanned)
+                            val isoDate =
+                                DateTimeFormatter.ISO_INSTANT.format(dStatus.journey.origin.departurePlanned)
 
                             val uri = Uri.Builder()
                                 .scheme("https")
                                 .authority("bahn.expert")
                                 .appendPath("details")
-                                .appendPath(dStatus.journey.journeyNumber.toString())
+                                .appendPath(journeyNumber)
                                 .appendPath(isoDate)
-                                .appendQueryParameter("station", dStatus.journey.origin.evaIdentifier.toString())
+                                .appendQueryParameter(
+                                    "station",
+                                    dStatus.journey.origin.evaIdentifier.toString()
+                                )
                                 .build()
 
                             intent.launchUrl(
                                 context,
                                 uri
                             )
+
                         }
-                    }
-                )
+                    )
+                }
                 if (operator != null) {
                     Text(
                         text = operator ?: "",
