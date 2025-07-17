@@ -380,4 +380,6 @@
     <string name="bio">Bio</string>
     <string name="email">E-Mail</string>
     <string name="time_zone">Time Zone</string>
+    <string name="pride">Träwelldroid is developed and brought to you with pride.</string>
+    <string name="contributors_thanks">Thanks to all contributors investing their free-time into this and associated open source projects.</string>
 </resources>
