@@ -350,4 +350,6 @@
     <string name="time_zone">Zeitzone</string>
     <string name="bio">Bio</string>
     <string name="email">E-Mail-Adresse</string>
+    <string name="pride">Träwelldroid wird für dich mit Pride entwickelt.</string>
+    <string name="contributors_thanks">Vielen Dank an alle Beitragenden, die ihre Freizeit in dieses und andere zugehörige Open Source-Projekte investieren.</string>
 </resources>
