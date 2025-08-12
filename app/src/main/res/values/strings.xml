@@ -209,7 +209,7 @@
     <string name="tag_staff_role_example">Driver, conductor, …</string>
     <string name="tag_passenger_rights_title">Passenger rights claim</string>
     <string name="tag_passenger_rights_example">i.e. Requested, paid out, ID of claim, …</string>
-    <string name="tag_price_title">Price</string>>
+    <string name="tag_price_title">Price</string>&gt;
     <string name="tag_price_example" translatable="false">6,99, 7 €, …</string>
     <string name="tag_journey_number_title">Journey number</string>
     <string name="tag_journey_number_example" translatable="false">RB 12600, ICE 900, …</string>
