@@ -7,8 +7,8 @@ plugins {
     kotlin("kapt")
     id("com.mikepenz.aboutlibraries.plugin")
     id("com.google.gms.google-services")
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.0"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.10"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.10"
 }
 
 aboutLibraries {
@@ -121,7 +121,7 @@ android {
 
 dependencies {
     // Jetpack Compose
-    val composeVersion = "1.8.3"
+    val composeVersion = "1.9.0"
     implementation("androidx.compose.runtime:runtime:$composeVersion")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
@@ -135,14 +135,14 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
 
-    implementation("androidx.core:core-ktx:1.16.0")
+    implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.android.material:material:1.13.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.3")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.browser:browser:1.8.0")
+    implementation("androidx.browser:browser:1.9.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("com.auth0.android:jwtdecode:2.0.2")
     implementation("net.openid:appauth:0.11.1")
@@ -161,7 +161,7 @@ dependencies {
     implementation("com.github.jcloquell:android-secure-storage:0.1.3")
 
     // Navigation Component
-    implementation("androidx.navigation:navigation-compose:2.9.0")
+    implementation("androidx.navigation:navigation-compose:2.9.3")
 
     // Retrofit
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
@@ -171,7 +171,7 @@ dependencies {
     implementation("io.coil-kt:coil-gif:2.7.0")
 
     // Emoji pack support
-    implementation("de.c1710:filemojicompat-autoinit:3.2.7")
+    implementation("de.c1710:filemojicompat-autoinit:3.3.1")
 
     // OSS licenses
     implementation("com.mikepenz:aboutlibraries-compose:12.2.4")
