@@ -148,6 +148,12 @@ enum class StatusVisibility() {
         override val icon = R.drawable.ic_authorized
         override val title = R.string.visibility_only_authenticated
         override val isMastodonVisibility = false
+    },
+    @SerializedName("5")
+    TRUSTED {
+        override val icon = R.drawable.ic_trusted
+        override val title = R.string.trusted
+        override val isMastodonVisibility = false
     };
 
     abstract val icon: Int

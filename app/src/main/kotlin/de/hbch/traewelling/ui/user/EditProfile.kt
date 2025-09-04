@@ -444,14 +444,12 @@ fun EditProfile(
                 }
             }
         }
-        AnimatedVisibility(allowedPersonsToCheckIn == AllowedPersonsToCheckIn.TRUSTED_USERS) {
-            OutlinedButtonWithIconAndText(
-                stringId = R.string.trusted,
-                modifier = formModifier,
-                onClick = manageTrustedUsers,
-                drawableId = R.drawable.ic_authorized
-            )
-        }
+        OutlinedButtonWithIconAndText(
+            stringId = R.string.trusted,
+            modifier = formModifier,
+            onClick = manageTrustedUsers,
+            drawableId = R.drawable.ic_trusted
+        )
         ButtonWithIconAndText(
             stringId = R.string.save,
             drawableId = R.drawable.ic_check_in,
