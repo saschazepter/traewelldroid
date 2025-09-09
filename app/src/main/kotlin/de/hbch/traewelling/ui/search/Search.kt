@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -89,8 +90,6 @@ fun Search(
         delayMillis = 500L
     )
 
-    var active by remember { mutableStateOf(false) }
-
     var usersLoading by remember { mutableStateOf(false) }
     var stationsLoading by remember { mutableStateOf(false) }
     val isLoading by remember { derivedStateOf { usersLoading || stationsLoading } }
@@ -100,11 +99,9 @@ fun Search(
     val stationResults = remember { mutableStateListOf<Station>() }
 
     val stationSelected: (Station) -> Unit = {
-        active = false
         onStationSelected(it.id)
     }
     val userSelected: (User) -> Unit = {
-        active = false
         onUserSelected(it)
     }
 
@@ -237,6 +234,8 @@ fun Search(
                 }
             }
             stationResults.forEach {
+                val additions = it.areas.filter { a -> !it.name.contains(a.name) }
+                    .sortedByDescending { a -> a.adminLevel }.joinToString(", ") { a -> a.name }
                 SearchItem(
                     item = it,
                     text = getStationNameWithRL100(it),
@@ -246,6 +245,7 @@ fun Search(
                             contentDescription = null
                         )
                     },
+                    addition = additions,
                     onClick = stationSelected
                 )
             }
@@ -334,6 +334,7 @@ private fun <T> SearchItem(
     item: T,
     text: String,
     modifier: Modifier = Modifier,
+    addition: String? = null,
     icon: @Composable () -> Unit = { },
     onClick: (T) -> Unit = { }
 ) {
@@ -342,10 +343,18 @@ private fun <T> SearchItem(
             .fillMaxWidth()
             .clickable { onClick(item) }
             .padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         icon()
         Text(text)
+        if (addition != null && addition.isNotBlank()) {
+            Text(
+                text = "($addition)",
+                fontStyle = FontStyle.Italic,
+                style = LocalFont.current.labelSmall,
+                maxLines = 1
+            )
+        }
     }
 }
