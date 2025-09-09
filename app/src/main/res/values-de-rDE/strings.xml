@@ -352,4 +352,8 @@
     <string name="email">E-Mail-Adresse</string>
     <string name="pride">Träwelldroid wird für dich mit Pride entwickelt.</string>
     <string name="contributors_thanks">Vielen Dank an alle Beitragenden, die ihre Freizeit in dieses und andere zugehörige Open Source-Projekte investieren.</string>
+    <plurals name="removed_departures">
+        <item quantity="one">Eine Abfahrt wurde aufgrund von Lizenzproblemen entfernt.</item>
+        <item quantity="other" formatted="true">%1$d Abfahrten wurden aufgrund von Lizenzproblemen entfernt.</item>
+    </plurals>
 </resources>
