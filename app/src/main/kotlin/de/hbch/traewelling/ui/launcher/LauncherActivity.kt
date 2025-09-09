@@ -1,42 +1,53 @@
 package de.hbch.traewelling.ui.launcher
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.api.models.notifications.NotificationChannelType
-import de.hbch.traewelling.shared.LineIcons
 import de.hbch.traewelling.shared.MastodonEmojis
 import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.ui.login.LoginActivity
 import de.hbch.traewelling.ui.main.MainActivity
-import de.hbch.traewelling.util.readOrDownloadLineIcons
-import kotlinx.coroutines.runBlocking
+import de.hbch.traewelling.util.refreshJwt
 
 class LauncherActivity : AppCompatActivity() {
+    private var splashScreenVisible = true
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        installSplashScreen()
+        installSplashScreen().setKeepOnScreenCondition(object: SplashScreen.KeepOnScreenCondition {
+            override fun shouldKeepOnScreen(): Boolean {
+                return splashScreenVisible
+            }
+        })
 
-        val icons = runBlocking {
+        /*val icons = runBlocking {
             readOrDownloadLineIcons()
         }
-        LineIcons.getInstance().icons.addAll(icons)
+        LineIcons.getInstance().icons.addAll(icons)*/
         MastodonEmojis.getInstance(this)
 
         createNotificationChannels()
 
         val secureStorage = SecureStorage(this)
-        val startupActivity =
-            when (secureStorage.getObject(SharedValues.SS_JWT, String::class.java)) {
-                null -> LoginActivity::class.java
-                else -> MainActivity::class.java
+        val jwt = secureStorage.getObject(SharedValues.SS_JWT, String::class.java)
+        if (jwt == null) {
+            start(LoginActivity::class.java)
+        } else {
+            refreshJwt {
+                start(MainActivity::class.java)
             }
+        }
+        super.onCreate(savedInstanceState)
+    }
 
-        val startupIntent = Intent(this, startupActivity)
+    private fun start(cls: Class<out Activity>) {
+        splashScreenVisible = false
+        val startupIntent = Intent(this, cls)
         startActivity(startupIntent)
         finish()
     }
