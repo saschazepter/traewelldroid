@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -153,6 +154,11 @@ fun SelectDestination(
                 }
             }
         }
+        Text(
+            text = trip?.dataSource?.attribution ?: "",
+            fontStyle = FontStyle.Italic,
+            style = LocalFont.current.labelSmall
+        )
         Box { }
     }
 }

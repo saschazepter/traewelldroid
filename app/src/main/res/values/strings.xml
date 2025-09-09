@@ -382,4 +382,8 @@
     <string name="time_zone">Time Zone</string>
     <string name="pride">Träwelldroid is developed and brought to you with pride.</string>
     <string name="contributors_thanks">Thanks to all contributors investing their free-time into this and associated open source projects.</string>
+    <plurals name="removed_departures">
+        <item quantity="one">1 departure was removed due to licensing issues.</item>
+        <item quantity="other" formatted="true">%1$d departures were removed due to licensing issues.</item>
+    </plurals>
 </resources>

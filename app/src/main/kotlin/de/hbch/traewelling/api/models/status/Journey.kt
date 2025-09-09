@@ -1,6 +1,7 @@
 package de.hbch.traewelling.api.models.status
 
 import com.google.gson.annotations.SerializedName
+import de.hbch.traewelling.api.models.trip.DataSource
 import de.hbch.traewelling.api.models.trip.HafasOperator
 import de.hbch.traewelling.api.models.trip.HafasTrainTripStation
 import de.hbch.traewelling.api.models.trip.ProductType
@@ -21,7 +22,8 @@ data class Journey(
     @SerializedName("manualDeparture") val departureManual: ZonedDateTime?,
     @SerializedName("manualArrival") val arrivalManual: ZonedDateTime?,
     val operator: HafasOperator?,
-    @SerializedName("number") val lineId: String
+    @SerializedName("number") val lineId: String,
+    val dataSource: DataSource?
 ) {
     val safeProductType get() = category ?: ProductType.UNKNOWN
 }
