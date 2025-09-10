@@ -3,7 +3,6 @@ package de.hbch.traewelling.push
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
 import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import android.os.Build
@@ -15,31 +14,35 @@ import de.hbch.traewelling.api.getGson
 import de.hbch.traewelling.api.models.notifications.Notification
 import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.theme.PolylineColor
-import org.unifiedpush.android.connector.MessagingReceiver
+import org.unifiedpush.android.connector.FailedReason
+import org.unifiedpush.android.connector.PushService
+import org.unifiedpush.android.connector.data.PushEndpoint
+import org.unifiedpush.android.connector.data.PushMessage
 
-class PushNotificationReceiver : MessagingReceiver() {
-    override fun onMessage(context: Context, message: ByteArray, instance: String) {
+class PushNotificationReceiver : PushService() {
+    override fun onMessage(message: PushMessage, instance: String) {
         Log.d("PushReceiver", "Message received!")
-        val json = String(message)
+        val json = String(message.content)
         if (json.isNotBlank()) {
             val notification = getGson().fromJson(json, Notification::class.java)
             notification?.let {
-                pushNotification(context, it)
+                pushNotification(this, it)
             }
         }
     }
 
-    override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
-        Log.d("PushReceiver", "Endpoint $endpoint on $instance received!")
-        val secureStorage = SecureStorage(context)
-        secureStorage.storeObject(SharedValues.SS_UP_ENDPOINT, endpoint)
+    override fun onNewEndpoint(endpoint: PushEndpoint, instance: String) {
+        val url = endpoint.url
+        Log.d("PushReceiver", "Endpoint $url on $instance received!")
+        val secureStorage = SecureStorage(this)
+        secureStorage.storeObject(SharedValues.SS_UP_ENDPOINT, url)
     }
 
-    override fun onRegistrationFailed(context: Context, instance: String) {
-        Log.d("PushReceiver", "Registration with $instance failed!")
+    override fun onRegistrationFailed(reason: FailedReason, instance: String) {
+        Log.d("PushReceiver", "Registration with $instance failed! (${reason.name})")
     }
 
-    override fun onUnregistered(context: Context, instance: String) {
+    override fun onUnregistered(instance: String) {
         Log.d("PushReceiver", "Unregistered from $instance")
     }
 

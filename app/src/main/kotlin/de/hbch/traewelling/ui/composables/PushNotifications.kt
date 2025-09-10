@@ -34,11 +34,7 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import de.hbch.traewelling.R
 import de.hbch.traewelling.theme.LocalFont
-import org.unifiedpush.android.connector.UnifiedPush.getDistributor
-import org.unifiedpush.android.connector.UnifiedPush.getDistributors
-import org.unifiedpush.android.connector.UnifiedPush.registerApp
-import org.unifiedpush.android.connector.UnifiedPush.saveDistributor
-import org.unifiedpush.android.connector.UnifiedPush.unregisterApp
+import org.unifiedpush.android.connector.UnifiedPush
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,15 +43,15 @@ fun EnablePushNotificationsCard(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val unifiedPushDistributors = getDistributors(context)
+    val unifiedPushDistributors = UnifiedPush.getDistributors(context)
     var upDistributorSelectionVisible by remember { mutableStateOf(false) }
-    var selectedDistributor by remember { mutableStateOf(getDistributor(context)) }
+    var selectedDistributor by remember { mutableStateOf(UnifiedPush.getAckDistributor(context)) }
 
     if (upDistributorSelectionVisible) {
         ContentDialog(
             onDismissRequest = {
                 upDistributorSelectionVisible = false
-                saveDistributor(context, unifiedPushDistributors[0])
+                UnifiedPush.saveDistributor(context, unifiedPushDistributors[0])
             }
         ) {
             Box(
@@ -65,8 +61,8 @@ fun EnablePushNotificationsCard(
                     selectedDistributor = selectedDistributor,
                     distributors = unifiedPushDistributors,
                     distributorSelected = {
-                        saveDistributor(context, it)
-                        registerApp(context)
+                        UnifiedPush.saveDistributor(context, it)
+                        UnifiedPush.register(context)
                         upDistributorSelectionVisible = false
                         selectedDistributor = it
                     }
@@ -90,14 +86,14 @@ fun EnablePushNotificationsCard(
                         if (it) {
                             if (unifiedPushDistributors.size == 1) {
                                 val distributor = unifiedPushDistributors[0]
-                                saveDistributor(context, distributor)
-                                registerApp(context)
+                                UnifiedPush.saveDistributor(context, distributor)
+                                UnifiedPush.register(context)
                                 selectedDistributor = distributor
                             } else {
                                 upDistributorSelectionVisible = true
                             }
                         } else {
-                            unregisterApp(context)
+                            UnifiedPush.unregister(context)
                             selectedDistributor = ""
                         }
                     }
@@ -113,9 +109,10 @@ fun EnablePushNotificationsCard(
                     textAlign = TextAlign.Center
                 )
             }
-            if (selectedDistributor.isNotBlank() && selectedDistributor != context.packageName) {
+            val selected = selectedDistributor
+            if (selected != null && selected.isNotBlank() && selected != context.packageName) {
                 Text(
-                    text = stringResource(id = R.string.selected_up_distributor, selectedDistributor)
+                    text = stringResource(id = R.string.selected_up_distributor, selected)
                 )
             }
         }
@@ -169,7 +166,7 @@ fun EnableNotificationsSwitch(
 
 @Composable
 private fun UnifiedPushDistributorSelection(
-    selectedDistributor: String,
+    selectedDistributor: String?,
     distributors: List<String>,
     distributorSelected: (String) -> Unit
 ) {

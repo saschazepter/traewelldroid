@@ -104,18 +104,13 @@
             </intent-filter>
         </activity>
 
-        <receiver
+        <service
             android:name=".push.PushNotificationReceiver"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
+            android:exported="false">
             <intent-filter>
-                <action android:name="org.unifiedpush.android.connector.MESSAGE" />
-                <action android:name="org.unifiedpush.android.connector.UNREGISTERED" />
-                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT" />
-                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED" />
+                <action android:name="org.unifiedpush.android.connector.PUSH_EVENT" />
             </intent-filter>
-        </receiver>
+        </service>
 
         <receiver
             android:name=".widget.TraewelldroidWidgetReceiver"
