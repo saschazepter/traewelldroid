@@ -9,7 +9,7 @@ data class Station(
     val longitude: Double,
     @SerializedName("ibnr") val evaIdentifier: Long?,
     @SerializedName("rilIdentifier") val ds100: String?,
-    val areas: List<Area>
+    val areas: List<Area>?
 )
 
 data class Area(
