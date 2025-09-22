@@ -274,12 +274,12 @@ private fun TraewellingProviderSettings(
                     stringId = R.string.renew_login,
                     drawableId = R.drawable.ic_refresh,
                     onClick = {
-                        context.refreshJwt {
+                        context.refreshJwt(onTokenReceived = {
                             jwt = it
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar(context.getString(R.string.renew_login_success))
                             }
-                        }
+                        })
                     },
                     modifier = Modifier.weight(1f)
                 )
