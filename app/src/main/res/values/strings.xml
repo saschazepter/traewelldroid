@@ -386,4 +386,5 @@
         <item quantity="one">1 departure was removed due to licensing issues.</item>
         <item quantity="other" formatted="true">%1$d departures were removed due to licensing issues.</item>
     </plurals>
+    <string name="test" translatable="false">Test</string>
 </resources>

@@ -428,6 +428,13 @@ enum class NotificationType {
             return gson.fromJson<Any>(gson.toJson(data), targetType) as? YouHaveBeenCheckedInData
         }
     },
+    Test {
+        override val icon = R.drawable.ic_check_in
+        override val channel = NotificationChannelType.Test
+        override fun getHeadline(context: Context, notification: Notification): String {
+            return context.getString(R.string.test)
+        }
+    },
     Unknown {
         override val icon = R.drawable.ic_unknown
         override val channel = NotificationChannelType.Unknown
