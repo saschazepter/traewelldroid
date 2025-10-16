@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.ui.compose.LibrariesContainer
-import com.mikepenz.aboutlibraries.ui.compose.android.rememberLibraries
+import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import de.hbch.traewelling.BuildConfig
 import de.hbch.traewelling.R
 import de.hbch.traewelling.theme.MainTheme
@@ -58,7 +58,7 @@ fun InfoScreen(
         },
         content = { innerPadding ->
             var licensesVisible by remember { mutableStateOf(false) }
-            val libraries by rememberLibraries()
+            val libraries by produceLibraries(R.raw.aboutlibraries)
 
             if (licensesVisible) {
                 ContentDialog(onDismissRequest = { licensesVisible = false }) {
