@@ -5,7 +5,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("com.mikepenz.aboutlibraries.plugin")
+    id("com.mikepenz.aboutlibraries.plugin.android")
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
     id("org.jetbrains.kotlin.plugin.compose") version "2.2.20"
@@ -121,7 +121,7 @@ android {
 
 dependencies {
     // Jetpack Compose
-    val composeVersion = "1.9.2"
+    val composeVersion = "1.9.3"
     implementation("androidx.compose.runtime:runtime:$composeVersion")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
@@ -174,7 +174,7 @@ dependencies {
     implementation("de.c1710:filemojicompat-autoinit:3.3.1")
 
     // OSS licenses
-    implementation("com.mikepenz:aboutlibraries-compose:12.2.4")
+    implementation("com.mikepenz:aboutlibraries-compose:13.1.0")
 
     // Feature flags
     implementation("io.getunleash:unleash-android-proxy-sdk:1.0.0")
@@ -196,7 +196,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
-    val acraVersion = "5.12.0"
+    val acraVersion = "5.13.1"
     "playImplementation"("ch.acra:acra-http:$acraVersion")
     "fossImplementation"("ch.acra:acra-mail:$acraVersion")
 }
