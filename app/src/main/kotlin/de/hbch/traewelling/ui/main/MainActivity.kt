@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBar
@@ -102,6 +100,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import de.hbch.traewelling.util.readOrDownloadCustomEmoji
+import de.hbch.traewelling.util.refreshJwt
 import de.hbch.traewelling.widget.updateWidgetState
 import java.net.URL
 import java.time.Duration
@@ -130,7 +129,12 @@ class MainActivity : ComponentActivity()
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onUnauthorizedEvent(unauthorizedEvent: UnauthorizedEvent) {
-        loggedInUserViewModel.resetApplication(this)
+        refreshJwt(
+            onTokenReceived = { },
+            onError = {
+                loggedInUserViewModel.resetApplication(this)
+            }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -274,7 +278,7 @@ fun TraewelldroidApp(
                                 }
                             ) {
                                 Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    painter = painterResource(R.drawable.ic_arrow_left),
                                     contentDescription = null
                                 )
                             }

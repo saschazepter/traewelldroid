@@ -234,8 +234,8 @@ fun Search(
                 }
             }
             stationResults.forEach {
-                val additions = it.areas.filter { a -> !it.name.contains(a.name) }
-                    .sortedByDescending { a -> a.adminLevel }.joinToString(", ") { a -> a.name }
+                val additions = it.areas?.filter { a -> !it.name.contains(a.name) }
+                    ?.sortedByDescending { a -> a.adminLevel }?.joinToString(", ") { a -> a.name }
                 SearchItem(
                     item = it,
                     text = getStationNameWithRL100(it),

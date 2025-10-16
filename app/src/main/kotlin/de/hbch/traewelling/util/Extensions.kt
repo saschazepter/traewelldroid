@@ -308,7 +308,7 @@ fun colorFromHex(color: String)
 
 
 
-fun Context.refreshJwt(onTokenReceived: (String) -> Unit = { }) {
+fun Context.refreshJwt(onTokenReceived: (String) -> Unit = { }, onError: () -> Unit = { }) {
     val authorizationService = AuthorizationService(
         this,
         AppAuthConfiguration.Builder().build()
@@ -320,12 +320,18 @@ fun Context.refreshJwt(onTokenReceived: (String) -> Unit = { }) {
         .setRefreshToken(refreshToken)
         .build()
 
-    authorizationService.performTokenRequest(tokenRequest) { response, _ ->
+    authorizationService.performTokenRequest(tokenRequest) { response, error ->
+        if (error != null) {
+            onError()
+            return@performTokenRequest
+        }
         if (response?.accessToken != null && response.refreshToken != null) {
             secureStorage.storeObject(SharedValues.SS_JWT, response.accessToken!!)
             secureStorage.storeObject(SharedValues.SS_REFRESH_TOKEN, response.refreshToken!!)
             TraewellingApi.jwt = response.accessToken!!
             onTokenReceived(response.accessToken!!)
+        } else {
+            onError()
         }
     }
 }

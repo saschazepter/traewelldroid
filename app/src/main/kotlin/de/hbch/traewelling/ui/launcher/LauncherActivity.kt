@@ -38,9 +38,13 @@ class LauncherActivity : AppCompatActivity() {
         if (jwt == null) {
             start(LoginActivity::class.java)
         } else {
-            refreshJwt {
+            val startMain: () -> Unit = {
                 start(MainActivity::class.java)
             }
+            refreshJwt(
+                onTokenReceived = { startMain() },
+                onError = startMain
+            )
         }
         super.onCreate(savedInstanceState)
     }
