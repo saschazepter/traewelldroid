@@ -200,4 +200,6 @@
     <string name="changes_saved">Wijzigingen zijn opgeslagen</string>
     <string name="time_left">%1$s over</string>
     <string name="edit_profile">Bewerk profiel</string>
+    <string name="greeting_evening">Goedenavond :)</string>
+    <string name="greeting_day">Fijne dag!</string>
 </resources>
