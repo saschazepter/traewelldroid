@@ -25,10 +25,6 @@ class LauncherActivity : AppCompatActivity() {
             }
         })
 
-        /*val icons = runBlocking {
-            readOrDownloadLineIcons()
-        }
-        LineIcons.getInstance().icons.addAll(icons)*/
         MastodonEmojis.getInstance(this)
 
         createNotificationChannels()

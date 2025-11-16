@@ -23,6 +23,7 @@ data class Journey(
     @SerializedName("manualArrival") val arrivalManual: ZonedDateTime?,
     val operator: HafasOperator?,
     @SerializedName("number") val lineId: String,
+    @SerializedName("routeColor") val lineColor: String,
     val dataSource: DataSource?
 ) {
     val safeProductType get() = category ?: ProductType.UNKNOWN

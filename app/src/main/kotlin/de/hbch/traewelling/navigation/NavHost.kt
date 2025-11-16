@@ -98,6 +98,7 @@ fun TraewelldroidNavHost(
     val navToEditCheckIn: (Status) -> Unit = {
         checkInViewModel.lineName = it.journey.line
         checkInViewModel.lineId = it.journey.lineId
+        checkInViewModel.lineColor = it.journey.lineColor
         checkInViewModel.operatorCode = it.journey.operator?.id
         checkInViewModel.message.postValue(it.body)
         checkInViewModel.statusVisibility.postValue(it.visibility)
@@ -123,6 +124,7 @@ fun TraewelldroidNavHost(
         checkInViewModel.lineName = status.journey.line
         checkInViewModel.operatorCode = status.journey.operator?.id
         checkInViewModel.lineId = status.journey.lineId
+        checkInViewModel.lineColor = status.journey.lineColor
         checkInViewModel.tripId = status.journey.hafasTripId
         checkInViewModel.originId = status.journey.origin.id
         checkInViewModel.departureTime = status.journey.origin.departurePlanned

@@ -54,16 +54,10 @@ import net.openid.appauth.AppAuthConfiguration
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.GrantTypeValues
 import net.openid.appauth.TokenRequest
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.InputStream
 import java.lang.Exception
-import java.net.URL
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -267,30 +261,6 @@ fun Context.shareImage(
     } catch (e: Exception) {
         Logger.captureException(e)
     }
-}
-
-suspend fun Context.readOrDownloadLineIcons(
-    overwrite: Boolean = false
-): List<LineIcon> {
-    val lineColorCsvUrl = URL("https://raw.githubusercontent.com/Traewelling/line-colors/main/line-colors.csv")
-    val file = File(filesDir, "line-colors.csv")
-    val icons = try {
-        withContext(Dispatchers.IO) {
-            if (overwrite || !file.exists()) {
-                val inputStream: InputStream = lineColorCsvUrl.openStream()
-                Files.copy(
-                    inputStream,
-                    file.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING
-                )
-            }
-            return@withContext readCsv(file.inputStream())
-        }
-    } catch (ex: Exception) {
-        Logger.captureException(ex)
-        listOf()
-    }
-    return icons
 }
 
 fun TraewelldroidUriBuilder(): Uri.Builder {

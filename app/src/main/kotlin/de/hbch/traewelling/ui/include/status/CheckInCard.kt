@@ -199,8 +199,7 @@ fun CheckInCard(
                         statusBusiness = status.business,
                         message = status.getStatusBody(),
                         journeyNumber = status.journey.manualJourneyNumber ?: status.journey.journeyNumber,
-                        operatorCode = status.journey.operator?.id,
-                        lineId = status.journey.lineId,
+                        lineColor = status.journey.lineColor,
                         userSelected = userSelected,
                         textClicked = statusClickedAction
                     )
@@ -328,8 +327,7 @@ fun CheckInCardContent(
     duration: Int,
     statusBusiness: StatusBusiness,
     message: Pair<AnnotatedString?, Map<String, InlineTextContent>>,
-    operatorCode: String? = null,
-    lineId: String? = null,
+    lineColor: String? = null,
     userSelected: (String, Boolean, Boolean) -> Unit = { _, _, _ -> },
     textClicked: () -> Unit = { }
 ) {
@@ -344,8 +342,7 @@ fun CheckInCardContent(
             kilometers = kilometers,
             duration = duration,
             statusBusiness = statusBusiness,
-            operatorCode = operatorCode,
-            lineId = lineId
+            lineColor = lineColor
         )
         if (!message.first.isNullOrEmpty()) {
             Row(
@@ -384,8 +381,7 @@ fun StatusDetailsRow(
     duration: Int,
     statusBusiness: StatusBusiness,
     modifier: Modifier = Modifier,
-    operatorCode: String? = null,
-    lineId: String? = null
+    lineColor: String? = null
 ) {
     FlowRow(
         modifier = modifier
@@ -399,8 +395,7 @@ fun StatusDetailsRow(
         LineIcon(
             lineName = line,
             modifier = alignmentModifier.padding(start = 4.dp),
-            operatorCode = operatorCode,
-            lineId = lineId,
+            lineColorString = lineColor,
             journeyNumber = journeyNumber
         )
         Text(
