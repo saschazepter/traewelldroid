@@ -181,8 +181,7 @@ private fun SuccessfulCheckInResult(
                 kilometers = journey.distance,
                 duration = journey.duration,
                 statusBusiness = checkInResponse.data.status.business,
-                operatorCode = journey.operator?.id,
-                lineId = journey.lineId
+                lineColor = journey.lineColor
             )
             Text(
                 text = stringResource(id = R.string.display_points, checkInResponse.data.points.points),

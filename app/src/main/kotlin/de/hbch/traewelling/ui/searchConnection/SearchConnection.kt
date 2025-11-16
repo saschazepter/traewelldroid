@@ -190,6 +190,7 @@ fun SearchConnection(
                                 checkInViewModel.lineName =
                                     trip.line?.name ?: trip.line?.journeyNumber ?: ""
                                 checkInViewModel.lineId = trip.line?.id
+                                checkInViewModel.lineColor = trip.line?.lineColor
                                 checkInViewModel.operatorCode = trip.line?.operator?.id
                                 checkInViewModel.tripId = trip.tripId
                                 checkInViewModel.originId = trip.station?.id ?: -1
@@ -464,9 +465,8 @@ fun ConnectionListItem(
                 )
                 LineIcon(
                     lineName = hafasLine?.name ?: "",
-                    operatorCode = hafasLine?.operator?.id,
-                    lineId = hafasLine?.id,
-                    journeyNumber = journeyNumber
+                    journeyNumber = journeyNumber,
+                    lineColorString = hafasLine?.lineColor
                 )
             }
 

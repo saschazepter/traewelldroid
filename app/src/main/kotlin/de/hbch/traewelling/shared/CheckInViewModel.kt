@@ -30,6 +30,7 @@ class CheckInViewModel : ViewModel() {
 
     var lineName: String = ""
     var lineId: String? = null
+    var lineColor: String? = null
     var operatorCode: String? = null
     var tripId: String = ""
     var originId: Int = 0
@@ -67,6 +68,7 @@ class CheckInViewModel : ViewModel() {
         lineName = ""
         operatorCode = null
         lineId = null
+        lineColor = null
         departureTime = null
         message.value = ""
         origin = ""

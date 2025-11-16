@@ -240,8 +240,7 @@ fun SharePic(
                     LineIconView(
                         lineName = status.journey.line,
                         modifier = alignmentModifier.padding(start = 4.dp),
-                        operatorCode = status.journey.operator?.id,
-                        lineId = status.journey.lineId,
+                        lineColorString = status.journey.lineColor,
                     )
                     Text(
                         modifier = alignmentModifier.padding(start = 12.dp),

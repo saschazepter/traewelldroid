@@ -67,8 +67,7 @@ fun ActiveStatusBar(
                     LineIcon(
                         lineName = status.journey.line,
                         journeyNumber = null,
-                        lineId = status.journey.lineId,
-                        operatorCode = status.journey.operator?.id
+                        lineColorString = status.journey.lineColor,
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.ic_arrow_right),
