@@ -391,7 +391,7 @@ fun SearchConnection(
                     .padding(vertical = 8.dp),
                 productType = trip.line?.safeProductType ?: ProductType.UNKNOWN,
                 departurePlanned = trip.plannedDeparture ?: ZonedDateTime.now(),
-                departureReal = trip.departure ?: trip.plannedDeparture,
+                departureReal = trip.departure,
                 isCancelled = trip.isCancelled,
                 destination = getLastDestination(trip),
                 departureStation =
