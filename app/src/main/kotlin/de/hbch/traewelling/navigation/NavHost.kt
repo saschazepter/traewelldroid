@@ -451,6 +451,11 @@ fun TraewelldroidNavHost(
                     navController.navigate(
                         CheckIn(editMode)
                     ) {
+                        if (editMode){
+                            popUpTo<SelectDestination> {
+                                inclusive = true
+                            }
+                        }
                         launchSingleTop = true
                     }
                 }
@@ -494,8 +499,8 @@ fun TraewelldroidNavHost(
                             navController.navigate(
                                 StatusDetails(status.id)
                             ) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    inclusive = false
+                                popUpTo<CheckIn> {
+                                    inclusive = true
                                 }
                                 launchSingleTop = true
                             }
@@ -505,19 +510,14 @@ fun TraewelldroidNavHost(
 
                         coroutineScope.launch {
                             checkInViewModel.checkIn(trwl, travelynx) { succeeded ->
-                                navController.navigate(
-                                    CheckInResult
-                                ) {
-                                    if (succeeded) {
-                                        secureStorage.storeObject(
-                                            SharedValues.SS_CHECK_IN_COUNT,
-                                            checkInCount + 1
-                                        )
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            inclusive = false
-                                        }
-                                    }
-
+                                if (succeeded) {
+                                    secureStorage.storeObject(
+                                        SharedValues.SS_CHECK_IN_COUNT,
+                                        checkInCount + 1
+                                    )
+                                    navController.popBackStackAndNavigate(Dashboard, popUpToInclusive = true)
+                                }
+                                navController.navigate(CheckInResult) {
                                     launchSingleTop = true
                                 }
                             }
@@ -556,6 +556,7 @@ fun TraewelldroidNavHost(
                 onCheckInForced = {
                     coroutineScope.launch {
                         checkInViewModel.forceCheckIn {
+                            navController.popBackStackAndNavigate(Dashboard, popUpToInclusive = true)
                             navController.navigate(
                                 CheckInResult
                             ) {
