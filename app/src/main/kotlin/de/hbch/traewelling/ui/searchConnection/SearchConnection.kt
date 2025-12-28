@@ -103,9 +103,9 @@ fun SearchConnection(
     val removedCount by remember { derivedStateOf { hafasTripPage?.meta?.removedCount } }
 
     val scrollState = rememberScrollState()
-    var searchDate by remember { mutableStateOf(currentSearchDate) }
+    var searchDate by rememberSaveable { mutableStateOf(currentSearchDate) }
     var loading by remember { mutableStateOf(false) }
-    var selectedFilter by remember { mutableStateOf<FilterType?>(null) }
+    var selectedFilter by rememberSaveable { mutableStateOf<FilterType?>(null) }
 
     LaunchedEffect(stationId, searchDate, selectedFilter) {
         loading = true
