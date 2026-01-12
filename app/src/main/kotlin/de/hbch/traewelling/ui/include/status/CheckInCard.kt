@@ -75,6 +75,8 @@ fun CheckInCard(
             statusSelected(status.id)
         }
 
+        val loggedInUser = loggedInUserViewModel?.loggedInUser?.value
+
         var progress by remember { mutableFloatStateOf(0f) }
         val progressAnimation by animateFloatAsState(
             targetValue = progress,
@@ -197,7 +199,9 @@ fun CheckInCard(
                         kilometers = status.journey.distance,
                         duration = status.journey.duration,
                         statusBusiness = status.business,
-                        message = status.getStatusBody(),
+                        message = status.getStatusBody(
+                            loggedInUserMastodonUrl = loggedInUser?.mastodonUrl
+                        ),
                         journeyNumber = status.journey.manualJourneyNumber ?: status.journey.journeyNumber,
                         lineColor = status.journey.lineColor,
                         userSelected = userSelected,
@@ -218,6 +222,7 @@ fun CheckInCard(
                     joinConnection = joinConnection,
                     isOwnStatus =
                     (loggedInUserViewModel?.loggedInUser?.value?.id ?: -1) == status.user.id,
+                    loggedInUserMastodonUrl = loggedInUserViewModel?.loggedInUser?.value?.mastodonUrl,
                     displayLongDate = displayLongDate,
                     checkInCardViewModel = checkInCardViewModel,
                     userSelected = userSelected,
@@ -424,6 +429,7 @@ private fun CheckInCardFooter(
     checkInCardViewModel: CheckInCardViewModel,
     joinConnection: (Status) -> Unit,
     isOwnStatus: Boolean = false,
+    loggedInUserMastodonUrl: String? = null,
     displayLongDate: Boolean = false,
     defaultVisibility: StatusVisibility = StatusVisibility.PUBLIC,
     userSelected: (String, Boolean, Boolean) -> Unit = { _, _, _ -> },
@@ -496,7 +502,10 @@ private fun CheckInCardFooter(
                 shareVisible = false
             }
         ) {
-            SharePicDialog(status = status)
+            SharePicDialog(
+                status = status,
+                loggedInUserMastodonUrl = loggedInUserMastodonUrl
+            )
         }
     }
 

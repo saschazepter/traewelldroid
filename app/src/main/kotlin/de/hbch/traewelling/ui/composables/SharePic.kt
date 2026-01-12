@@ -17,6 +17,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,6 +39,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.Status
+import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.theme.LocalColorScheme
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.ui.include.status.StationRow
@@ -50,6 +52,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SharePicDialog(
     status: Status,
+    loggedInUserMastodonUrl: String? = null,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -96,6 +99,7 @@ fun SharePicDialog(
             ) {
                 SharePic(
                     status = status,
+                    loggedInUserMastodonUrl = loggedInUserMastodonUrl,
                     shareTags = shareTags,
                     modifier = Modifier.padding(4.dp)
                 )
@@ -127,10 +131,13 @@ fun SharePicDialog(
 fun SharePic(
     status: Status,
     modifier: Modifier = Modifier,
+    loggedInUserMastodonUrl: String? = null,
     shareTags: Boolean = true
 ) {
     val primaryColor = LocalColorScheme.current.primary
-    val message = status.getStatusBody()
+    val message = status.getStatusBody(
+        loggedInUserMastodonUrl = loggedInUserMastodonUrl
+    )
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
