@@ -52,10 +52,11 @@ fun ActiveStatusBar(
             }
         }
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = modifier
         ) {
             Row(
-                modifier = modifier.height(58.dp).padding(horizontal = 8.dp),
+                modifier = Modifier.height(58.dp).padding(horizontal = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
