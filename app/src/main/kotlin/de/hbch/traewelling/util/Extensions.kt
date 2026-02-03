@@ -35,34 +35,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider.getUriForFile
+import androidx.core.graphics.toColorInt
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
-import com.jcloquell.androidsecurestorage.SecureStorage
-import de.hbch.traewelling.BuildConfig
 import de.hbch.traewelling.R
-import de.hbch.traewelling.api.TraewellingApi
-import de.hbch.traewelling.api.models.lineIcons.LineIcon
+import de.hbch.traewelling.api.AuthManager
 import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.logging.Logger
 import de.hbch.traewelling.navigation.Destination
 import de.hbch.traewelling.shared.LoggedInUserViewModel
-import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.ui.include.status.CheckInCard
 import de.hbch.traewelling.ui.include.status.CheckInCardViewModel
 import kotlinx.coroutines.CoroutineScope
-import net.openid.appauth.AppAuthConfiguration
-import net.openid.appauth.AuthorizationService
-import net.openid.appauth.GrantTypeValues
-import net.openid.appauth.TokenRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
-import java.lang.Exception
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.UUID
-import androidx.core.graphics.toColorInt
-import androidx.core.net.toUri
+import java.util.*
 
 fun NavHostController.popBackStackAndNavigate(
     destination: Destination,
@@ -99,12 +90,12 @@ fun LazyListScope.checkInList(
         if (
             showDate &&
             (
-                previousStatus == null ||
-                !isSameDay(
-                    previousStatus.journey.origin.departurePlanned.toLocalDate(),
-                    status.journey.origin.departurePlanned.toLocalDate()
-                )
-            )
+                    previousStatus == null ||
+                            !isSameDay(
+                                previousStatus.journey.origin.departurePlanned.toLocalDate(),
+                                status.journey.origin.departurePlanned.toLocalDate()
+                            )
+                    )
         ) {
             Row(
                 modifier = Modifier
@@ -271,39 +262,22 @@ fun TraewelldroidUriBuilder(): Uri.Builder {
 
 fun colorFromHex(color: String)
     = try {
-        Color(color.toColorInt())
-    } catch (_: Exception) {
-        null
-    }
-
-
+    Color(color.toColorInt())
+} catch (_: Exception) {
+    null
+}
 
 fun Context.refreshJwt(onTokenReceived: (String) -> Unit = { }, onError: () -> Unit = { }) {
-    val authorizationService = AuthorizationService(
-        this,
-        AppAuthConfiguration.Builder().build()
-    )
-    val secureStorage = SecureStorage(this)
-    val refreshToken = secureStorage.getObject(SharedValues.SS_REFRESH_TOKEN, String::class.java)
-    val tokenRequest = TokenRequest.Builder(SharedValues.AUTH_SERVICE_CONFIG, BuildConfig.OAUTH_CLIENT_ID)
-        .setGrantType(GrantTypeValues.REFRESH_TOKEN)
-        .setRefreshToken(refreshToken)
-        .build()
-
-    authorizationService.performTokenRequest(tokenRequest) { response, error ->
-        if (error != null) {
-            onError()
-            return@performTokenRequest
-        }
-        if (response?.accessToken != null && response.refreshToken != null) {
-            secureStorage.storeObject(SharedValues.SS_JWT, response.accessToken!!)
-            secureStorage.storeObject(SharedValues.SS_REFRESH_TOKEN, response.refreshToken!!)
-            TraewellingApi.jwt = response.accessToken!!
-            onTokenReceived(response.accessToken!!)
+    AuthManager.getInstance(this).getFreshAccessToken({ token ->
+        if (token != null) {
+            onTokenReceived(token)
         } else {
             onError()
         }
-    }
+    },
+    {
+            onError()
+    })
 }
 
 fun Context.openLink(url: String) {
@@ -315,11 +289,11 @@ fun Context.openLink(url: String) {
 
 @Composable
 fun <T> T.useDebounce(
-        delayMillis: Long = 300L,
-        coroutineScope: CoroutineScope = rememberCoroutineScope(),
-        onChange: suspend (T) -> Unit
-    ): T{
-        val state by rememberUpdatedState(this)
+    delayMillis: Long = 300L,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    onChange: suspend (T) -> Unit
+): T{
+    val state by rememberUpdatedState(this)
 
     DisposableEffect(state){
         val job = coroutineScope.launch {

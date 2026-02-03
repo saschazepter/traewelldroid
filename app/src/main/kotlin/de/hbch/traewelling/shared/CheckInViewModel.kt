@@ -1,9 +1,11 @@
 package de.hbch.traewelling.shared
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import de.hbch.traewelling.api.TraewellingApi
+import de.hbch.traewelling.TraewelldroidApplication
+import de.hbch.traewelling.api.AuthManager
 import de.hbch.traewelling.api.models.Data
 import de.hbch.traewelling.api.models.event.Event
 import de.hbch.traewelling.api.models.status.TrwlCheckInRequest
@@ -24,8 +26,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.ZonedDateTime
 
-class CheckInViewModel : ViewModel() {
-    val trwlProvider: TrwlCheckInProvider = TrwlCheckInProvider()
+class CheckInViewModel(application: Application) : AndroidViewModel(application) {
+    private var traewellingApi = (application as TraewelldroidApplication).traewellingApi
+    val trwlProvider: TrwlCheckInProvider = TrwlCheckInProvider(AuthManager.getInstance(application))
     val travelynxProvider: TravelynxCheckInProvider = TravelynxCheckInProvider()
 
     var lineName: String = ""
@@ -139,7 +142,7 @@ class CheckInViewModel : ViewModel() {
     }
 
     fun updateCheckIn(successfulCallback: (Status) -> Unit) {
-        TraewellingApi.checkInService.updateCheckIn(
+        traewellingApi.checkInService.updateCheckIn(
             editStatusId,
             TrwlCheckInUpdateRequest(
                 message.value,

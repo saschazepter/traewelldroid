@@ -79,7 +79,7 @@ android {
         }
         debug {
             buildConfigField("String", "OAUTH_REDIRECT_URL", "\"https://app.traewelldroid.de/oauth2redirect\"")
-            buildConfigField("String", "OAUTH_CLIENT_ID", "\"43\"")
+            buildConfigField("String", "OAUTH_CLIENT_ID", "\"63\"")
             buildConfigField("String", "REPO_URL", "\"https://github.com/Traewelldroid/traewelldroid\"")
             buildConfigField("String", "PRIVACY_URL", "\"https://traewelldroid.de/privacy\"")
             buildConfigField("String", "UNLEASH_URL", "\"https://unleash.traewelldroid.de/api/frontend\"")
