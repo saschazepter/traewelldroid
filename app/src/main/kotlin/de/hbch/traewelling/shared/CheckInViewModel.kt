@@ -34,6 +34,7 @@ class CheckInViewModel(application: Application) : AndroidViewModel(application)
     var lineName: String = ""
     var lineId: String? = null
     var lineColor: String? = null
+    var textColor: String? = null
     var operatorCode: String? = null
     var tripId: String = ""
     var originId: Int = 0

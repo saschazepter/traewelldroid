@@ -17,7 +17,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,7 +38,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.Status
-import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.theme.LocalColorScheme
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.ui.include.status.StationRow
@@ -248,6 +246,7 @@ fun SharePic(
                         lineName = status.journey.line,
                         modifier = alignmentModifier.padding(start = 4.dp),
                         lineColorString = status.journey.lineColor,
+                        textColorString = status.journey.textColor
                     )
                     Text(
                         modifier = alignmentModifier.padding(start = 12.dp),
