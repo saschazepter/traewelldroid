@@ -2,6 +2,7 @@ package de.hbch.traewelling.api
 
 import android.content.Context
 import androidx.annotation.AnyThread
+import com.auth0.android.jwt.JWT
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.BuildConfig
 import de.hbch.traewelling.shared.SharedValues
@@ -89,13 +90,35 @@ class AuthManager private constructor(context: Context) {
     ) {
         val stateSnapshot = lock.withLock { authState }
 
-        stateSnapshot.performActionWithFreshTokens(authService) { accessToken, _, ex ->
-            writeState(stateSnapshot)
+        // Check if current token needs to be refreshed
+        val token = stateSnapshot.getAccessToken()
+        try {
+            val jwt = JWT(token ?: "")
 
+            if ((jwt.expiresAt?.time ?: 0) > System.currentTimeMillis()) {
+                callback(token)
+                return
+            }
+        } catch (_: Exception) {
+            // ignored
+        }
+
+        authService.performTokenRequest(
+            TokenRequest.Builder(
+                SharedValues.AUTH_SERVICE_CONFIG,
+                BuildConfig.OAUTH_CLIENT_ID
+            )
+                .setRefreshToken(stateSnapshot.refreshToken)
+                .setGrantType(GrantTypeValues.REFRESH_TOKEN)
+                .build()
+        ) { tokenResponse, ex ->
+            stateSnapshot.update(tokenResponse, ex)
+            writeState(stateSnapshot)
             if (ex != null) {
                 onError(ex)
+            } else {
+                callback(tokenResponse?.accessToken)
             }
-            callback(accessToken)
         }
     }
 
