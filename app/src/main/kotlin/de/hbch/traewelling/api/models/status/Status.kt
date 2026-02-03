@@ -70,7 +70,7 @@ data class Status(
         val matches = listOf(usernames, extractedEmojis).flatten().sortedBy { it.range.first }
         val builder = AnnotatedString.Builder()
 
-        val instance = (user.mastodonUrl ?: loggedInUserMastodonUrl)?.let { URL(it).host }
+        val instance = (user.mastodonData?.instance ?: loggedInUserMastodonUrl)?.let { URL(it).host }
 
         LaunchedEffect(instance) {
             if (instance != null && mastodonEmoji.isEmpty()) {
