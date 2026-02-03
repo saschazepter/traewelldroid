@@ -32,6 +32,7 @@ fun LineIcon(
     journeyNumber: String?,
     modifier: Modifier = Modifier,
     lineColorString: String? = null,
+    textColorString: String? = null,
     defaultTextStyle: TextStyle = LocalFont.current.bodyMedium,
     displayJourneyNumber: Boolean = true
 ) {
@@ -45,7 +46,13 @@ fun LineIcon(
 
     val lineColor: Color? = try {
         colorFromHex("#$lineColorString")
-    } catch (_: IllegalArgumentException) {
+    } catch (_: Exception) {
+        null
+    }
+
+    val textColor: Color? = try {
+        colorFromHex("#$textColorString")
+    } catch (_: Exception) {
         null
     }
 
@@ -67,7 +74,7 @@ fun LineIcon(
                 Text(
                     text = displayedName,
                     modifier = Modifier.align(Alignment.Center),
-                    color = getContrastTextColor(lineColor),
+                    color = textColor ?: getContrastTextColor(lineColor),
                     style = LineIconStyle,
                     fontWeight = FontWeight.Bold
                 )
@@ -99,13 +106,20 @@ fun LineIconView(
     lineName: String,
     modifier: Modifier = Modifier,
     lineColorString: String? = null,
+    textColorString: String? = null,
     defaultTextStyle: TextStyle = LocalFont.current.bodyMedium
 ) {
     val displayedName = lineName.split(" (").firstOrNull() ?: lineName
 
     val lineColor: Color? = try {
         colorFromHex("#$lineColorString")
-    } catch (_: IllegalArgumentException) {
+    } catch (_: Exception) {
+        null
+    }
+
+    val textColor: Color? = try {
+        colorFromHex("#$textColorString")
+    } catch (_: Exception) {
         null
     }
 
@@ -127,7 +141,7 @@ fun LineIconView(
                 Text(
                     text = displayedName,
                     modifier = Modifier.align(Alignment.Center),
-                    color = getContrastTextColor(lineColor),
+                    color = textColor ?: getContrastTextColor(lineColor),
                     style = LineIconStyle,
                     fontWeight = FontWeight.Bold
                 )
