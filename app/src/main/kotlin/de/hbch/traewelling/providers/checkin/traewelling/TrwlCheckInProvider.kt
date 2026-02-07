@@ -39,8 +39,8 @@ class TrwlCheckInProvider(authManager: AuthManager): CheckInProvider<TrwlCheckIn
     }
 
     override val client = httpClientBuilder
-        .addInterceptor(ErrorInterceptor())
         .addInterceptor(AuthInterceptor(authManager))
+        .addInterceptor(ErrorInterceptor())
         .build()
     override val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(ZonedDateTimeRetrofitConverterFactory.create())

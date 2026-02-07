@@ -334,8 +334,8 @@ interface WrappedService {
 class TraewellingApi(context: Context) {
     private val httpClient = OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS)
         .addInterceptor(LogInterceptor())
-        .addInterceptor(ErrorInterceptor())
         .addInterceptor(AuthInterceptor(AuthManager.getInstance(context)))
+        .addInterceptor(ErrorInterceptor())
         .build()
 
     private val trwlRetrofit =

@@ -13,16 +13,21 @@ import net.openid.appauth.GrantTypeValues
 import net.openid.appauth.TokenRequest
 import net.openid.appauth.TokenResponse
 import org.json.JSONException
+import java.time.Duration
+import java.time.Instant
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 class AuthManager private constructor(context: Context) {
     private val secureStorage: SecureStorage = SecureStorage(context.applicationContext)
     private val lock = ReentrantLock()
+    private val apiLock = ReentrantLock()
     private val authService = AuthorizationService(context.applicationContext)
 
     @Volatile
     private var authState: AuthState = AuthState()
+
+    val token get() = authState.accessToken
 
     init {
         readState()
@@ -79,45 +84,51 @@ class AuthManager private constructor(context: Context) {
         }
     }
 
-    fun replace(state: AuthState) = writeState(state)
+    fun replace(state: AuthState?) = writeState(state)
 
-    fun logout() = replace(AuthState())
+    fun logout() = replace(null)
 
     @AnyThread
     fun getFreshAccessToken(
         callback: (String?) -> Unit,
         onError: (AuthorizationException?) -> Unit = {}
     ) {
-        val stateSnapshot = lock.withLock { authState }
+        apiLock.withLock {
+            val stateSnapshot = lock.withLock { authState }
 
-        // Check if current token needs to be refreshed
-        val token = stateSnapshot.getAccessToken()
-        try {
-            val jwt = JWT(token ?: "")
+            // Check if current token needs to be refreshed
+            val token = stateSnapshot.getAccessToken()
+            try {
+                val jwt = JWT(token ?: "")
 
-            if ((jwt.expiresAt?.time ?: 0) > System.currentTimeMillis()) {
-                callback(token)
-                return
+                val eat = jwt.expiresAt?.toInstant() ?: Instant.MIN
+                val now = Instant.now()
+                val duration = Duration.between(now, eat)
+
+                if (duration > Duration.ofMinutes(55)) {
+                    callback(token)
+                    return
+                }
+            } catch (_: Exception) {
+                // ignored
             }
-        } catch (_: Exception) {
-            // ignored
-        }
 
-        authService.performTokenRequest(
-            TokenRequest.Builder(
-                SharedValues.AUTH_SERVICE_CONFIG,
-                BuildConfig.OAUTH_CLIENT_ID
-            )
-                .setRefreshToken(stateSnapshot.refreshToken)
-                .setGrantType(GrantTypeValues.REFRESH_TOKEN)
-                .build()
-        ) { tokenResponse, ex ->
-            stateSnapshot.update(tokenResponse, ex)
-            writeState(stateSnapshot)
-            if (ex != null) {
-                onError(ex)
-            } else {
-                callback(tokenResponse?.accessToken)
+            authService.performTokenRequest(
+                TokenRequest.Builder(
+                    SharedValues.AUTH_SERVICE_CONFIG,
+                    BuildConfig.OAUTH_CLIENT_ID
+                )
+                    .setRefreshToken(stateSnapshot.refreshToken)
+                    .setGrantType(GrantTypeValues.REFRESH_TOKEN)
+                    .build()
+            ) { tokenResponse, ex ->
+                stateSnapshot.update(tokenResponse, ex)
+                writeState(stateSnapshot)
+                if (ex != null) {
+                    onError(ex)
+                } else {
+                    callback(tokenResponse?.accessToken)
+                }
             }
         }
     }

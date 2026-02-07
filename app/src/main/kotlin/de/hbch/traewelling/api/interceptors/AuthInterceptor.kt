@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference
 class AuthInterceptor(private val authManager: AuthManager) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val tokenRef = AtomicReference<String?>(null)
+        val tokenRef = AtomicReference(authManager.token)
         val latch = CountDownLatch(1)
 
         authManager.getFreshAccessToken(
