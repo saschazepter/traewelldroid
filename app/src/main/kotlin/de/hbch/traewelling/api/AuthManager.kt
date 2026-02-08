@@ -15,15 +15,13 @@ import net.openid.appauth.TokenResponse
 import org.json.JSONException
 import java.time.Duration
 import java.time.Instant
-import java.util.concurrent.CountDownLatch
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-val API_LOCK = ReentrantLock()
+val STATE_LOCK = ReentrantLock()
 
 class AuthManager private constructor(context: Context) {
     private val secureStorage: SecureStorage = SecureStorage(context.applicationContext)
-    private val lock = ReentrantLock()
     private val authService = AuthorizationService(context.applicationContext)
 
     @Volatile
@@ -36,7 +34,7 @@ class AuthManager private constructor(context: Context) {
     }
 
     fun readState() {
-        lock.withLock {
+        STATE_LOCK.withLock {
             val stateString = secureStorage.getObject(SharedValues.SS_AUTH_STATE, String::class.java)
             if (stateString != null) {
                 try {
@@ -75,7 +73,7 @@ class AuthManager private constructor(context: Context) {
     }
 
     private fun writeState(state: AuthState?) {
-        lock.withLock {
+        STATE_LOCK.withLock {
             authState = state ?: AuthState()
             val stateString = state?.jsonSerializeString()
             if (stateString != null) {
@@ -90,74 +88,84 @@ class AuthManager private constructor(context: Context) {
 
     fun logout() = replace(null)
 
+    private val refreshLock = ReentrantLock()
+    private var refreshInFlight = false
+    private val waiters = mutableListOf<Pair<(String?) -> Unit, (AuthorizationException?) -> Unit>>()
+
     @AnyThread
     fun getFreshAccessToken(
         callback: (String?) -> Unit,
         onError: (AuthorizationException?) -> Unit = {}
     ) {
-        val token = lock.withLock { authState }.accessToken
-        try {
-            val jwt = JWT(token ?: "")
-            val eat = jwt.expiresAt?.toInstant() ?: Instant.MIN
-            val now = Instant.now()
-            val duration = Duration.between(now, eat)
-
-            if (duration > Duration.ofMinutes(59)) {
-                callback(token)
-                return
-            }
-        } catch (_: Exception) {
-            // ignored
+        // Check if token is fresh
+        val tokenNow = STATE_LOCK.withLock { authState.accessToken }
+        if (isTokenFresh(tokenNow)) {
+            callback(tokenNow)
+            return
         }
 
-        API_LOCK.withLock {
-            val currentState = lock.withLock { authState }
-            val freshToken = currentState.accessToken
-            try {
-                val jwt = JWT(freshToken ?: "")
-
-                val eat = jwt.expiresAt?.toInstant() ?: Instant.MIN
-                val now = Instant.now()
-                val duration = Duration.between(now, eat)
-
-                if (duration > Duration.ofMinutes(59)) {
-                    callback(freshToken)
-                    return@withLock
-                }
-            } catch (_: Exception) {
-                // ignored
+        // start refresh or get informed when refresh is done
+        refreshLock.withLock {
+            // check token again (avoid race conditions)
+            val tokenAgain = STATE_LOCK.withLock { authState.accessToken }
+            if (isTokenFresh(tokenAgain)) {
+                callback(tokenAgain)
+                return
             }
 
-            val latch = CountDownLatch(1)
-            var tokenResponseResult: TokenResponse? = null
-            var exResult: AuthorizationException? = null
-
-            authService.performTokenRequest(
-                TokenRequest.Builder(
-                    SharedValues.AUTH_SERVICE_CONFIG,
-                    BuildConfig.OAUTH_CLIENT_ID
-                )
-                    .setRefreshToken(currentState.refreshToken)
-                    .setGrantType(GrantTypeValues.REFRESH_TOKEN)
-                    .build()
-            ) { tokenResponse, ex ->
-                tokenResponseResult = tokenResponse
-                exResult = ex
-                latch.countDown()
-            }
-
-            latch.await()
-
-            currentState.update(tokenResponseResult, exResult)
-            writeState(currentState)
-
-            if (exResult != null) {
-                onError(exResult)
+            if (refreshInFlight) {
+                waiters += callback to onError
+                return
             } else {
-                callback(tokenResponseResult?.accessToken)
+                refreshInFlight = true
+                waiters += callback to onError
+            }
+        }
+
+        // only a single refresh can occur
+        val currentState = STATE_LOCK.withLock { authState }
+        val request = TokenRequest.Builder(
+            SharedValues.AUTH_SERVICE_CONFIG,
+            BuildConfig.OAUTH_CLIENT_ID
+        )
+            .setRefreshToken(currentState.refreshToken)
+            .setGrantType(GrantTypeValues.REFRESH_TOKEN)
+            .build()
+
+        authService.performTokenRequest(request) { tokenResponse, ex ->
+            // Update state and get waiters to notify
+            val callbacksToNotify: List<Pair<(String?) -> Unit, (AuthorizationException?) -> Unit>> =
+                refreshLock.withLock {
+                    currentState.update(tokenResponse, ex)
+                    writeState(currentState)
+
+                    refreshInFlight = false
+                    val copy = waiters.toList()
+                    waiters.clear()
+                    copy
+                }
+
+            // Notify waiters
+            if (ex != null) {
+                callbacksToNotify.forEach { (_, err) -> err(ex) }
+            } else {
+                val newToken = tokenResponse?.accessToken
+                callbacksToNotify.forEach { (cb, _) -> cb(newToken) }
             }
         }
     }
+
+    private fun isTokenFresh(token: String?): Boolean {
+        if (token.isNullOrBlank()) return false
+        return try {
+            val jwt = JWT(token)
+            val exp = jwt.expiresAt?.toInstant() ?: return false
+            Duration.between(Instant.now(), exp) > Duration.ofMinutes(30)
+        } catch (_: Exception) {
+            false
+        }
+    }
+
 
     companion object {
         @Volatile private var INSTANCE: AuthManager? = null
