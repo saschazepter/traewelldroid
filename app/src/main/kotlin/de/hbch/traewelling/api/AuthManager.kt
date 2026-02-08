@@ -15,13 +15,15 @@ import net.openid.appauth.TokenResponse
 import org.json.JSONException
 import java.time.Duration
 import java.time.Instant
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
+
+val API_LOCK = ReentrantLock()
 
 class AuthManager private constructor(context: Context) {
     private val secureStorage: SecureStorage = SecureStorage(context.applicationContext)
     private val lock = ReentrantLock()
-    private val apiLock = ReentrantLock()
     private val authService = AuthorizationService(context.applicationContext)
 
     @Volatile
@@ -93,42 +95,66 @@ class AuthManager private constructor(context: Context) {
         callback: (String?) -> Unit,
         onError: (AuthorizationException?) -> Unit = {}
     ) {
-        apiLock.withLock {
-            val stateSnapshot = lock.withLock { authState }
+        val token = lock.withLock { authState }.accessToken
+        try {
+            val jwt = JWT(token ?: "")
+            val eat = jwt.expiresAt?.toInstant() ?: Instant.MIN
+            val now = Instant.now()
+            val duration = Duration.between(now, eat)
 
-            // Check if current token needs to be refreshed
-            val token = stateSnapshot.getAccessToken()
+            if (duration > Duration.ofMinutes(59)) {
+                callback(token)
+                return
+            }
+        } catch (_: Exception) {
+            // ignored
+        }
+
+        API_LOCK.withLock {
+            val currentState = lock.withLock { authState }
+            val freshToken = currentState.accessToken
             try {
-                val jwt = JWT(token ?: "")
+                val jwt = JWT(freshToken ?: "")
 
                 val eat = jwt.expiresAt?.toInstant() ?: Instant.MIN
                 val now = Instant.now()
                 val duration = Duration.between(now, eat)
 
-                if (duration > Duration.ofMinutes(55)) {
-                    callback(token)
-                    return
+                if (duration > Duration.ofMinutes(59)) {
+                    callback(freshToken)
+                    return@withLock
                 }
             } catch (_: Exception) {
                 // ignored
             }
+
+            val latch = CountDownLatch(1)
+            var tokenResponseResult: TokenResponse? = null
+            var exResult: AuthorizationException? = null
 
             authService.performTokenRequest(
                 TokenRequest.Builder(
                     SharedValues.AUTH_SERVICE_CONFIG,
                     BuildConfig.OAUTH_CLIENT_ID
                 )
-                    .setRefreshToken(stateSnapshot.refreshToken)
+                    .setRefreshToken(currentState.refreshToken)
                     .setGrantType(GrantTypeValues.REFRESH_TOKEN)
                     .build()
             ) { tokenResponse, ex ->
-                stateSnapshot.update(tokenResponse, ex)
-                writeState(stateSnapshot)
-                if (ex != null) {
-                    onError(ex)
-                } else {
-                    callback(tokenResponse?.accessToken)
-                }
+                tokenResponseResult = tokenResponse
+                exResult = ex
+                latch.countDown()
+            }
+
+            latch.await()
+
+            currentState.update(tokenResponseResult, exResult)
+            writeState(currentState)
+
+            if (exResult != null) {
+                onError(exResult)
+            } else {
+                callback(tokenResponseResult?.accessToken)
             }
         }
     }
