@@ -5,8 +5,8 @@ plugins {
     id("com.android.application")
     id("com.mikepenz.aboutlibraries.plugin")
     id("com.google.gms.google-services")
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.10"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.3.10"
 }
 
 aboutLibraries {
@@ -119,7 +119,7 @@ android {
 
 dependencies {
     // Jetpack Compose
-    val composeVersion = "1.10.2"
+    val composeVersion = "1.10.3"
     implementation("androidx.compose.runtime:runtime:$composeVersion")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
@@ -130,7 +130,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-themeadapter-material3:0.36.0")
     implementation("com.google.accompanist:accompanist-permissions:0.37.3")
     implementation("androidx.compose.material3:material3:1.4.0")
-    implementation("androidx.activity:activity-compose:1.12.3")
+    implementation("androidx.activity:activity-compose:1.12.4")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
 
     implementation("androidx.core:core-ktx:1.17.0")
