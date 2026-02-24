@@ -89,6 +89,20 @@ enum class TagType {
         override val key = "trwl:price"
         override val example = R.string.tag_price_example
     },
+    @SerializedName("trwl:social_status")
+    SOCIAL_STATUS {
+        override val icon = R.drawable.ic_face
+        override val title = R.string.tag_social_status_title
+        override val key = "trwl:social_status"
+        override val example = R.string.please_select
+        override val allowedValues = mapOf(
+            "open" to R.string.tag_social_status_value_open,
+            "open_find_me" to R.string.tag_social_status_value_open_find_me,
+            "open_lets_hang" to R.string.tag_social_status_value_open_lets_hang,
+            "do_not_disturb" to R.string.tag_social_status_value_do_not_disturb,
+            "unknown" to R.string.unknown
+        )
+    },
     UNKNOWN {
         override val icon = R.drawable.ic_unknown
         override val title = R.string.unknown
@@ -102,4 +116,5 @@ enum class TagType {
     abstract val key: String
     abstract val example: Int
     open val selectable: Boolean = true
+    open val allowedValues: Map<String, Int>? = null
 }

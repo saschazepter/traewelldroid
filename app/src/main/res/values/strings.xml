@@ -213,6 +213,12 @@
     <string name="tag_price_example" translatable="false">6,99, 7 €, …</string>
     <string name="tag_journey_number_title">Journey number</string>
     <string name="tag_journey_number_example" translatable="false">RB 12600, ICE 900, …</string>
+    <string name="tag_social_status_title">Social status</string>
+    <string name="tag_social_status_value_open">👋 Available</string>
+    <string name="tag_social_status_value_open_find_me">🕵️ Available – Come find me!</string>
+    <string name="tag_social_status_value_open_lets_hang">🚶 Available – Let\'s meet!</string>
+    <string name="tag_social_status_value_do_not_disturb">🚫 Do not disturb</string>
+    <string name="please_select">Please select…</string>
     <string name="add_tag">Add tag</string>
     <string name="edit_tag">Edit tag</string>
     <string name="select_tag_type">Select tag type</string>
