@@ -24,7 +24,7 @@ jobs:
 
       - name: Decode Keystore
         run: |
-          echo "$SIGNING_KEYSTORE_BASE64" | base64 -di > "$RUNNER_TMP/keystore.jks"
+          echo "$SIGNING_KEYSTORE_BASE64" | base64 -di > "${{ runner.temp }}/keystore.jks"
         env:
           SIGNING_KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
 
@@ -33,7 +33,10 @@ jobs:
           echo "storePassword=${{ secrets.KEYSTORE_STORE_PASSWORD }}" >> keystore.properties
           echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}" >> keystore.properties
           echo "keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}" >> keystore.properties
-          echo "storeFile=$RUNNER_TMP/keystore.jks" >> keystore.properties
+          echo "storeFile=${{ runner.temp }}/keystore.jks" >> keystore.properties
+
+      - name: Create temp folder
+        run: mkdir -p ${{ runner.temp }}/release
 
       - name: Clean before Foss build
         run: ./gradlew clean
@@ -42,7 +45,7 @@ jobs:
         run: ./gradlew assembleFossRelease
 
       - name: Copy Foss APK artifact
-        run: cp app/build/outputs/apk/foss/release/app-foss-release.apk "$RUNNER_TMP/app-foss-release.apk"
+        run: cp app/build/outputs/apk/foss/release/app-foss-release.apk "${{ runner.temp }}/release/app-foss-release.apk"
 
       - name: Clean before Play build
         run: ./gradlew clean
@@ -51,7 +54,7 @@ jobs:
         run: ./gradlew assemblePlayRelease
 
       - name: Copy Play APK artifact
-        run: cp app/build/outputs/apk/play/release/app-play-release.apk "$RUNNER_TMP/app-play-release.apk"
+        run: cp app/build/outputs/apk/play/release/app-play-release.apk "${{ runner.temp }}/release/app-play-release.apk"
 
       - name: Build Play Release AAB
         run: ./gradlew bundlePlayRelease
@@ -60,23 +63,23 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: foss-release-apk
-          path: $RUNNER_TMP/app-foss-release.apk
+          path: ${{ runner.temp }}/release/app-foss-release.apk
 
       - name: Upload Play Release APK (Artifact)
         uses: actions/upload-artifact@v3
         with:
           name: play-release-apk
-          path: $RUNNER_TMP/app-play-release.apk
+          path: ${{ runner.temp }}/release/app-play-release.apk
 
       - name: Upload Release Assets to Forgejo Release
         uses: actions/forgejo-release@v2.11.1
         with:
           direction: upload
-          release-dir: $RUNNER_TMP
+          release-dir: ${{ runner.temp }}/release
           release-notes-assistant: true
 
       - name: Upload to Google Play
-        uses: r0adkll/upload-google-play@v1
+        uses: https://github.com/r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName: de.hbch.traewelling
