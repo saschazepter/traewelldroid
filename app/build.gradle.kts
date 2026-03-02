@@ -61,7 +61,7 @@ android {
 
             buildConfigField("String", "OAUTH_REDIRECT_URL", "\"https://app.traewelldroid.de/oauth2redirect\"")
             buildConfigField("String", "OAUTH_CLIENT_ID", "\"43\"")
-            buildConfigField("String", "REPO_URL", "\"https://github.com/Traewelldroid/traewelldroid\"")
+            buildConfigField("String", "REPO_URL", "\"https://codeberg.org/traewelldroid/traewelldroid\"")
             buildConfigField("String", "PRIVACY_URL", "\"https://traewelldroid.de/privacy\"")
             buildConfigField("String", "UNLEASH_URL", "\"https://unleash.traewelldroid.de/api/frontend\"")
             buildConfigField("String", "UNLEASH_KEY", "\"default:production.286fca3aac1497f85ed886b3339c65cdfea9d5f52450524325398461\"")
@@ -78,7 +78,7 @@ android {
         debug {
             buildConfigField("String", "OAUTH_REDIRECT_URL", "\"https://app.traewelldroid.de/oauth2redirect\"")
             buildConfigField("String", "OAUTH_CLIENT_ID", "\"63\"")
-            buildConfigField("String", "REPO_URL", "\"https://github.com/Traewelldroid/traewelldroid\"")
+            buildConfigField("String", "REPO_URL", "\"https://codeberg.org/traewelldroid/traewelldroid\"")
             buildConfigField("String", "PRIVACY_URL", "\"https://traewelldroid.de/privacy\"")
             buildConfigField("String", "UNLEASH_URL", "\"https://unleash.traewelldroid.de/api/frontend\"")
             buildConfigField("String", "UNLEASH_KEY", "\"default:development.52c54a43ebad9b9a668a69410b57cc19e44e19ab1ee40b4dd3f49b38\"")
