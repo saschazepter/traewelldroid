@@ -160,7 +160,7 @@
     <string name="product_type_express">Fjerntog</string>
     <string name="default_hashtag_text">Du kan bestemme en standardhashtag som tilsettes automatisk til dine innsjekkinger.</string>
     <string name="emoji">Emojipakke</string>
-    <string name="view_on_github">Se på prosjektet på GitHub</string>
+    <string name="view_on_github">Se på prosjektet</string>
     <string name="legal">Impressum og personvern</string>
     <string name="point_reason_forced">Fordi du fremtvunget denne innsjekkingen få du ikke alle poenger.</string>
     <string name="or">eller</string>

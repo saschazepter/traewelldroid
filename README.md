@@ -13,7 +13,7 @@ This is a community app for the open source project
 
 ## Download the app
 
-[<img src="https://raw.githubusercontent.com/Traewelldroid/traewelldroid/dev/assets/badges/google-play-badge.png" alt="Download on Google Play" width="240">](https://play.google.com/store/apps/details?id=de.hbch.traewelling)
+[<img src="https://codeberg.org/traewelldroid/traewelldroid/raw/branch/dev/assets/badges/google-play-badge.png" alt="Download on Google Play" width="240">](https://play.google.com/store/apps/details?id=de.hbch.traewelling)
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Download on F-Droid" width="240">](https://f-droid.org/packages/de.hbch.traewelling)
 
 ## How it is developed
@@ -45,7 +45,7 @@ Personalised properties can be configured in the app-level `build.gradle` file.
 ## Contributions
 
 I'm always happy for contributions in any way! Is there something that could be improved on
-Träwelldroid? Just [create an issue](https://github.com/Traewelldroid/traewelldroid/issues/new/choose)
+Träwelldroid? Just [create an issue](https://codeberg.org/traewelldroid/traewelldroid/issues/new/choose)
 and tell us about your concerns or ideas!
 
 Of course you're also free to contribute code by yourself! Just fork the repo, do your changes and

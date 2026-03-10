@@ -119,7 +119,7 @@ android {
 
 dependencies {
     // Jetpack Compose
-    val composeVersion = "1.10.3"
+    val composeVersion = "1.10.4"
     implementation("androidx.compose.runtime:runtime:$composeVersion")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
