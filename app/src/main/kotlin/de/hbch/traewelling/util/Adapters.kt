@@ -174,8 +174,8 @@ fun getJwtExpiration(jwt: String): String {
 fun getStationNameWithRL100(station: Station): String =
     station.name.let {
         var stationName = it
-        if (station.ds100 != null) {
-            stationName = stationName.plus(" [${station.ds100}]")
+        if (station.rl100 != null) {
+            stationName = stationName.plus(" [${station.rl100}]")
         }
         stationName
     }

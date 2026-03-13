@@ -26,7 +26,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     ): List<Station>? {
         return try {
             val stations = traewellingApi.travelService.autoCompleteStationSearch(query).data
-            stations.sortedWith(compareBy(nullsLast()) { it.ds100 })
+            stations.sortedWith(compareBy(nullsLast()) { it.rl100 })
         } catch (_: Exception) {
             null
         }
