@@ -112,6 +112,6 @@
     <string name="hint_event_missing">Bir etkinliği göremiyor musunuz? Önerinizi Träwelling websitesine gönderebilirsiniz! https://traewelling.de/events</string>
     <string name="tag_ticket_example">Örneğin: Kentkart, TrenKart, Esnek Bilet, …</string>
     <string name="tag_travel_class_example">Örneğin: 1. Mevki, Ekonomi, Business, …</string>
-    <string name="follow_request_issued">%1$s seni takip etmek istiyor!</string>
+    <string name="follow_request_issued">\@%1$s seni takip etmek istiyor!</string>
     <string name="settings_check_in_providers_description">Check-in sağlayıcılarınızı buradan yönetebilirsiniz.</string>
 </resources>

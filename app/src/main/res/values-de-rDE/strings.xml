@@ -35,7 +35,7 @@
     <string name="error_missing_location_permission">Um diese Funktion zu nutzen, musst du die Standortberechtigung in deinen Geräteeinstellungen aktivieren.</string>
     <string name="username_or_email">Username oder E-Mail-Adresse</string>
     <string name="check_in_successful">Du bist eingecheckt!</string>
-    <string name="check_in_failure">Beim Einchecken ist ein Fehler aufgetreten</string>
+    <string name="check_in_failure">Beim Einchecken ist ein Fehler aufgetreten.</string>
     <string name="check_in_conflict">Du bist bereits in einer anderen Verbindung eingecheckt!</string>
     <string name="title_select_date">Wähle das Abfahrtsdatum</string>
     <string name="title_select_time">Wähle die Abfahrtszeit</string>
@@ -148,7 +148,7 @@
     <string name="status_not_shared_on_mastodon">Dein Check-In wurde aufgrund von Fehler %1$d nicht auf Mastodon geteilt.</string>
     <string name="user_mentioned_you">\@%1$s hat dich in einem Status erwähnt.</string>
     <string name="map_view">Kartenansicht</string>
-    <string name="configure_map">Hier kannst du die Kartenansicht konfigurieren.</string>
+    <string name="configure_map">Hier kannst du die Kartenansicht konfigurieren</string>
     <string name="standard_layer">Standard</string>
     <string name="standard_description">Darstellung von Infrastruktur, Gleisen, Bahnhöfen, …</string>
     <string name="signal_layer">Signale</string>
@@ -312,7 +312,7 @@
     <string name="take_me_back">Bring mich zurück!</string>
     <string name="wrapped_is_being_prepared">Dein Jahresrückblick wird vorbereitet. Dies kann ein paar Sekunden dauern - bitte hab ein wenig Geduld. 😊</string>
     <string name="wrapped_hey">Hey %1$s! 👋🏼</string>
-    <string name="wrapped_intro">Gemeinsam haben wir viel erlebt. Lass uns auf dein Fahrtenjahr %1$d zurückschauen und entdecke deinen Rückblick!</string>
+    <string name="wrapped_intro">Gemeinsam haben wir viel erlebt. Lass uns auf dein Fahrtenjahr %1$d zurückschauen und entdecke deinen Rückblick! ⏳</string>
     <string name="wrapped_title">Jahresrückblick</string>
     <string name="wrapped_times">mal …</string>
     <string name="wrapped_times_checked_in">… hast du eingecheckt! Insgesamt waren das …</string>
@@ -352,7 +352,7 @@
     <string name="trwl_api_error">Aktuell gibt es vermehrt Probleme bei Träwelling (traewelling.de), daher ist die Funktionalität eingeschränkt. Bitte prüfe die Träwelling-Webseite.</string>
     <string name="no_map_for_check_in">Für diesen Check-In steht moment leider keine Kartenansicht zur Verfügung.</string>
     <string name="now">Jetzt</string>
-    <string name="push_registration_no_endpoint_error">Konnte nicht für Push-Benachrichtigungen registrieren</string>
+    <string name="push_registration_no_endpoint_error">Konnte nicht für Push-Benachrichtigungen registrieren.</string>
     <string name="time_zone">Zeitzone</string>
     <string name="bio">Bio</string>
     <string name="email">E-Mail-Adresse</string>

@@ -139,7 +139,7 @@
     <string name="event_suggestion_rejected">Din Eventvorschlag %1$s isch abglehnt worde.</string>
     <string name="user_followed">\@%1$s folgt dir jetzt!</string>
     <string name="user_also_on_connection">\@%1$s isch au i dinere Verbindig!</string>
-    <string name="follow_request_issued">%1$s möcht dir folgä!</string>
+    <string name="follow_request_issued">\@%1$s möcht dir folgä!</string>
     <string name="follow_request_approved">\@%1$s hät dini Folgeanfrag beschtätigt!</string>
     <string name="standard_description">Darschtellig vo Infraschtruktur wie Gleis, Bahnhöf, …</string>
     <string name="signal_layer">Signal</string>
