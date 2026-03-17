@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
-    <locale android:name="en-US"/>
-    <locale android:name="de-DE"/>
+    <locale android:name="en"/>
+    <locale android:name="de"/>
     <locale android:name="de-CH"/>
-    <locale android:name="nb-NO" />
+    <locale android:name="nb" />
+    <locale android:name="kw" />
 </locale-config>
