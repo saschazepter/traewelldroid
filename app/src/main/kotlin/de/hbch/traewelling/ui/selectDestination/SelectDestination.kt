@@ -36,8 +36,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.hbch.traewelling.R
-import de.hbch.traewelling.api.models.trip.HafasTrainTrip
-import de.hbch.traewelling.api.models.trip.HafasTrainTripStation
+import de.hbch.traewelling.api.models.trip.Trip
+import de.hbch.traewelling.api.models.trip.Stopover
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.shared.CheckInViewModel
 import de.hbch.traewelling.theme.LocalColorScheme
@@ -51,10 +51,10 @@ import de.hbch.traewelling.util.getLocalTimeString
 fun SelectDestination(
     checkInViewModel: CheckInViewModel,
     modifier: Modifier = Modifier,
-    onStationSelected: (HafasTrainTripStation) -> Unit = { }
+    onStationSelected: (Stopover) -> Unit = { }
 ) {
     val selectDestinationViewModel: SelectDestinationViewModel = viewModel()
-    var trip by remember { mutableStateOf<HafasTrainTrip?>(null) }
+    var trip by remember { mutableStateOf<Trip?>(null) }
     var dataLoading by remember { mutableStateOf(false) }
     var dataError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
@@ -65,7 +65,6 @@ fun SelectDestination(
             selectDestinationViewModel.getTrip(
                 checkInViewModel.tripId,
                 checkInViewModel.lineName,
-                checkInViewModel.originId,
                 { tripData ->
                     dataLoading = false
                     val relevantStations = tripData.stopovers.subList(
@@ -140,7 +139,6 @@ fun SelectDestination(
                                                 tripStation.arrivalPlanned
                                             checkInViewModel.destination = tripStation.name
                                             checkInViewModel.destinationId = tripStation.id
-                                            checkInViewModel.destinationEvaIdentifier = tripStation.evaIdentifier
                                             onStationSelected(tripStation)
                                         }
                                     }),
@@ -206,7 +204,7 @@ fun FromToTextRow(
 @Composable
 private fun TravelStopListItem(
     modifier: Modifier = Modifier,
-    station: HafasTrainTripStation,
+    station: Stopover,
     isLastStop: Boolean = false
 ) {
     ConstraintLayout(
@@ -268,10 +266,6 @@ private fun TravelStopListItem(
             )
         }
 
-        // Station description
-        var stationNameText = station.name
-        if (station.rilIdentifier != null)
-            stationNameText = stationNameText.plus(" [${station.rilIdentifier}]")
         Text(
             modifier = Modifier
                 .padding(vertical = 12.dp)
@@ -282,7 +276,7 @@ private fun TravelStopListItem(
                     end.linkTo(time.start, margin = 8.dp)
                     width = Dimension.fillToConstraints
                 },
-            text = stationNameText,
+            text = station.name,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = LocalFont.current.titleMedium

@@ -35,7 +35,7 @@ import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.api.models.status.StatusBusiness
 import de.hbch.traewelling.api.models.status.StatusVisibility
-import de.hbch.traewelling.api.models.trip.HafasTrainTripStation
+import de.hbch.traewelling.api.models.trip.Stopover
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.shared.SettingsViewModel
@@ -267,7 +267,7 @@ fun calculateProgress(
 @Composable
 fun StationRow(
     modifier: Modifier = Modifier,
-    station: HafasTrainTripStation,
+    station: Stopover,
     timePlanned: ZonedDateTime,
     timeReal: ZonedDateTime?,
     verticalAlignment: Alignment.Vertical = Alignment.Top,
@@ -738,7 +738,7 @@ private fun CheckInCardFooter(
                 contentDescription = null
             )
             Text(
-                text = status.event!!.name,
+                text = status.event.name,
                 style = LocalFont.current.labelMedium
             )
         }

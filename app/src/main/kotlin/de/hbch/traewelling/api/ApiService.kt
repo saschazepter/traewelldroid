@@ -22,8 +22,8 @@ import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.api.models.status.StatusPage
 import de.hbch.traewelling.api.models.status.Tag
 import de.hbch.traewelling.api.models.status.TrwlCheckInUpdateRequest
-import de.hbch.traewelling.api.models.trip.HafasTrainTrip
-import de.hbch.traewelling.api.models.trip.HafasTripPage
+import de.hbch.traewelling.api.models.trip.Trip
+import de.hbch.traewelling.api.models.trip.DeparturePage
 import de.hbch.traewelling.api.models.user.*
 import de.hbch.traewelling.api.models.webhook.WebhookUserCreateRequest
 import de.hbch.traewelling.api.models.wrapped.YearInReviewData
@@ -169,9 +169,8 @@ interface TravelService {
     @GET("trains/trip")
     fun getTrip(
         @Query("hafasTripId") tripId: String,
-        @Query("lineName") lineName: String,
-        @Query("start") start: Int
-    ): Call<Data<HafasTrainTrip>>
+        @Query("lineName") lineName: String
+    ): Call<Data<Trip>>
 
     @GET("trains/station/nearby")
     suspend fun getNearbyStation(
@@ -184,7 +183,7 @@ interface TravelService {
         @Path("id") stationId: Int,
         @Query("when") time: ZonedDateTime,
         @Query("travelType") filter: String
-    ): Response<HafasTripPage>
+    ): Response<DeparturePage>
 
     @GET("trains/station/autocomplete/{station}")
     suspend fun autoCompleteStationSearch(
@@ -320,7 +319,7 @@ interface WebhookRelayService {
 }
 
 interface ReportService {
-    @POST("report")
+    @POST("reports")
     suspend fun createReport(
         @Body report: Report
     ): Response<Unit>

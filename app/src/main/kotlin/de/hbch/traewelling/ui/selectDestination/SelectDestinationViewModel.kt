@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import de.hbch.traewelling.TraewelldroidApplication
 import de.hbch.traewelling.api.models.Data
-import de.hbch.traewelling.api.models.trip.HafasTrainTrip
+import de.hbch.traewelling.api.models.trip.Trip
 import de.hbch.traewelling.logging.Logger
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,15 +16,14 @@ class SelectDestinationViewModel(application: Application) : AndroidViewModel(ap
     fun getTrip(
         tripId: String,
         lineName: String,
-        start: Int,
-        successfulCallback: (HafasTrainTrip) -> Unit,
+        successfulCallback: (Trip) -> Unit,
         failureCallback: (String?) -> Unit
     ) {
-        traewellingApi.travelService.getTrip(tripId, lineName, start)
-            .enqueue(object: Callback<Data<HafasTrainTrip>> {
+        traewellingApi.travelService.getTrip(tripId, lineName)
+            .enqueue(object: Callback<Data<Trip>> {
                 override fun onResponse(
-                    call: Call<Data<HafasTrainTrip>>,
-                    response: Response<Data<HafasTrainTrip>>
+                    call: Call<Data<Trip>>,
+                    response: Response<Data<Trip>>
                 ) {
                     if (response.isSuccessful) {
                         val trip = response.body()?.data
@@ -35,7 +34,7 @@ class SelectDestinationViewModel(application: Application) : AndroidViewModel(ap
                     }
                     failureCallback(response.errorBody()?.string())
                 }
-                override fun onFailure(call: Call<Data<HafasTrainTrip>>, t: Throwable) {
+                override fun onFailure(call: Call<Data<Trip>>, t: Throwable) {
                     Logger.captureException(t)
                     failureCallback(t.message)
                 }

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.auth0.android.jwt.JWT
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.station.Station
-import de.hbch.traewelling.api.models.trip.HafasTrip
+import de.hbch.traewelling.api.models.trip.Departure
 import java.lang.Exception
 import java.time.Duration
 import java.time.Instant
@@ -92,11 +92,11 @@ fun isSameDay(date1: LocalDate, date2: LocalDate): Boolean {
     return date1.isEqual(date2)
 }
 
-fun getLastDestination(trip: HafasTrip): String {
+fun getLastDestination(trip: Departure): String {
     val lastDestination = clarifyRingbahnBerlin(trip)
 
     return lastDestination.ifBlank {
-        trip.direction ?: (trip.destination?.name ?: "")
+        trip.direction ?: ""
     }
 }
 
@@ -143,13 +143,13 @@ fun getSwitzerlandLineName(productName: String, lineId: String): Pair<AnnotatedS
     return Pair(null, mapOf())
 }
 
-private fun clarifyRingbahnBerlin(trip: HafasTrip): String {
+private fun clarifyRingbahnBerlin(trip: Departure): String {
     if (trip.line == null || trip.direction == null)
         return ""
 
     if (trip.direction.contains("Ring")) {
-        return trip.direction.replace("S41", "↻")
-            .replace("S42", "↺")
+        return trip.direction.replace("S 41", "↻")
+            .replace("S 42", "↺")
     }
 
     return ""

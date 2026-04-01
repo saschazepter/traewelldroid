@@ -205,10 +205,6 @@ fun StatusDetail(
                                 .appendPath("details")
                                 .appendPath(journeyNumber)
                                 .appendPath(isoDate)
-                                .appendQueryParameter(
-                                    "evaNumberAlongRoute",
-                                    dStatus.journey.origin.evaIdentifier.toString()
-                                )
                                 .build()
 
                             intent.launchUrl(

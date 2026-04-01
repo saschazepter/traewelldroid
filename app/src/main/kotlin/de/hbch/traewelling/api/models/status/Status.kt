@@ -38,11 +38,11 @@ data class Status(
     var likes: Int?,
     var liked: Boolean?,
     @SerializedName("isLikable") val likeable: Boolean?,
-    @SerializedName("train") val journey: Journey,
+    @SerializedName("checkin") val journey: Journey,
     val event: Event?,
     val client: ApiClient?,
     @SerializedName("bodyMentions") val mentions: List<UserMention>,
-    @SerializedName("userDetails") val user: LightUser,
+    val user: LightUser,
     val tags: List<Tag>
 ) {
     fun getStatusText(): String {

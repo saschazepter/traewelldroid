@@ -35,7 +35,6 @@ class CheckInViewModel(application: Application) : AndroidViewModel(application)
     var lineId: String? = null
     var lineColor: String? = null
     var textColor: String? = null
-    var operatorCode: String? = null
     var tripId: String = ""
     var originId: Int = 0
     var destinationId: Int = 0
@@ -70,7 +69,6 @@ class CheckInViewModel(application: Application) : AndroidViewModel(application)
         arrivalTime = null
         tripId = ""
         lineName = ""
-        operatorCode = null
         lineId = null
         lineColor = null
         departureTime = null

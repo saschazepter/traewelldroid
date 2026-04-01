@@ -2,17 +2,13 @@ package de.hbch.traewelling.api.models.trip
 
 import java.time.ZonedDateTime
 
-data class HafasTrainTripStation(
+data class Stopover(
     val id: Int,
     val name: String,
-    val rilIdentifier: String?,
-    val evaIdentifier: Long?,
-    val arrival: ZonedDateTime?,
     val arrivalPlanned: ZonedDateTime,
     val arrivalReal: ZonedDateTime?,
     val arrivalPlatformPlanned: String?,
     val arrivalPlatformReal: String?,
-    val departure: ZonedDateTime?,
     val departurePlanned: ZonedDateTime,
     val departureReal: ZonedDateTime?,
     val departurePlatformPlanned: String?,

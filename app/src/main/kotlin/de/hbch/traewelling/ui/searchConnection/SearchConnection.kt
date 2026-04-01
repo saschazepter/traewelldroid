@@ -53,9 +53,9 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.station.Station
-import de.hbch.traewelling.api.models.trip.HafasLine
-import de.hbch.traewelling.api.models.trip.HafasTrip
-import de.hbch.traewelling.api.models.trip.HafasTripPage
+import de.hbch.traewelling.api.models.trip.Line
+import de.hbch.traewelling.api.models.trip.Departure
+import de.hbch.traewelling.api.models.trip.DeparturePage
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.shared.CheckInViewModel
 import de.hbch.traewelling.shared.LoggedInUserViewModel
@@ -92,15 +92,15 @@ fun SearchConnection(
 
     var timeTableError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
-    var hafasTripPage by remember { mutableStateOf<HafasTripPage?>(null) }
+    var departurePage by remember { mutableStateOf<DeparturePage?>(null) }
     var stationId by rememberSaveable { mutableIntStateOf(station) }
-    val stationName by remember { derivedStateOf { hafasTripPage?.meta?.station?.name ?: "" } }
+    val stationName by remember { derivedStateOf { departurePage?.meta?.station?.name ?: "" } }
     val trips by remember { derivedStateOf {
-        val data = hafasTripPage?.data ?: listOf()
+        val data = departurePage?.data ?: listOf()
         data
     } }
-    val times by remember { derivedStateOf { hafasTripPage?.meta?.times } }
-    val removedCount by remember { derivedStateOf { hafasTripPage?.meta?.removedCount } }
+    val times by remember { derivedStateOf { departurePage?.meta?.times } }
+    val removedCount by remember { derivedStateOf { departurePage?.meta?.removedCount } }
 
     val scrollState = rememberScrollState()
     var searchDate by rememberSaveable { mutableStateOf(currentSearchDate) }
@@ -114,7 +114,7 @@ fun SearchConnection(
         coroutineScope.launch {
             val tripPage = viewModel.searchConnections(stationId, searchDate, selectedFilter)
             loading = false
-            hafasTripPage = tripPage.second
+            departurePage = tripPage.second
             timeTableError = tripPage.first >= 500
             errorMessage = tripPage.third?.message ?: ""
         }
@@ -192,7 +192,6 @@ fun SearchConnection(
                                 checkInViewModel.lineId = trip.line?.id
                                 checkInViewModel.lineColor = trip.line?.lineColor
                                 checkInViewModel.textColor = trip.line?.textColor
-                                checkInViewModel.operatorCode = trip.line?.operator?.id
                                 checkInViewModel.tripId = trip.tripId
                                 checkInViewModel.originId = trip.station?.id ?: -1
                                 checkInViewModel.originEvaIdentifier = trip.station?.evaIdentifier
@@ -244,12 +243,12 @@ fun SearchConnection(
     modifier: Modifier = Modifier,
     stationId: Int? = null,
     searchTime: ZonedDateTime = ZonedDateTime.now(),
-    trips: List<HafasTrip>? = null,
+    trips: List<Departure>? = null,
     onPreviousTime: () -> Unit = { },
     onNextTime: () -> Unit = { },
     appliedFilter: FilterType? = null,
     onFilter: (FilterType?) -> Unit = { },
-    onTripSelection: (HafasTrip) -> Unit = { },
+    onTripSelection: (Departure) -> Unit = { },
     onHomelandStationSelection: () -> Unit = { },
     onTimeSelection: (ZonedDateTime) -> Unit = { }
 ) {
@@ -396,11 +395,11 @@ fun SearchConnection(
                 isCancelled = trip.isCancelled,
                 destination = getLastDestination(trip),
                 departureStation =
-                    if (!trip.station?.name.isNullOrBlank() && stationId != null && trip.station?.id != stationId && displayDivergentStop)
-                        trip.station?.name
+                    if (!trip.station?.name.isNullOrBlank() && stationId != null && trip.station.id != stationId && displayDivergentStop)
+                        trip.station.name
                     else
                         null,
-                hafasLine = trip.line,
+                line = trip.line,
                 platformPlanned = trip.plannedPlatform,
                 platformReal = trip.platform
             )
@@ -440,12 +439,12 @@ fun ConnectionListItem(
     isCancelled: Boolean,
     destination: String,
     departureStation: String?,
-    hafasLine: HafasLine?,
+    line: Line?,
     platformPlanned: String?,
     platformReal: String?,
     modifier: Modifier = Modifier
 ) {
-    val journeyNumber = hafasLine?.journeyNumber
+    val journeyNumber = line?.journeyNumber
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -465,10 +464,10 @@ fun ConnectionListItem(
                     contentDescription = stringResource(id = productType.getString())
                 )
                 LineIcon(
-                    lineName = hafasLine?.name ?: "",
+                    lineName = line?.name ?: "",
                     journeyNumber = journeyNumber,
-                    lineColorString = hafasLine?.lineColor,
-                    textColorString = hafasLine?.textColor
+                    lineColorString = line?.lineColor,
+                    textColorString = line?.textColor
                 )
             }
 
@@ -644,7 +643,7 @@ fun ConnectionListItemPreview() {
                 isCancelled = false,
                 destination = "Memmingen",
                 departureStation = null,
-                hafasLine = null,
+                line = null,
                 platformPlanned = "2",
                 platformReal = "3 Süd"
             )
@@ -655,7 +654,7 @@ fun ConnectionListItemPreview() {
                 isCancelled = true,
                 destination = "S-Vaihingen über Dachswald, Panoramabahn etc pp",
                 departureStation = "Hauptbahnhof, Arnulf-Klett-Platz, einmal über den Fernwanderweg, rechts abbiegen, Treppe runter, dritter Bahnsteig rechts",
-                hafasLine = null,
+                line = null,
                 platformPlanned = "2",
                 platformReal = "2"
             )

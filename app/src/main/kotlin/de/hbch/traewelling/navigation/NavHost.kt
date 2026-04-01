@@ -99,7 +99,6 @@ fun TraewelldroidNavHost(
         checkInViewModel.lineId = it.journey.lineId
         checkInViewModel.lineColor = it.journey.lineColor
         checkInViewModel.textColor = it.journey.textColor
-        checkInViewModel.operatorCode = it.journey.operator?.id
         checkInViewModel.message.postValue(it.body)
         checkInViewModel.statusVisibility.postValue(it.visibility)
         checkInViewModel.statusBusiness.postValue(it.business)
@@ -122,7 +121,6 @@ fun TraewelldroidNavHost(
 
     val navToJoinConnection: (Status) -> Unit = { status ->
         checkInViewModel.lineName = status.journey.line
-        checkInViewModel.operatorCode = status.journey.operator?.id
         checkInViewModel.lineId = status.journey.lineId
         checkInViewModel.lineColor = status.journey.lineColor
         checkInViewModel.textColor = status.journey.textColor

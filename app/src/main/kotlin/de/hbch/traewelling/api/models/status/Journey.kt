@@ -3,7 +3,7 @@ package de.hbch.traewelling.api.models.status
 import com.google.gson.annotations.SerializedName
 import de.hbch.traewelling.api.models.trip.DataSource
 import de.hbch.traewelling.api.models.trip.HafasOperator
-import de.hbch.traewelling.api.models.trip.HafasTrainTripStation
+import de.hbch.traewelling.api.models.trip.Stopover
 import de.hbch.traewelling.api.models.trip.ProductType
 import java.time.ZonedDateTime
 
@@ -17,8 +17,8 @@ data class Journey(
     val distance: Int,
     val points: Int,
     val duration: Int,
-    val origin: HafasTrainTripStation,
-    val destination: HafasTrainTripStation,
+    val origin: Stopover,
+    val destination: Stopover,
     @SerializedName("manualDeparture") val departureManual: ZonedDateTime?,
     @SerializedName("manualArrival") val arrivalManual: ZonedDateTime?,
     val operator: HafasOperator?,

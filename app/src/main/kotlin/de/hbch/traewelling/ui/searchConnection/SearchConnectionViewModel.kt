@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import de.hbch.traewelling.TraewelldroidApplication
 import de.hbch.traewelling.api.models.station.Station
-import de.hbch.traewelling.api.models.trip.HafasTripPage
+import de.hbch.traewelling.api.models.trip.DeparturePage
 import java.time.ZonedDateTime
 
 class SearchConnectionViewModel(application: Application): AndroidViewModel(application) {
@@ -14,7 +14,7 @@ class SearchConnectionViewModel(application: Application): AndroidViewModel(appl
         stationId: Int,
         departureTime: ZonedDateTime,
         filterType: FilterType?
-    ): Triple<Int, HafasTripPage?, Exception?> {
+    ): Triple<Int, DeparturePage?, Exception?> {
         return try {
             val tripPage = traewellingApi
                 .travelService
