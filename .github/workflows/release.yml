@@ -72,7 +72,7 @@ jobs:
           path: ${{ runner.temp }}/release/app-play-release.apk
 
       - name: Upload Release Assets to Forgejo Release
-        uses: actions/forgejo-release@v2.11.1
+        uses: actions/forgejo-release@v2.11.3
         with:
           direction: upload
           release-dir: ${{ runner.temp }}/release
