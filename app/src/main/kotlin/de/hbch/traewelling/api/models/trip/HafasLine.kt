@@ -74,6 +74,11 @@ enum class ProductType {
     PLANE {
         override fun getIcon() = R.drawable.ic_plane
     },
+    @SerializedName("freightTrain")
+    FREIGHT_TRAIN {
+        override fun getIcon() = R.drawable.ic_package
+        override fun getString() = R.string.product_type_freight_train
+    },
     LONG_DISTANCE {
         override fun getString() = R.string.product_type_national_express
     },

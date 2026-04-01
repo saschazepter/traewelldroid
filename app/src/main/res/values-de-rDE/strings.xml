@@ -71,6 +71,7 @@
     <string name="product_type_national_express">Fernverkehr (ICE/ECE)</string>
     <string name="product_type_national">Fernverkehr (IC/EC)</string>
     <string name="product_type_plane">Flugzeug</string>
+    <string name="product_type_freight_train">Güterzug</string>
     <string name="data_loading" tools:ignore="TypographyEllipsis">Daten werden geladen…</string>
     <string name="status_details">Statusdetails</string>
     <string name="title_statistics">Statistik</string>
