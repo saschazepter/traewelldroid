@@ -71,12 +71,15 @@ jobs:
           name: play-release-apk
           path: ${{ runner.temp }}/release/app-play-release.apk
 
-      - name: Upload Release Assets to Forgejo Release
+      - name: Generate release notes
+        run: ./release_notes.sh
+
+      - name: Create Forgejo Release
         uses: actions/forgejo-release@v2.11.3
         with:
           direction: upload
           release-dir: ${{ runner.temp }}/release
-          release-notes-assistant: true
+          release-notes-file: ${{ runner.temp }}/RELEASE_NOTES.md
 
       - name: Upload to Google Play
         uses: https://github.com/r0adkll/upload-google-play@v1
