@@ -72,7 +72,7 @@ jobs:
           path: ${{ runner.temp }}/release/app-play-release.apk
 
       - name: Generate release notes
-        run: ./release_notes.sh
+        run: chmod +x ./release_notes.sh && ./release_notes.sh
 
       - name: Create Forgejo Release
         uses: actions/forgejo-release@v2.11.3
