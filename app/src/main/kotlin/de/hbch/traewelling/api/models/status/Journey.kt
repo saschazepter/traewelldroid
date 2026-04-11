@@ -2,7 +2,7 @@ package de.hbch.traewelling.api.models.status
 
 import com.google.gson.annotations.SerializedName
 import de.hbch.traewelling.api.models.trip.DataSource
-import de.hbch.traewelling.api.models.trip.HafasOperator
+import de.hbch.traewelling.api.models.trip.Operator
 import de.hbch.traewelling.api.models.trip.Stopover
 import de.hbch.traewelling.api.models.trip.ProductType
 import java.time.ZonedDateTime
@@ -21,7 +21,7 @@ data class Journey(
     val destination: Stopover,
     @SerializedName("manualDeparture") val departureManual: ZonedDateTime?,
     @SerializedName("manualArrival") val arrivalManual: ZonedDateTime?,
-    val operator: HafasOperator?,
+    val operator: Operator?,
     @SerializedName("number") val lineId: String,
     @SerializedName("routeColor") val lineColor: String?,
     @SerializedName("routeTextColor") val textColor: String?,
