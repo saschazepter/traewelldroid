@@ -1,5 +1,6 @@
 package de.hbch.traewelling.ui.composables
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -87,6 +88,7 @@ fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =
         }
     }
 
+@SuppressLint("ClickableViewAccessibility")
 @Composable
 fun MapView(
     modifier: Modifier = Modifier,
@@ -97,6 +99,18 @@ fun MapView(
 
     AndroidView(
         factory = {
+            mapViewState.setOnTouchListener { v, event ->
+                when (event.actionMasked) {
+                    android.view.MotionEvent.ACTION_DOWN -> {
+                        v.parent?.requestDisallowInterceptTouchEvent(true)
+                    }
+                    android.view.MotionEvent.ACTION_UP,
+                    android.view.MotionEvent.ACTION_CANCEL -> {
+                        v.parent?.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                false
+            }
             onInit(mapViewState)
             mapViewState
         },

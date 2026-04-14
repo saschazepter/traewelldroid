@@ -8,9 +8,11 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -89,6 +91,7 @@ fun StatusDetail(
     )
     val displayTagsInCard by settingsViewModel.displayTagsInCard.observeAsState(true)
     var displayMap by remember { mutableStateOf<Boolean?>(null) }
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(status) {
         if (status == null) {
@@ -100,157 +103,161 @@ fun StatusDetail(
         }
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        val mapModifier = modifier
-            .fillMaxHeight(if (mapExpanded) 1.0f else 0.5f)
-            .animateContentSize()
-        Box(
-            modifier = modifier
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        val fullHeight = maxHeight
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState, enabled = !mapExpanded),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            StatusDetailMap(
-                modifier = mapModifier.align(Alignment.TopCenter),
-                statusId = statusId,
-                statusDetailViewModel = statusDetailViewModel,
-                mapLoaded = { displayMap = it }
-            )
-            if (displayMap == true) {
-                IconToggleButton(
-                    modifier = Modifier.align(Alignment.TopEnd),
-                    checked = mapExpanded,
-                    onCheckedChange = {
-                        mapExpanded = it
-                    },
-                    colors = IconButtonDefaults.filledIconToggleButtonColors()
-                ) {
-                    AnimatedContent(mapExpanded, label = "MapExpansionIcon") {
-                        val iconSource =
-                            if (it) R.drawable.ic_fullscreen_exit else R.drawable.ic_fullscreen
-                        Icon(
-                            painter = painterResource(id = iconSource),
-                            contentDescription = null
-                        )
+            val mapModifier = Modifier
+                .fillMaxWidth()
+                .height(if (mapExpanded) fullHeight else fullHeight * 0.5f)
+                .animateContentSize()
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                StatusDetailMap(
+                    modifier = mapModifier.align(Alignment.TopCenter),
+                    statusId = statusId,
+                    statusDetailViewModel = statusDetailViewModel,
+                    mapLoaded = { displayMap = it }
+                )
+                if (displayMap == true) {
+                    IconToggleButton(
+                        modifier = Modifier.align(Alignment.TopEnd),
+                        checked = mapExpanded,
+                        onCheckedChange = {
+                            mapExpanded = it
+                        },
+                        colors = IconButtonDefaults.filledIconToggleButtonColors()
+                    ) {
+                        AnimatedContent(mapExpanded, label = "MapExpansionIcon") {
+                            val iconSource =
+                                if (it) R.drawable.ic_fullscreen_exit else R.drawable.ic_fullscreen
+                            Icon(
+                                painter = painterResource(id = iconSource),
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
             }
-        }
-        AnimatedVisibility (!mapExpanded) {
-            val scrollState = rememberScrollState()
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(scrollState),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                CheckInCard(
-                    checkInCardViewModel = checkInCardViewModel,
-                    status = status,
-                    joinConnection = joinConnection,
-                    loggedInUserViewModel = loggedInUserViewModel,
-                    onDeleted = statusDeleted,
-                    handleEditClicked = statusEdit,
-                    displayLongDate = true,
-                    userSelected = userSelected
-                )
-                if (!displayTagsInCard && status != null) {
-                    StatusTags(
-                        statusId = statusId,
-                        modifier = Modifier.fillMaxWidth(),
-                        isOwnStatus = (loggedInUserViewModel?.loggedInUser?.value?.id
-                            ?: -1) == status?.user?.id,
-                        defaultVisibility = loggedInUserViewModel?.defaultStatusVisibility
-                            ?: StatusVisibility.PUBLIC,
-                        tags = status?.tags ?: listOf()
-                    )
-                }
-                if (displayMap == false) {
-                    Text(
-                        text = stringResource(R.string.no_map_for_check_in),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                }
-                status?.likes?.let {
-                    if (it > 0) {
-                        StatusLikes(
-                            statusId = statusId,
-                            likes = it,
-                            statusDetailViewModel = statusDetailViewModel,
-                            modifier = Modifier.fillMaxWidth(),
-                            userSelected = userSelected
-                        )
-                    }
-                }
-                val dStatus = status
-                val journeyNumber = dStatus?.journey?.manualJourneyNumber ?: dStatus?.journey?.journeyNumber
-                if (dStatus != null && journeyNumber != null) {
-                    ButtonWithIconAndText(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(id = R.string.open_with_bahnexpert),
-                        drawableId = R.drawable.ic_train,
-                        onClick = {
-                            val intent = CustomTabsIntent.Builder()
-                                .setShowTitle(false)
-                                .build()
-
-                            val isoDate =
-                                DateTimeFormatter.ISO_INSTANT.format(dStatus.journey.origin.departurePlanned)
-
-                            val uri = Uri.Builder()
-                                .scheme("https")
-                                .authority("bahn.expert")
-                                .appendPath("details")
-                                .appendPath(journeyNumber)
-                                .appendPath(isoDate)
-                                .build()
-
-                            intent.launchUrl(
-                                context,
-                                uri
-                            )
-
-                        }
-                    )
-                }
-                if (operator != null) {
-                    Text(
-                        text = operator ?: "",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.End,
-                        style = LocalFont.current.labelMedium
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
+            AnimatedVisibility(!mapExpanded) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    if (status?.isTraewelldroidCheckIn == true) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_logo),
-                            contentDescription = null,
-                            modifier = Modifier.padding(end = 4.dp)
+                    CheckInCard(
+                        checkInCardViewModel = checkInCardViewModel,
+                        status = status,
+                        joinConnection = joinConnection,
+                        loggedInUserViewModel = loggedInUserViewModel,
+                        onDeleted = statusDeleted,
+                        handleEditClicked = statusEdit,
+                        displayLongDate = true,
+                        userSelected = userSelected
+                    )
+                    if (!displayTagsInCard && status != null) {
+                        StatusTags(
+                            statusId = statusId,
+                            modifier = Modifier.fillMaxWidth(),
+                            isOwnStatus = (loggedInUserViewModel?.loggedInUser?.value?.id
+                                ?: -1) == status?.user?.id,
+                            defaultVisibility = loggedInUserViewModel?.defaultStatusVisibility
+                                ?: StatusVisibility.PUBLIC,
+                            tags = status?.tags ?: listOf()
+                        )
+                    }
+                    if (displayMap == false) {
+                        Text(
+                            text = stringResource(R.string.no_map_for_check_in),
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    status?.likes?.let {
+                        if (it > 0) {
+                            StatusLikes(
+                                statusId = statusId,
+                                likes = it,
+                                statusDetailViewModel = statusDetailViewModel,
+                                modifier = Modifier.fillMaxWidth(),
+                                userSelected = userSelected
+                            )
+                        }
+                    }
+                    val dStatus = status
+                    val journeyNumber =
+                        dStatus?.journey?.manualJourneyNumber ?: dStatus?.journey?.journeyNumber
+                    if (dStatus != null && journeyNumber != null) {
+                        ButtonWithIconAndText(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.open_with_bahnexpert),
+                            drawableId = R.drawable.ic_train,
+                            onClick = {
+                                val intent = CustomTabsIntent.Builder()
+                                    .setShowTitle(false)
+                                    .build()
+
+                                val isoDate =
+                                    DateTimeFormatter.ISO_INSTANT.format(dStatus.journey.origin.departurePlanned)
+
+                                val uri = Uri.Builder()
+                                    .scheme("https")
+                                    .authority("bahn.expert")
+                                    .appendPath("details")
+                                    .appendPath(journeyNumber)
+                                    .appendPath(isoDate)
+                                    .build()
+
+                                intent.launchUrl(
+                                    context,
+                                    uri
+                                )
+
+                            }
+                        )
+                    }
+                    if (operator != null) {
+                        Text(
+                            text = operator ?: "",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                            style = LocalFont.current.labelMedium
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        if (status?.isTraewelldroidCheckIn == true) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_logo),
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 4.dp)
+                            )
+                        }
+                        Text(
+                            text = stringResource(
+                                id = R.string.checked_in_with,
+                                status?.client?.name ?: "Träwelling"
+                            ),
+                            style = LocalFont.current.labelMedium,
+                            maxLines = 2
                         )
                     }
                     Text(
-                        text = stringResource(
-                            id = R.string.checked_in_with,
-                            status?.client?.name ?: "Träwelling"
-                        ),
-                        style = LocalFont.current.labelMedium,
-                        maxLines = 2
+                        text = status?.journey?.dataSource?.attribution ?: "",
+                        style = LocalFont.current.labelSmall,
+                        fontStyle = FontStyle.Italic,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
-                Text(
-                    text = status?.journey?.dataSource?.attribution ?: "",
-                    style = LocalFont.current.labelSmall,
-                    fontStyle = FontStyle.Italic,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
     }
@@ -381,7 +388,7 @@ private fun StatusLikes(
                     }
                 }
             }
-            AnimatedVisibility (cardExpanded) {
+            AnimatedVisibility(cardExpanded) {
                 if (isLoading) {
                     DataLoading()
                 } else {
