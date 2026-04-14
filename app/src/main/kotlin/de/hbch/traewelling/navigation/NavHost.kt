@@ -298,7 +298,8 @@ fun TraewelldroidNavHost(
             val data: ManageFollowers = it.toRoute()
             ManageFollowers(
                 snackbarHostState = snackbarHostState,
-                showFollowRequests = data.followRequests
+                showFollowRequests = data.followRequests,
+                userSelectedAction = navToUserProfile
             )
         }
         composable<TrustedUsers> {

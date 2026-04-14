@@ -871,7 +871,13 @@ fun SelectCoTravellers(
             } else {
                 trustingPersons.forEach { user ->
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            if (user in selectedForCheckIn) {
+                                selectedForCheckIn.remove(user)
+                            } else {
+                                selectedForCheckIn.add(user)
+                            }
+                        },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {

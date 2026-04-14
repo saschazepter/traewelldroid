@@ -1,6 +1,7 @@
 package de.hbch.traewelling.ui.followers
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,10 +55,11 @@ import kotlinx.coroutines.launch
 fun ManageFollowers(
     snackbarHostState: SnackbarHostState,
     showFollowRequests: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userSelectedAction: (String, Boolean, Boolean) -> Unit = { _, _, _ -> }
 ) {
     val manageFollowersViewModel: ManageFollowersViewModel = viewModel()
-    var selectedTab by remember { mutableIntStateOf(if (showFollowRequests) 2 else 0) }
+    var selectedTab by rememberSaveable { mutableIntStateOf(if (showFollowRequests) 2 else 0) }
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -89,6 +91,7 @@ fun ManageFollowers(
             0 -> {
                 Followers(
                     snackbarHostState = snackbarHostState,
+                    onUserSelected = { userSelectedAction(it.username, it.privateProfile, it.following) },
                     nextPageAction = { manageFollowersViewModel.getFollowers(it) },
                     removeAction = { manageFollowersViewModel.removeFollower(it) },
                     removeSuccessString = R.string.remove_follower_success,
@@ -98,6 +101,7 @@ fun ManageFollowers(
             1 -> {
                 Followers(
                     snackbarHostState = snackbarHostState,
+                    onUserSelected = { userSelectedAction(it.username, it.privateProfile, it.following) },
                     nextPageAction = { manageFollowersViewModel.getFollowings(it) },
                     removeAction = { manageFollowersViewModel.unfollowUser(it) },
                     removeSuccessString = R.string.remove_follower_success,
@@ -106,7 +110,8 @@ fun ManageFollowers(
             }
             2 -> {
                 FollowRequests(
-                    snackbarHostState = snackbarHostState
+                    snackbarHostState = snackbarHostState,
+                    onUserSelected = { userSelectedAction(it.username, it.privateProfile, it.following) },
                 )
             }
         }
@@ -117,6 +122,7 @@ fun ManageFollowers(
 @Composable
 private fun Followers(
     snackbarHostState: SnackbarHostState,
+    onUserSelected: (User) -> Unit,
     nextPageAction: suspend (Int) -> List<User>,
     removeAction: suspend (Int) -> Boolean,
     @StringRes removeSuccessString: Int,
@@ -125,7 +131,7 @@ private fun Followers(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    var currentPage by rememberSaveable { mutableIntStateOf(0) }
+    var currentPage by remember { mutableIntStateOf(0) }
     val users = remember { mutableStateListOf<User>() }
     val columnState = rememberLazyListState()
     columnState.OnBottomReached {
@@ -165,6 +171,7 @@ private fun Followers(
                     var isRemoving by remember { mutableStateOf(false) }
                     UserRow(
                         user = user,
+                        onUserSelected = onUserSelected,
                         additionalActions = {
                             IconButton(
                                 onClick = {
@@ -208,13 +215,14 @@ private fun Followers(
 @Composable
 private fun FollowRequests(
     snackbarHostState: SnackbarHostState,
+    onUserSelected: (User) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val viewModel: ManageFollowersViewModel = viewModel()
 
-    var currentPage by rememberSaveable { mutableIntStateOf(0) }
+    var currentPage by remember { mutableIntStateOf(0) }
     val users = remember { mutableStateListOf<User>() }
     val columnState = rememberLazyListState()
     columnState.OnBottomReached {
@@ -254,6 +262,7 @@ private fun FollowRequests(
                     var isRemoving by remember { mutableStateOf(false) }
                     UserRow(
                         user = user,
+                        onUserSelected = onUserSelected,
                         additionalActions = {
                             IconButton(
                                 onClick = {
@@ -320,6 +329,7 @@ private fun FollowRequests(
 @Composable
 private fun UserRow(
     user: User,
+    onUserSelected: (User) -> Unit,
     modifier: Modifier = Modifier,
     additionalActions: @Composable () -> Unit
 ) {
@@ -329,7 +339,10 @@ private fun UserRow(
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(end = 8.dp).weight(1f)
+            modifier = Modifier
+                .clickable { onUserSelected(user) }
+                .padding(end = 8.dp)
+                .weight(1f)
         ) {
             ProfilePicture(
                 user = user,
