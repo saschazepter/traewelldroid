@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
@@ -14,7 +15,9 @@ import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.BuildConfig
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.polyline.FeatureCollection
+import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.shared.SharedValues
+import de.hbch.traewelling.util.colorFromHex
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.MapTileProviderBasic
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
@@ -159,7 +162,7 @@ fun OpenRailwayMapView(
     )
 }
 
-fun getPolyLinesFromFeatureCollection(featureCollection: FeatureCollection?, color: Int): List<Polyline> {
+fun getPolyLinesFromFeatureCollection(featureCollection: FeatureCollection?, color: Int, statuses: List<Status> = listOf()): List<Polyline> {
     val polyLines: MutableList<Polyline> = mutableListOf()
 
     featureCollection?.features?.forEach { feature ->
@@ -177,7 +180,11 @@ fun getPolyLinesFromFeatureCollection(featureCollection: FeatureCollection?, col
             polyLines.add(polyline)
         }
 
-        polyline.outlinePaint.color = color
+        val statusLineColor = statuses
+            .firstOrNull { it.id == feature.properties?.statusId }
+            ?.journey?.lineColor
+        val argb = colorFromHex("#$statusLineColor")?.toArgb()
+        polyline.outlinePaint.color = argb ?: color
     }
 
     return polyLines

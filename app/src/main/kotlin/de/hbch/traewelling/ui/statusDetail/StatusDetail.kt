@@ -65,6 +65,7 @@ import de.hbch.traewelling.ui.composables.getBoundingBoxFromPolyLines
 import de.hbch.traewelling.ui.composables.getPolyLinesFromFeatureCollection
 import de.hbch.traewelling.ui.include.status.CheckInCard
 import de.hbch.traewelling.ui.include.status.CheckInCardViewModel
+import de.hbch.traewelling.util.colorFromHex
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Polyline
 import java.time.format.DateTimeFormatter
@@ -84,6 +85,7 @@ fun StatusDetail(
     val checkInCardViewModel: CheckInCardViewModel = viewModel()
     var mapExpanded by remember { mutableStateOf(false) }
     var status by remember { mutableStateOf<Status?>(null) }
+    val currentStatus = status
     var operator by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
     val settingsViewModel: SettingsViewModel = viewModel(
@@ -118,28 +120,30 @@ fun StatusDetail(
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                StatusDetailMap(
-                    modifier = mapModifier.align(Alignment.TopCenter),
-                    statusId = statusId,
-                    statusDetailViewModel = statusDetailViewModel,
-                    mapLoaded = { displayMap = it }
-                )
-                if (displayMap == true) {
-                    IconToggleButton(
-                        modifier = Modifier.align(Alignment.TopEnd),
-                        checked = mapExpanded,
-                        onCheckedChange = {
-                            mapExpanded = it
-                        },
-                        colors = IconButtonDefaults.filledIconToggleButtonColors()
-                    ) {
-                        AnimatedContent(mapExpanded, label = "MapExpansionIcon") {
-                            val iconSource =
-                                if (it) R.drawable.ic_fullscreen_exit else R.drawable.ic_fullscreen
-                            Icon(
-                                painter = painterResource(id = iconSource),
-                                contentDescription = null
-                            )
+                if (currentStatus != null) {
+                    StatusDetailMap(
+                        modifier = mapModifier.align(Alignment.TopCenter),
+                        status = currentStatus,
+                        statusDetailViewModel = statusDetailViewModel,
+                        mapLoaded = { displayMap = it }
+                    )
+                    if (displayMap == true) {
+                        IconToggleButton(
+                            modifier = Modifier.align(Alignment.TopEnd),
+                            checked = mapExpanded,
+                            onCheckedChange = {
+                                mapExpanded = it
+                            },
+                            colors = IconButtonDefaults.filledIconToggleButtonColors()
+                        ) {
+                            AnimatedContent(mapExpanded, label = "MapExpansionIcon") {
+                                val iconSource =
+                                    if (it) R.drawable.ic_fullscreen_exit else R.drawable.ic_fullscreen
+                                Icon(
+                                    painter = painterResource(id = iconSource),
+                                    contentDescription = null
+                                )
+                            }
                         }
                     }
                 }
@@ -266,11 +270,11 @@ fun StatusDetail(
 @Composable
 private fun StatusDetailMap(
     modifier: Modifier = Modifier,
-    statusId: Int,
+    status: Status,
     statusDetailViewModel: StatusDetailViewModel,
     mapLoaded: (Boolean) -> Unit,
 ) {
-    val color = PolylineColor.toArgb()
+    val colorArgb = (colorFromHex("#${status.journey.lineColor}") ?: PolylineColor).toArgb()
     val polyLines = remember { mutableStateListOf<Polyline>() }
     var requested by remember { mutableStateOf(false) }
     var mapView: MapView? = remember { null }
@@ -279,9 +283,9 @@ private fun StatusDetailMap(
         if (!requested && polyLines.isEmpty()) {
             requested = true
             statusDetailViewModel.getPolylineForStatus(
-                statusId = statusId,
+                statusId = status.id,
                 successfulCallback = {
-                    val polylines = getPolyLinesFromFeatureCollection(it, color)
+                    val polylines = getPolyLinesFromFeatureCollection(it, colorArgb)
                     polyLines.addAll(polylines)
                     if (polylines.isEmpty()) {
                         mapLoaded(false)

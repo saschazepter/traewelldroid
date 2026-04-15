@@ -277,7 +277,8 @@ private fun DailyStatisticsView(
 
                 val polyLines = getPolyLinesFromFeatureCollection(
                     statistics.featureCollection,
-                    PolylineColor.toArgb()
+                    PolylineColor.toArgb(),
+                    statuses = checkIns
                 )
                 val bounds = getBoundingBoxFromPolyLines(polyLines)
 

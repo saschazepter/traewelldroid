@@ -15,6 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.TimeZone
 
 class StatisticsViewModel(application: Application) : AndroidViewModel(application) {
     private val traewellingApi = (application as TraewelldroidApplication).traewellingApi
@@ -69,7 +70,7 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     fun getDailyStatistics(date: String, onSuccess: (DailyStatistics) -> Unit, onError: () -> Unit) {
         traewellingApi
             .statisticsService
-            .getDailyStatistics(date)
+            .getDailyStatistics(date, true, TimeZone.getDefault().id)
             .enqueue(object: Callback<Data<DailyStatistics>> {
                 override fun onResponse(
                     call: Call<Data<DailyStatistics>>,

@@ -76,7 +76,9 @@ interface StatisticsService {
 
     @GET("statistics/daily/{date}?withPolylines=true")
     fun getDailyStatistics(
-        @Path("date") date: String
+        @Path("date") date: String,
+        @Query("withPolylines") polylines: Boolean,
+        @Query("timezone") timezone: String
     ): Call<Data<DailyStatistics>>
 }
 
