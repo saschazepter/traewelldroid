@@ -11,7 +11,9 @@ jobs:
     container:
       image: mingc/android-build-box:latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -80,6 +82,22 @@ jobs:
           direction: upload
           release-dir: ${{ runner.temp }}/release
           release-notes-file: ${{ runner.temp }}/RELEASE_NOTES.md
+
+      - name: Read release notes
+        id: release_notes
+        run: |
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "content<<$EOF" >> "$GITHUB_OUTPUT"
+          cat "${{ runner.temp }}/RELEASE_NOTES.md" >> "$GITHUB_OUTPUT"
+          echo "Find out more on https://codeberg.org/traewelldroid/traewelldroid/releases/tag/${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Post Release Notes to Mastodon
+        uses: https://github.com/cbrgm/mastodon-github-action@v2
+        with:
+          access-token: ${{ secrets.MASTODON_ACCESS_TOKEN }}
+          url: ${{ vars.MASTODON_INSTANCE }}
+          message: ${{ steps.release_notes.outputs.content }}
 
       - name: Upload to Google Play
         uses: https://github.com/r0adkll/upload-google-play@v1
