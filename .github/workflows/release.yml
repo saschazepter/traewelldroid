@@ -76,21 +76,18 @@ jobs:
       - name: Generate release notes
         run: chmod +x ./release_notes.sh && ./release_notes.sh
 
-      - name: Read release notes
-        id: release_notes
+      - name: Prepare Release Notes
+        id: prepare_notes
         run: |
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          echo "content<<$EOF" >> "$GITHUB_OUTPUT"
-          cat "${{ runner.temp }}/RELEASE_NOTES.md" >> "$GITHUB_OUTPUT"
-          echo "Find out more on https://codeberg.org/traewelldroid/traewelldroid/releases/tag/${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
-          echo "$EOF" >> "$GITHUB_OUTPUT"
+          STATUS_FILE="${{ runner.temp }}/mastodon_status.txt"
+          cat "${{ runner.temp }}/RELEASE_NOTES.md" > "$STATUS_FILE"
+          echo -e "\n\nFind out more on https://codeberg.org/traewelldroid/traewelldroid/releases/tag/${{ github.ref_name }}" >> "$STATUS_FILE"
 
       - name: Post Release Notes to Mastodon
-        uses: https://github.com/cbrgm/mastodon-github-action@v2
-        with:
-          access-token: ${{ secrets.MASTODON_ACCESS_TOKEN }}
-          url: ${{ vars.MASTODON_INSTANCE }}
-          message: ${{ steps.release_notes.outputs.content }}
+        run: |
+          curl -X POST "${{ vars.MASTODON_INSTANCE }}/api/v1/statuses" \
+            -H "Authorization: Bearer ${{ secrets.MASTODON_ACCESS_TOKEN }}" \
+            --data-urlencode "status@${{ runner.temp }}/mastodon_status.txt"
 
       - name: Create Forgejo Release
         uses: actions/forgejo-release@v2.11.3
