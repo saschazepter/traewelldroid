@@ -76,13 +76,6 @@ jobs:
       - name: Generate release notes
         run: chmod +x ./release_notes.sh && ./release_notes.sh
 
-      - name: Create Forgejo Release
-        uses: actions/forgejo-release@v2.11.3
-        with:
-          direction: upload
-          release-dir: ${{ runner.temp }}/release
-          release-notes-file: ${{ runner.temp }}/RELEASE_NOTES.md
-
       - name: Read release notes
         id: release_notes
         run: |
@@ -98,6 +91,13 @@ jobs:
           access-token: ${{ secrets.MASTODON_ACCESS_TOKEN }}
           url: ${{ vars.MASTODON_INSTANCE }}
           message: ${{ steps.release_notes.outputs.content }}
+
+      - name: Create Forgejo Release
+        uses: actions/forgejo-release@v2.11.3
+        with:
+          direction: upload
+          release-dir: ${{ runner.temp }}/release
+          release-notes-file: ${{ runner.temp }}/RELEASE_NOTES.md
 
       - name: Upload to Google Play
         uses: https://github.com/r0adkll/upload-google-play@v1
