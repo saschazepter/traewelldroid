@@ -16,9 +16,9 @@ echo "# What's changed in ${LATEST_TAG}" > "$OUTPUT_FILE"
 echo "" >> "$OUTPUT_FILE"
 
 if [ -z "$PREVIOUS_TAG" ]; then
-  git log "$LATEST_TAG" --reverse --pretty=format:"- %s by %an" >> "$OUTPUT_FILE"
+  git log "$LATEST_TAG" --reverse --pretty=format:"- %s" >> "$OUTPUT_FILE"
 else
-  git log "${PREVIOUS_TAG}..${LATEST_TAG}" --reverse --pretty=format:"- %s by %an" >> "$OUTPUT_FILE"
+  git log "${PREVIOUS_TAG}..${LATEST_TAG}" --reverse --pretty=format:"- %s" >> "$OUTPUT_FILE"
 fi
 
 echo "" >> "$OUTPUT_FILE"
