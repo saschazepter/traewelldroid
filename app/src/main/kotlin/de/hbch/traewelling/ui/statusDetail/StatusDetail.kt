@@ -28,11 +28,13 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +55,11 @@ import de.hbch.traewelling.api.models.status.StatusVisibility
 import de.hbch.traewelling.api.models.user.User
 import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.shared.SettingsViewModel
+import de.hbch.traewelling.theme.AppTypography
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.MainTheme
 import de.hbch.traewelling.theme.PolylineColor
+import de.hbch.traewelling.ui.checkInResult.CoTraveller
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.DataLoading
 import de.hbch.traewelling.ui.composables.OpenRailwayMapView
@@ -66,6 +70,7 @@ import de.hbch.traewelling.ui.composables.getPolyLinesFromFeatureCollection
 import de.hbch.traewelling.ui.include.status.CheckInCard
 import de.hbch.traewelling.ui.include.status.CheckInCardViewModel
 import de.hbch.traewelling.util.colorFromHex
+import kotlinx.coroutines.launch
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Polyline
 import java.time.format.DateTimeFormatter
@@ -79,7 +84,8 @@ fun StatusDetail(
     statusDeleted: (Status) -> Unit = { },
     statusEdit: (Status) -> Unit = { },
     loggedInUserViewModel: LoggedInUserViewModel? = null,
-    userSelected: (String, Boolean, Boolean) -> Unit = { _, _, _ -> }
+    userSelected: (String, Boolean, Boolean) -> Unit = { _, _, _ -> },
+    statusSelected: (Int) -> Unit = { }
 ) {
     val statusDetailViewModel: StatusDetailViewModel = viewModel()
     val checkInCardViewModel: CheckInCardViewModel = viewModel()
@@ -194,6 +200,13 @@ fun StatusDetail(
                         }
                     }
                     val dStatus = status
+                    if (dStatus != null) {
+                        CoTravellers(
+                            status = dStatus,
+                            modifier = Modifier.fillMaxWidth(),
+                            statusSelected = statusSelected
+                        )
+                    }
                     val journeyNumber =
                         dStatus?.journey?.manualJourneyNumber ?: dStatus?.journey?.journeyNumber
                     if (dStatus != null && journeyNumber != null) {
@@ -233,26 +246,28 @@ fun StatusDetail(
                             style = LocalFont.current.labelMedium
                         )
                     }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        if (status?.isTraewelldroidCheckIn == true) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_logo),
-                                contentDescription = null,
-                                modifier = Modifier.padding(end = 4.dp)
+                    if (status != null) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            if (status?.isTraewelldroidCheckIn == true) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_logo),
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                            }
+                            Text(
+                                text = stringResource(
+                                    id = R.string.checked_in_with,
+                                    status?.client?.name ?: "Träwelling"
+                                ),
+                                style = LocalFont.current.labelMedium,
+                                maxLines = 2
                             )
                         }
-                        Text(
-                            text = stringResource(
-                                id = R.string.checked_in_with,
-                                status?.client?.name ?: "Träwelling"
-                            ),
-                            style = LocalFont.current.labelMedium,
-                            maxLines = 2
-                        )
                     }
                     Text(
                         text = status?.journey?.dataSource?.attribution ?: "",
@@ -450,6 +465,93 @@ private fun Liker(
         )
     }
 }
+
+@Composable
+private fun CoTravellers(
+    status: Status,
+    modifier: Modifier = Modifier,
+    statusSelected: (Int) -> Unit = { }
+) {
+    val viewModel: StatusDetailViewModel = viewModel()
+    val coroutineScope = rememberCoroutineScope()
+    var requested by remember { mutableStateOf(false) }
+    val coTravellers = remember { mutableStateListOf<Status>() }
+    val coTravellerCount by remember { derivedStateOf { coTravellers.size } }
+
+    var cardExpanded by remember { mutableStateOf(false) }
+    val expandAction: () -> Unit = { cardExpanded = !cardExpanded }
+
+    LaunchedEffect(requested) {
+        if (!requested) {
+            requested = true
+            coroutineScope.launch {
+                val statuses = viewModel.getStatusesForTrip(status.journey.tripId, status.id)
+                coTravellers.clear()
+                coTravellers.addAll(statuses)
+            }
+        }
+    }
+
+    if (coTravellerCount > 0) {
+        ElevatedCard(
+            modifier = modifier,
+            onClick = expandAction
+        ) {
+            var contentModifier = Modifier.padding(horizontal = 16.dp)
+            if (cardExpanded) {
+                contentModifier = contentModifier.padding(bottom = 8.dp)
+            }
+            Column(
+                modifier = contentModifier,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.co_travellers_count, coTravellerCount),
+                        style = LocalFont.current.bodyLarge
+                    )
+                    IconButton(onClick = expandAction) {
+                        AnimatedContent(cardExpanded, label = "CardExpansionIcon") {
+                            val icon =
+                                if (it)
+                                    R.drawable.ic_expand_less
+                                else
+                                    R.drawable.ic_expand_more
+                            Icon(
+                                painter = painterResource(id = icon),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
+                AnimatedVisibility(cardExpanded) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.co_traveller_visibility_restriction),
+                            modifier = Modifier.padding(bottom = 6.dp),
+                            style = AppTypography.labelMedium
+                        )
+                        coTravellers.forEach {
+                            CoTraveller(
+                                status = it,
+                                modifier = Modifier.clickable { statusSelected(it.id) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 @Preview
 @Composable

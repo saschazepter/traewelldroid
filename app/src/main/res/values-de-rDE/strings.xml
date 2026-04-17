@@ -165,6 +165,8 @@
     <string name="manual_arrival">Überschriebene Ankunftszeit</string>
     <string name="planned">Plan: %1$s</string>
     <string name="likes">%1$d gefällt das</string>
+    <string name="co_travellers_count">%1$d Mitreisende</string>
+    <string name="co_traveller_visibility_restriction">Du kannst nur die Mitreisenden sehen, deren Check-Ins du für diese Reise sehen kannst.</string>
     <string name="tag_travel_class_title">Reiseklasse</string>
     <string name="tag_travel_class_example">z.B. 1. Klasse, 2. Klasse, Business, …</string>
     <string name="tag_ticket_title">Fahrschein</string>

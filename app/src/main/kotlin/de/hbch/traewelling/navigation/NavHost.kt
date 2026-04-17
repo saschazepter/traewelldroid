@@ -389,7 +389,8 @@ fun TraewelldroidNavHost(
                 statusDeleted = {
                     navController.popBackStack()
                 },
-                userSelected = navToUserProfile
+                userSelected = navToUserProfile,
+                statusSelected = navToStatusDetails
             )
         }
         composable<SearchConnection>(

@@ -104,6 +104,11 @@ interface CheckInService {
         @Path("id") id: Int
     ): Call<Data<List<User>>>
 
+    @GET("trips/{id}/statuses")
+    suspend fun getStatusesForTripId(
+        @Path("id") id: ULong
+    ): Response<Data<List<Status>>>
+
     @GET("status/{id}/tags")
     fun getTagsForStatusById(
         @Path("id") id: Int

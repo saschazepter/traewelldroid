@@ -238,7 +238,7 @@ private fun SuccessfulCheckInResult(
 }
 
 @Composable
-private fun CoTraveller(
+fun CoTraveller(
     status: Status,
     modifier: Modifier = Modifier
 ) {

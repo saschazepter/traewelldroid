@@ -107,4 +107,22 @@ class StatusDetailViewModel(application: Application): AndroidViewModel(applicat
                 }
             )
     }
+
+    suspend fun getStatusesForTrip(
+        tripId: ULong,
+        currentStatusId: Int
+    ): List<Status> {
+        return try {
+            val response = traewellingApi.checkInService.getStatusesForTripId(tripId)
+            if (response.isSuccessful) {
+                val statusesInTrip = response.body()?.data
+                if (!statusesInTrip.isNullOrEmpty()) {
+                    return statusesInTrip.filter { it.id != currentStatusId }
+                }
+            }
+            listOf()
+        } catch (_: Exception) {
+            listOf()
+        }
+    }
 }

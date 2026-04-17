@@ -191,6 +191,8 @@
     <string name="manual_arrival">Overwritten arrival time</string>
     <string name="planned">Planned: %1$s</string>
     <string name="likes">%1$d like that</string>
+    <string name="co_travellers_count">%1$d co-travellers</string>
+    <string name="co_traveller_visibility_restriction">You can only see the co-travellers whose check-in to this journey you can see.</string>
     <string name="tag_travel_class_title">Travel class</string>
     <string name="tag_travel_class_example">i.e. First, economy, business, …</string>
     <string name="tag_ticket_title">Ticket</string>

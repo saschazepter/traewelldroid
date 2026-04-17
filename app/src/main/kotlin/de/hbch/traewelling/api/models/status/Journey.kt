@@ -8,7 +8,7 @@ import de.hbch.traewelling.api.models.trip.ProductType
 import java.time.ZonedDateTime
 
 data class Journey(
-    @SerializedName("trip") val tripId: Int,
+    @SerializedName("trip") val tripId: ULong,
     @SerializedName("hafasId") val hafasTripId: String,
     val category: ProductType?,
     @SerializedName("lineName") val line: String,
