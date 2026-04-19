@@ -8,6 +8,7 @@ import de.hbch.traewelling.logging.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.InputStream
 import java.net.URL
 import java.nio.file.Files
@@ -43,7 +44,9 @@ suspend fun Context.readOrDownloadCustomEmoji(
             return@withContext getCustomEmojiFromJson(file.readText())
         }
     } catch (ex: Exception) {
-        Logger.captureException(ex)
+        if (!(ex is FileNotFoundException || ex is FileAlreadyExistsException)) {
+            Logger.captureException(ex)
+        }
         listOf()
     }
     return emoji
