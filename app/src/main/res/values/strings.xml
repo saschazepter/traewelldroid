@@ -398,4 +398,6 @@
     </plurals>
     <string name="message_from">Message from %1$s</string>
     <string name="displayed_in_account_language">displayed in your selected account language</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_not_accepted">You have not yet accepted the current privacy policy of Träwelling. Please do this on the Träwelling website to continue using the app.</string>
 </resources>

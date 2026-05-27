@@ -69,6 +69,7 @@ import com.jcloquell.androidsecurestorage.SecureStorage
 import de.c1710.filemojicompat_ui.views.picker.EmojiPackItemAdapter
 import de.hbch.traewelling.BuildConfig
 import de.hbch.traewelling.R
+import de.hbch.traewelling.events.PrivacyPolicyNotAcceptedEvent
 import de.hbch.traewelling.events.UnauthorizedEvent
 import de.hbch.traewelling.navigation.BOTTOM_NAVIGATION
 import de.hbch.traewelling.navigation.ComposeMenuItem
@@ -86,10 +87,13 @@ import de.hbch.traewelling.shared.MastodonEmojis
 import de.hbch.traewelling.shared.SettingsViewModel
 import de.hbch.traewelling.shared.SharedValues
 import de.hbch.traewelling.theme.LocalColorScheme
+import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.MainTheme
+import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.include.status.ActiveStatusBar
 import de.hbch.traewelling.ui.notifications.NotificationsViewModel
+import de.hbch.traewelling.util.openLink
 import de.hbch.traewelling.util.popBackStackAndNavigate
 import de.hbch.traewelling.util.publishStationShortcuts
 import io.getunleash.UnleashClient
@@ -136,6 +140,14 @@ class MainActivity : ComponentActivity()
         )
     }
 
+    private var onPrivacyPolicyNotAccepted: () -> Unit = { }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onPrivacyPolicyNotAcceptedEvent(event: PrivacyPolicyNotAcceptedEvent) {
+        onPrivacyPolicyNotAccepted()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         initUnleash()
         secureStorage = SecureStorage(this)
@@ -158,7 +170,10 @@ class MainActivity : ComponentActivity()
                     navController = navController,
                     loggedInUserViewModel = loggedInUserViewModel,
                     eventViewModel = eventViewModel,
-                    checkInViewModel = checkInViewModel
+                    checkInViewModel = checkInViewModel,
+                    onPrivacyPolicyNotAcceptedInit = {
+                        onPrivacyPolicyNotAccepted = it
+                    }
                 )
             }
         }
@@ -191,7 +206,8 @@ fun TraewelldroidApp(
     navController: NavHostController,
     loggedInUserViewModel: LoggedInUserViewModel,
     eventViewModel: EventViewModel,
-    checkInViewModel: CheckInViewModel
+    checkInViewModel: CheckInViewModel,
+    onPrivacyPolicyNotAcceptedInit: (() -> Unit) -> Unit
 ) {
     val context = LocalContext.current
     val currentBackStack by navController.currentBackStackEntryAsState()
@@ -201,6 +217,14 @@ fun TraewelldroidApp(
     val lastVisitedStations by loggedInUserViewModel.lastVisitedStations.observeAsState()
     val homelandStation by loggedInUserViewModel.home.observeAsState()
     val currentStatus by loggedInUserViewModel.currentStatus.observeAsState()
+
+    var privacyPolicyDialogVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        onPrivacyPolicyNotAcceptedInit {
+            privacyPolicyDialogVisible = true
+        }
+    }
 
     LaunchedEffect(lastVisitedStations, homelandStation) {
         context.publishStationShortcuts(homelandStation, lastVisitedStations)
@@ -501,6 +525,39 @@ fun TraewelldroidApp(
                         Text(
                             text = "${stringResource(R.string.contributors_thanks)} ❤",
                             textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+
+            if (privacyPolicyDialogVisible) {
+                ContentDialog(
+                    onDismissRequest = {
+                        privacyPolicyDialogVisible = false
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(12.dp),
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.privacy_policy_title),
+                            style = LocalFont.current.titleLarge,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = stringResource(R.string.privacy_policy_not_accepted),
+                            textAlign = TextAlign.Justify,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        ButtonWithIconAndText(
+                            text = stringResource(R.string.traewelling_de),
+                            drawableId = R.drawable.ic_arrow_right,
+                            onClick = {
+                                context.openLink("https://traewelling.de")
+                            }
                         )
                     }
                 }

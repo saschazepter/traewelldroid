@@ -367,4 +367,6 @@
     </plurals>
     <string name="message_from">Meldung von %1$s</string>
     <string name="displayed_in_account_language">angezeigt in deiner festgelegten Accountsprache</string>
+    <string name="privacy_policy_title">Datenschutzerklärung</string>
+    <string name="privacy_policy_not_accepted">Du hast die aktuelle Datenschutzerklärung von Träwelling noch nicht akzeptiert. Bitte mache dies auf der Webseite von Träwelling, um die App weiter nutzen zu können.</string>
 </resources>
