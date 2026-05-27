@@ -4,22 +4,27 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import de.hbch.traewelling.TraewelldroidApplication
+import de.hbch.traewelling.api.models.alert.Alert
 import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.api.models.status.StatusPage
 import de.hbch.traewelling.logging.Logger
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DashboardFragmentViewModel(application: Application) : AndroidViewModel(application) {
+class DashboardViewModel(application: Application) : AndroidViewModel(application) {
     private val traewellingApi = (application as TraewelldroidApplication).traewellingApi
 
     val checkIns = mutableStateListOf<Status>()
+    val alerts = mutableStateListOf<Alert>()
     var isRefreshing = MutableLiveData(false)
 
     init {
         loadCheckIns(1)
+        loadAlerts()
     }
 
     fun loadCheckIns(
@@ -49,6 +54,28 @@ class DashboardFragmentViewModel(application: Application) : AndroidViewModel(ap
 
     fun refresh() {
         checkIns.clear()
+        alerts.clear()
         loadCheckIns(1)
+        loadAlerts()
+    }
+
+    private fun loadAlerts() {
+        viewModelScope.launch {
+            try {
+                val response = traewellingApi
+                    .notificationService
+                    .getAlerts()
+
+                if (response.isSuccessful) {
+                    val alertData = response.body()
+                    if (alertData != null) {
+                        alerts.clear()
+                        alerts.addAll(alertData.data)
+                    }
+                }
+            } catch (e: Exception) {
+                Logger.captureException(e)
+            }
+        }
     }
 }

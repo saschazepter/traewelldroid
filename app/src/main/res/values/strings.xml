@@ -383,6 +383,7 @@
     <string name="notice">Notice</string>
     <string name="trwl_api_error">Currently there are ongoing service issues with Träwelling (traewelling.de). Please check the Träwelling website.</string>
     <string name="traewelling_de" translatable="false">traewelling.de</string>
+    <string name="traewelling" translatable="false">Träwelling</string>
     <string name="no_map_for_check_in">Currently there is no map view available for this check-in.</string>
     <string name="now">Now</string>
     <string name="push_registration_no_endpoint_error">Failed to register for push notifications.</string>
@@ -395,4 +396,6 @@
         <item quantity="one">1 departure was removed due to licensing issues.</item>
         <item quantity="other" formatted="true">%1$d departures were removed due to licensing issues.</item>
     </plurals>
+    <string name="message_from">Message from %1$s</string>
+    <string name="displayed_in_account_language">displayed in your selected account language</string>
 </resources>

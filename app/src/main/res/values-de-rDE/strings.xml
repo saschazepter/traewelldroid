@@ -365,4 +365,6 @@
         <item quantity="one">Eine Abfahrt wurde aufgrund von Lizenzproblemen entfernt.</item>
         <item quantity="other" formatted="true">%1$d Abfahrten wurden aufgrund von Lizenzproblemen entfernt.</item>
     </plurals>
+    <string name="message_from">Meldung von %1$s</string>
+    <string name="displayed_in_account_language">angezeigt in deiner festgelegten Accountsprache</string>
 </resources>

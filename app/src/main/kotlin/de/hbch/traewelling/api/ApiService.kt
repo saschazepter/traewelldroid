@@ -10,6 +10,7 @@ import de.hbch.traewelling.api.interceptors.AuthInterceptor
 import de.hbch.traewelling.api.interceptors.ErrorInterceptor
 import de.hbch.traewelling.api.interceptors.LogInterceptor
 import de.hbch.traewelling.api.models.Data
+import de.hbch.traewelling.api.models.alert.Alert
 import de.hbch.traewelling.api.models.event.Event
 import de.hbch.traewelling.api.models.notifications.Notification
 import de.hbch.traewelling.api.models.notifications.NotificationPage
@@ -219,6 +220,9 @@ interface NotificationService {
 
     @PUT("notifications/read/all")
     fun markAllAsRead(): Call<Unit>
+
+    @GET("alerts")
+    suspend fun getAlerts(): Response<Data<List<Alert>>>
 }
 
 interface UserService {

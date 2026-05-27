@@ -57,10 +57,11 @@ fun Dashboard(
     statusDeletedAction: () -> Unit = { },
     statusEditAction: (Status) -> Unit = { }
 ) {
-    val dashboardViewModel: DashboardFragmentViewModel = viewModel()
+    val dashboardViewModel: DashboardViewModel = viewModel()
     val checkInCardViewModel : CheckInCardViewModel = viewModel()
     val refreshing by dashboardViewModel.isRefreshing.observeAsState(false)
     val checkIns = remember { dashboardViewModel.checkIns }
+    val alerts = remember { dashboardViewModel.alerts }
     val coroutineScope = rememberCoroutineScope()
     var currentPage by remember { mutableIntStateOf(1) }
     val pullRefreshState = rememberPullRefreshState(
@@ -109,6 +110,12 @@ fun Dashboard(
                         userSelectedAction(it.username, it.privateProfile, it.following)
                     }
                 )
+            }
+
+            if (alerts.isNotEmpty()) {
+                item {
+                    AlertCarousel(traewellingAlerts = alerts)
+                }
             }
 
             if (trwlDown) {
