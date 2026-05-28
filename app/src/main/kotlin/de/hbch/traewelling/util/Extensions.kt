@@ -14,10 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -48,7 +48,10 @@ import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.ui.include.status.CheckInCard
 import de.hbch.traewelling.ui.include.status.CheckInCardViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
@@ -287,22 +290,34 @@ fun Context.openLink(url: String) {
     } catch (_: Exception) { }
 }
 
+@OptIn(FlowPreview::class)
+@Composable
+fun TextFieldState.useDebounce(
+    delayMillis: Long = 300L,
+    onChange: suspend (TextFieldState) -> Unit
+) {
+    val state by rememberUpdatedState(this)
+
+    LaunchedEffect(state) {
+        snapshotFlow { state.text }
+            .debounce(delayMillis)
+            .collectLatest {
+                onChange(state)
+            }
+    }
+}
+
 @Composable
 fun <T> T.useDebounce(
     delayMillis: Long = 300L,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     onChange: suspend (T) -> Unit
-): T{
+): T {
     val state by rememberUpdatedState(this)
 
-    DisposableEffect(state){
-        val job = coroutineScope.launch {
-            delay(delayMillis)
-            onChange(state)
-        }
-        onDispose {
-            job.cancel()
-        }
+    LaunchedEffect(state) {
+        delay(delayMillis)
+        onChange(state)
     }
 
     return state

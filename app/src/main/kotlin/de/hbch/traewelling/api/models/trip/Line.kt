@@ -18,73 +18,80 @@ data class Line(
 @Suppress("unused")
 enum class ProductType {
     @SerializedName("all")
-    ALL,
+    ALL {
+        override val selectable = false
+    },
     @SerializedName("ferry")
     FERRY {
-        override fun getIcon() = R.drawable.ic_ferry
-        override fun getString() = R.string.product_type_ferry
+        override val icon = R.drawable.ic_ferry
+        override val text = R.string.product_type_ferry
     },
     @SerializedName("taxi")
     TAXI {
-        override fun getIcon() = R.drawable.ic_taxi
+        override val icon = R.drawable.ic_taxi
+        override val text = R.string.product_type_taxi
     },
     @SerializedName("bus")
     BUS {
-        override fun getIcon() = R.drawable.ic_bus
-        override fun getString() = R.string.product_type_bus
+        override val icon = R.drawable.ic_bus
+        override val text = R.string.product_type_bus
     },
     @SerializedName("suburban")
     SUBURBAN {
-        override fun getIcon() = R.drawable.ic_suburban
-        override fun getString() = R.string.product_type_suburban
+        override val icon = R.drawable.ic_suburban
+        override val text = R.string.product_type_suburban
     },
     @SerializedName("subway")
     SUBWAY {
-        override fun getIcon() = R.drawable.ic_subway
-        override fun getString() = R.string.product_type_subway
+        override val icon = R.drawable.ic_subway
+        override val text = R.string.product_type_subway
     },
     @SerializedName("tram")
     TRAM {
-        override fun getIcon() = R.drawable.ic_tram
-        override fun getString() = R.string.product_type_tram
+        override val icon = R.drawable.ic_tram
+        override val text = R.string.product_type_tram
     },
     // RE, RB, RS
     @SerializedName("regional")
     REGIONAL {
-        override fun getString() = R.string.product_type_regional
+        override val text = R.string.product_type_regional
     },
     // IRE, IR
     @SerializedName("regionalExp")
     REGIONAL_EXPRESS {
-        override fun getString() = R.string.product_type_regional_express
+        override val text = R.string.product_type_regional_express
     },
     // ICE, ECE
     @SerializedName("nationalExpress")
     NATIONAL_EXPRESS {
-        override fun getString() = R.string.product_type_national_express
+        override val text = R.string.product_type_national_express
     },
     // IC, EC
     @SerializedName("national")
     NATIONAL {
-        override fun getString() = R.string.product_type_national
+        override val text = R.string.product_type_national
     },
     @SerializedName("plane")
     PLANE {
-        override fun getIcon() = R.drawable.ic_plane
+        override val icon = R.drawable.ic_plane
+        override val text = R.string.product_type_plane
     },
     @SerializedName("freightTrain")
     FREIGHT_TRAIN {
-        override fun getIcon() = R.drawable.ic_package
-        override fun getString() = R.string.product_type_freight_train
+        override val icon = R.drawable.ic_package
+        override val text = R.string.product_type_freight_train
     },
     LONG_DISTANCE {
-        override fun getString() = R.string.product_type_national_express
+        override val text = R.string.product_type_national_express
+        override val selectable = false
     },
     UNKNOWN {
-        override fun getIcon() = R.drawable.ic_unknown
-        override fun getString() = R.string.unknown
+        override val icon = R.drawable.ic_unknown
+        override val text = R.string.unknown
+        override val selectable = false
     };
 
-    open fun getIcon() = R.drawable.ic_train
-    open fun getString() = R.string.product_type_bus
+    open val icon = R.drawable.ic_train
+    open val text = R.string.product_type_bus
+    open val selectable = true
 }

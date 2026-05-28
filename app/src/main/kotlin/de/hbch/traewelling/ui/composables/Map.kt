@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.BuildConfig
 import de.hbch.traewelling.R
+import de.hbch.traewelling.api.models.polyline.Feature
 import de.hbch.traewelling.api.models.polyline.FeatureCollection
 import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.shared.SharedValues
@@ -166,28 +167,40 @@ fun getPolyLinesFromFeatureCollection(featureCollection: FeatureCollection?, col
     val polyLines: MutableList<Polyline> = mutableListOf()
 
     featureCollection?.features?.forEach { feature ->
-        val polyline = Polyline()
-        feature.geometry?.coordinates?.forEach { coordinate ->
-            polyline.addPoint(
-                GeoPoint(
-                    coordinate[1] ?: 0.0,
-                    coordinate[0] ?: 0.0
-                )
-            )
+        val polyline = getPolyLineFromFeature(
+            feature,
+            color,
+            statuses.firstOrNull { it.id == feature.properties?.statusId }
+        )
+        polyline?.let {
+            polyLines.add(it)
         }
-        // Skip erroneous polylines which have (0/0) as a point
-        if (!polyline.actualPoints.any { it.latitude == 0.0 && it.longitude == 0.0 }) {
-            polyLines.add(polyline)
-        }
-
-        val statusLineColor = statuses
-            .firstOrNull { it.id == feature.properties?.statusId }
-            ?.journey?.lineColor
-        val argb = colorFromHex("#$statusLineColor")?.toArgb()
-        polyline.outlinePaint.color = argb ?: color
     }
 
     return polyLines
+}
+
+fun getPolyLineFromFeature(feature: Feature, color: Int, status: Status? = null): Polyline? {
+    val polyline = Polyline()
+    feature.geometry?.coordinates?.forEach { coordinate ->
+        polyline.addPoint(
+            GeoPoint(
+                coordinate[1] ?: 0.0,
+                coordinate[0] ?: 0.0
+            )
+        )
+    }
+
+    // Skip erroneous polylines which have (0/0) as a point
+    if (polyline.actualPoints.any { it.latitude == 0.0 && it.longitude == 0.0 } || polyline.actualPoints.isEmpty()) {
+        return null
+    }
+
+    val statusLineColor = status?.journey?.lineColor
+    val argb = colorFromHex("#$statusLineColor")?.toArgb()
+    polyline.outlinePaint.color = argb ?: color
+
+    return polyline
 }
 
 fun getBoundingBoxFromPolyLines(polyLines: List<Polyline>): BoundingBox {

@@ -59,6 +59,7 @@
     <string name="status_delete_failure">Beim Löschen des Check-Ins ist ein Fehler aufgetreten.</string>
     <string name="co_travellers">Auch in deiner Verbindung:</string>
     <string name="no_departures">Für diese Zeit gibt es keine verfügbaren Abfahrten.</string>
+    <string name="product_type">Verkehrsmittel</string>
     <string name="product_type_regional">Regional</string>
     <string name="product_type_express">Fernverkehr</string>
     <string name="product_type_bus">Bus</string>
@@ -365,6 +366,18 @@
         <item quantity="one">Eine Abfahrt wurde aufgrund von Lizenzproblemen entfernt.</item>
         <item quantity="other" formatted="true">%1$d Abfahrten wurden aufgrund von Lizenzproblemen entfernt.</item>
     </plurals>
+    <string name="trip_data">Fahrtdaten</string>
+    <string name="preview">Vorschau</string>
+    <string name="line_train_name">Linien- / Zugbezeichnung</string>
+    <string name="journey_number">Fahrtnummer</string>
+    <string name="create_manual_trip">Manuelle Fahrt erstellen</string>
+    <string name="arrival_time">Ankunftszeit</string>
+    <string name="arrival_station">Ankunftsstation</string>
+    <string name="departure_time">Abfahrtszeit</string>
+    <string name="departure_station">Startstation</string>
+    <string name="stopover">Unterwegshalt</string>
+    <string name="add_stopover">Unterwegshalt hinzufügen</string>
+    <string name="error_manual_trip_validation">Um eine manuelle Fahrt zu erstellen müssen mindestens das Verkehrsmittel sowie die Abfahrts- und Ankunftsstation angegeben werden.</string>
     <string name="message_from">Meldung von %1$s</string>
     <string name="displayed_in_account_language">angezeigt in deiner festgelegten Accountsprache</string>
     <string name="privacy_policy_title">Datenschutzerklärung</string>

@@ -166,6 +166,13 @@ object TrustedUsers : Destination {
     override val route = "trusted-users"
 }
 
+@Serializable
+object ManualTripCreation : Destination {
+    override val label = R.string.create_manual_trip
+    override val route = "manual-trip"
+
+}
+
 val SCREENS = listOf(
     Dashboard,
     EnRoute,
@@ -182,7 +189,8 @@ val SCREENS = listOf(
     ProfileEdit,
     ManageFollowers(),
     ProfileEdit,
-    TrustedUsers
+    TrustedUsers,
+    ManualTripCreation
 )
 
 val BOTTOM_NAVIGATION = listOf(

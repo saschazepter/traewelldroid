@@ -84,7 +84,8 @@ fun SearchConnection(
     station: Int,
     currentSearchDate: ZonedDateTime,
     onTripSelected: () -> Unit = { },
-    onHomelandSelected: (Station) -> Unit = { }
+    onHomelandSelected: (Station) -> Unit = { },
+    onCreateManualTrip: () -> Unit = { }
 ) {
     val viewModel: SearchConnectionViewModel = viewModel()
     val context = LocalContext.current
@@ -222,6 +223,10 @@ fun SearchConnection(
                     }
                 }
             }
+            ButtonWithIconAndText(
+                text = stringResource(R.string.create_manual_trip),
+                onClick = onCreateManualTrip
+            )
             if (removedCount != null) {
                 Text(
                     text = pluralStringResource(R.plurals.removed_departures, removedCount ?: 0, removedCount ?: 0),
@@ -460,8 +465,8 @@ fun ConnectionListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = productType.getIcon()),
-                    contentDescription = stringResource(id = productType.getString())
+                    painter = painterResource(id = productType.icon),
+                    contentDescription = stringResource(id = productType.text)
                 )
                 LineIcon(
                     lineName = line?.name ?: "",

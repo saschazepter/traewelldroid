@@ -175,7 +175,7 @@ fun FromToTextRow(
         if (category != null) {
             Image(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(id = category.getIcon()),
+                painter = painterResource(id = category.icon),
                 contentDescription = null
             )
         }

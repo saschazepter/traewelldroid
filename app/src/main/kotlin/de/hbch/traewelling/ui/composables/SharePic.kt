@@ -239,7 +239,7 @@ fun SharePic(
                     val alignmentModifier = Modifier.align(Alignment.CenterVertically)
                     Image(
                         modifier = alignmentModifier,
-                        painter = painterResource(id = status.journey.safeProductType.getIcon()),
+                        painter = painterResource(id = status.journey.safeProductType.icon),
                         contentDescription = null
                     )
                     LineIconView(

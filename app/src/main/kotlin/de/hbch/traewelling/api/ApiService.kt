@@ -15,6 +15,7 @@ import de.hbch.traewelling.api.models.alert.Alert
 import de.hbch.traewelling.api.models.event.Event
 import de.hbch.traewelling.api.models.notifications.Notification
 import de.hbch.traewelling.api.models.notifications.NotificationPage
+import de.hbch.traewelling.api.models.polyline.Feature
 import de.hbch.traewelling.api.models.polyline.FeatureCollection
 import de.hbch.traewelling.api.models.report.Report
 import de.hbch.traewelling.api.models.station.Station
@@ -24,8 +25,11 @@ import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.api.models.status.StatusPage
 import de.hbch.traewelling.api.models.status.Tag
 import de.hbch.traewelling.api.models.status.TrwlCheckInUpdateRequest
+import de.hbch.traewelling.api.models.trip.CreateManualTripRequest
 import de.hbch.traewelling.api.models.trip.Trip
 import de.hbch.traewelling.api.models.trip.DeparturePage
+import de.hbch.traewelling.api.models.trip.Operator
+import de.hbch.traewelling.api.models.trip.PreviewManualTripPolylineRequest
 import de.hbch.traewelling.api.models.user.*
 import de.hbch.traewelling.api.models.webhook.WebhookUserCreateRequest
 import de.hbch.traewelling.api.models.wrapped.YearInReviewData
@@ -172,6 +176,11 @@ interface CheckInService {
         @Query("timestamp") timestamp: ZonedDateTime = ZonedDateTime.now(),
         @Query("upcoming") upcoming: Boolean = false
     ): Data<List<Event>>
+
+    @GET("operators")
+    suspend fun getOperators(
+        @Query("query") query: String = ""
+    ): Response<Data<List<Operator>>>
 }
 
 interface TravelService {
@@ -180,6 +189,16 @@ interface TravelService {
         @Query("hafasTripId") tripId: String,
         @Query("lineName") lineName: String
     ): Call<Data<Trip>>
+
+    @POST("trips")
+    suspend fun createManualTrip(
+        @Body request: CreateManualTripRequest
+    ): Response<Data<Trip>>
+
+    @POST("trips/route-preview")
+    suspend fun previewPolylineForManualTrip(
+        @Body request: PreviewManualTripPolylineRequest
+    ): Response<Data<Feature>>
 
     @GET("trains/station/nearby")
     suspend fun getNearbyStation(

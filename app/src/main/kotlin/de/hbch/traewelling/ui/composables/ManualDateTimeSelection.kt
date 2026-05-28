@@ -45,7 +45,9 @@ fun DateTimeSelection(
     plannedDate: ZonedDateTime?,
     @StringRes label: Int,
     modifier: Modifier = Modifier,
-    dateSelected: (ZonedDateTime?) -> Unit = { }
+    dateSelected: (ZonedDateTime?) -> Unit = { },
+    showNow: Boolean = true,
+    isError: Boolean = false
 ) {
     val initDateTime = initDate ?: plannedDate ?: ZonedDateTime.now()
 
@@ -126,12 +128,19 @@ fun DateTimeSelection(
     }
 
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         OutlinedTextField(
             value = dateTimeText,
             onValueChange = { },
-            modifier = modifier.clickable(interactionSource, null) { },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = { }
+                ),
             readOnly = true,
             label = {
                 Text(
@@ -148,16 +157,18 @@ fun DateTimeSelection(
             },
             trailingIcon = {
                 if (dateTime == null) {
-                    TextButton(
-                        onClick = {
-                            val now = ZonedDateTime.now()
-                            dateTime = now
-                            dateSelected(now)
+                    if (showNow) {
+                        TextButton(
+                            onClick = {
+                                val now = ZonedDateTime.now()
+                                dateTime = now
+                                dateSelected(now)
+                            }
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.now)
+                            )
                         }
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.now)
-                        )
                     }
                 } else {
                     IconButton(onClick = {
@@ -173,7 +184,8 @@ fun DateTimeSelection(
                 }
             },
             maxLines = 1,
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            isError = isError
         )
         if (plannedDate != null) {
             Text(

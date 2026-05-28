@@ -24,6 +24,8 @@ import androidx.navigation.toRoute
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.Status
+import de.hbch.traewelling.api.models.trip.ProductType
+import de.hbch.traewelling.api.models.trip.Trip
 import de.hbch.traewelling.shared.CheckInViewModel
 import de.hbch.traewelling.shared.EventViewModel
 import de.hbch.traewelling.shared.LoggedInUserViewModel
@@ -35,6 +37,7 @@ import de.hbch.traewelling.ui.dashboard.Dashboard
 import de.hbch.traewelling.ui.followers.ManageFollowers
 import de.hbch.traewelling.ui.info.InfoActivity
 import de.hbch.traewelling.ui.main.MainActivity
+import de.hbch.traewelling.ui.manualTrip.ManualTripCreation
 import de.hbch.traewelling.ui.notifications.Notifications
 import de.hbch.traewelling.ui.notifications.NotificationsViewModel
 import de.hbch.traewelling.ui.searchConnection.SearchConnection
@@ -135,6 +138,24 @@ fun TraewelldroidNavHost(
 
         navController.navigate(
             CheckIn()
+        )
+    }
+
+    val navToSelectDestination: (Trip) -> Unit = { trip ->
+        checkInViewModel.reset()
+        checkInViewModel.lineName = trip.lineName
+        checkInViewModel.lineId = trip.lineId
+        checkInViewModel.lineColor = trip.lineColor
+        checkInViewModel.textColor = null
+        checkInViewModel.tripId = trip.id.toString()
+        checkInViewModel.originId = trip.origin.id
+        checkInViewModel.originEvaIdentifier = trip.origin.evaIdentifier
+        checkInViewModel.departureTime = trip.stopovers.first().departurePlanned
+        checkInViewModel.category = trip.category ?: ProductType.UNKNOWN
+        checkInViewModel.origin = trip.origin.name
+
+        navController.navigate(
+            SelectDestination(false)
         )
     }
 
@@ -434,9 +455,17 @@ fun TraewelldroidNavHost(
                         )
                         shortcutManager.requestPinShortcut(shortcut, successCallback.intentSender)
                     }
+                },
+                onCreateManualTrip = {
+                    navController.navigate(ManualTripCreation)
                 }
             )
             onResetFloatingActionButton()
+        }
+        composable<ManualTripCreation> {
+            ManualTripCreation(
+                onTripCreated = navToSelectDestination
+            )
         }
         composable<SelectDestination> {
             val data: SelectDestination = it.toRoute()

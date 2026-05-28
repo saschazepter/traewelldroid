@@ -27,7 +27,7 @@ data class CategoryStatistics(
     @SerializedName("duration") override val duration: Int
 ) : AbstractStatistics() {
     private val safeProductType get() = productType ?: ProductType.UNKNOWN
-    override fun getLabel(context: Context) = context.getString(safeProductType.getString())
+    override fun getLabel(context: Context) = context.getString(safeProductType.text)
 }
 
 data class OperatorStatistics(

@@ -61,6 +61,7 @@
     <string name="status_delete_failure">There was an error when deleting your check-in.</string>
     <string name="co_travellers">Also in your connection:</string>
     <string name="no_departures">There are no available departures for this time.</string>
+    <string name="product_type">Means of transport</string>
     <string name="product_type_regional">Regional</string>
     <string name="product_type_express">Express</string>
     <string name="product_type_bus">Bus</string>
@@ -396,6 +397,18 @@
         <item quantity="one">1 departure was removed due to licensing issues.</item>
         <item quantity="other" formatted="true">%1$d departures were removed due to licensing issues.</item>
     </plurals>
+    <string name="trip_data">Trip data</string>
+    <string name="preview">Preview</string>
+    <string name="line_train_name">Line / Train name</string>
+    <string name="journey_number">Journey number</string>
+    <string name="create_manual_trip">Create manual trip</string>
+    <string name="arrival_time">Arrival time</string>
+    <string name="arrival_station">Arrival station</string>
+    <string name="departure_time">Departure time</string>
+    <string name="departure_station">Departure station</string>
+    <string name="stopover">Stopover</string>
+    <string name="add_stopover">Add stopover</string>
+    <string name="error_manual_trip_validation">To create a manual trip, at least the means of transport and the departure and arrival station must be specified.</string>
     <string name="message_from">Message from %1$s</string>
     <string name="displayed_in_account_language">displayed in your selected account language</string>
     <string name="privacy_policy_title">Privacy Policy</string>
