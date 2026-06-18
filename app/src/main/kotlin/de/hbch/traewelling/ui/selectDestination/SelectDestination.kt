@@ -134,13 +134,11 @@ fun SelectDestination(
                             trip!!.stopovers.forEachIndexed { index, tripStation ->
                                 TravelStopListItem(
                                     modifier = Modifier.clickable(onClick = {
-                                        if (!tripStation.isCancelled) {
-                                            checkInViewModel.arrivalTime =
-                                                tripStation.arrivalPlanned
-                                            checkInViewModel.destination = tripStation.name
-                                            checkInViewModel.destinationId = tripStation.id
-                                            onStationSelected(tripStation)
-                                        }
+                                        checkInViewModel.arrivalTime =
+                                            tripStation.arrivalPlanned
+                                        checkInViewModel.destination = tripStation.name
+                                        checkInViewModel.destinationId = tripStation.id
+                                        onStationSelected(tripStation)
                                     }),
                                     station = tripStation,
                                     isLastStop = index == trip!!.stopovers.size - 1

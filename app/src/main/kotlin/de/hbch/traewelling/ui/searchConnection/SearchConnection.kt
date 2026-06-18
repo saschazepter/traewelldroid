@@ -389,9 +389,7 @@ fun SearchConnection(
                 modifier = itemModifier
                     .fillMaxWidth()
                     .clickable {
-                        if (!trip.isCancelled) {
-                            onTripSelection(trip)
-                        }
+                        onTripSelection(trip)
                     }
                     .padding(vertical = 8.dp),
                 productType = trip.line?.safeProductType ?: ProductType.UNKNOWN,
