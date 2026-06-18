@@ -16,8 +16,8 @@ aboutLibraries {
 
 android {
     val packageName = "de.hbch.traewelling"
-    val name = "2.25.0"
-    val code = 223
+    val name = "2.26.0"
+    val code = 224
     compileSdk = 37
 
     dependenciesInfo {
