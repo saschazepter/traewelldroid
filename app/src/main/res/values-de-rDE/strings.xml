@@ -382,4 +382,9 @@
     <string name="displayed_in_account_language">angezeigt in deiner festgelegten Accountsprache</string>
     <string name="privacy_policy_title">Datenschutzerklärung</string>
     <string name="privacy_policy_not_accepted">Du hast die aktuelle Datenschutzerklärung von Träwelling noch nicht akzeptiert. Bitte mache dies auf der Webseite von Träwelling, um die App weiter nutzen zu können.</string>
+    <string name="tag_default_values">Tag-Standardwerte</string>
+    <string name="tag_default_values_text">Hier kannst du Standardwerte für Tags definieren.</string>
+    <string name="add">Hinzufügen</string>
+    <string name="new_value">Neuer Wert</string>
+    <string name="value_contained_in_list">Dieser Wert befindet sich bereits in der Liste.</string>
 </resources>

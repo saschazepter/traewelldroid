@@ -2,8 +2,6 @@ package de.hbch.traewelling.ui.tag
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +13,10 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -34,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.jcloquell.androidsecurestorage.SecureStorage
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.StatusVisibility
 import de.hbch.traewelling.api.models.status.Tag
@@ -51,7 +53,9 @@ import de.hbch.traewelling.theme.MainTheme
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.OutlinedButtonWithIconAndText
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,9 +71,11 @@ fun StatusTags(
     var tagFormVisible by remember { mutableStateOf(false) }
     var tagFormData by remember { mutableStateOf<Tag?>(null) }
 
-    val currentTags = remember { mutableStateListOf<Tag>().also {
-        it.addAll(tags)
-    } }
+    val currentTags = remember {
+        mutableStateListOf<Tag>().also {
+            it.addAll(tags)
+        }
+    }
 
     LaunchedEffect(tagsRequested) {
         if (!tagsRequested) {
@@ -180,7 +186,7 @@ fun StatusTag(
             onClick = {
                 if (isOwnTag && tagType != TagType.UNKNOWN) {
                     onClick()
-                }  else {
+                } else {
                     scope.launch {
                         tooltipState.show()
                     }
@@ -207,6 +213,7 @@ fun StatusTag(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagForm(
     tagData: Tag?,
@@ -242,15 +249,69 @@ fun TagForm(
     var saving by remember { mutableStateOf(false) }
     var deleting by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val secureStorage = remember { SecureStorage(context) }
+
+    var defaultTagValues by remember { mutableStateOf<List<String>>(emptyList()) }
+    LaunchedEffect(type?.ssDefaultValKey) {
+        val key = type?.ssDefaultValKey
+        if (key != null) {
+            withContext(Dispatchers.IO) {
+                val storedArray = secureStorage.getObject(key, Array<String>::class.java)
+                defaultTagValues = storedArray?.toList() ?: emptyList()
+            }
+        }
+    }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        val title = if (isCreationMode) R.string.add_tag else R.string.edit_tag
-        Text(
-            text = stringResource(id = title),
-            style = LocalFont.current.titleLarge
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            val title = if (isCreationMode) R.string.add_tag else R.string.edit_tag
+            Text(
+                text = stringResource(id = title),
+                modifier = Modifier.weight(1f),
+                style = LocalFont.current.titleLarge
+            )
+            AnimatedVisibility(type != null) {
+                Box {
+                    OutlinedIconButton(
+                        onClick = {
+                            tagVisibilitySelectionVisible = true
+                        },
+                        enabled = !(saving || deleting)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = tagVisibility.icon),
+                            contentDescription = stringResource(id = tagVisibility.title)
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = tagVisibilitySelectionVisible,
+                        onDismissRequest = {
+                            tagVisibilitySelectionVisible = false
+                        }) {
+                        StatusVisibility.entries.forEach {
+                            DropdownMenuItem(text = {
+                                Text(
+                                    text = stringResource(id = it.title)
+                                )
+                            }, leadingIcon = {
+                                Icon(
+                                    painter = painterResource(id = it.icon),
+                                    contentDescription = null
+                                )
+                            }, onClick = {
+                                tagVisibility = it
+                                tagVisibilitySelectionVisible = false
+                            })
+                        }
+                    }
+                }
+            }
+
+        }
         if (isCreationMode && availableTagsToAdd.isEmpty()) {
             Text(
                 modifier = Modifier
@@ -265,7 +326,7 @@ fun TagForm(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp, end = 8.dp)
                 ) {
                     if (type == null) {
                         OutlinedButtonWithIconAndText(
@@ -310,93 +371,82 @@ fun TagForm(
                     }
                 }
                 AnimatedVisibility(type != null) {
-                    val interactionSource = remember { MutableInteractionSource() }
                     val focusManager = LocalFocusManager.current
-                    val tagFieldPressed by interactionSource.collectIsFocusedAsState()
-                    LaunchedEffect(tagFieldPressed) {
-                        if (tagFieldPressed) {
-                            tagValueSelectionVisible = true
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        val readOnly = type?.allowedValues != null
+                        val dropdownAvailable = readOnly || defaultTagValues.any {
+                            it.contains(
+                                displayedValue
+                            )
                         }
-                    }
-                    Box {
-                        OutlinedTextField(
-                            value = displayedValue,
-                            onValueChange = { tagValue = it },
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            label = {
-                                Text(
-                                    text = stringResource(id = type.title)
-                                )
-                            },
-                            placeholder = {
-                                Text(
-                                    text = stringResource(id = type.example),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            },
-                            maxLines = 1,
-                            readOnly = type!!.allowedValues != null,
-                            singleLine = true,
-                            enabled = !(saving || deleting),
-                            trailingIcon = {
-                                Box {
-                                    IconButton(
-                                        onClick = { tagVisibilitySelectionVisible = true },
-                                        enabled = !(saving || deleting)
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(id = tagVisibility.icon),
-                                            contentDescription = stringResource(id = tagVisibility.title)
-                                        )
-                                    }
-                                    DropdownMenu(
-                                        expanded = tagVisibilitySelectionVisible,
-                                        onDismissRequest = { tagVisibilitySelectionVisible = false }
-                                    ) {
-                                        StatusVisibility.entries.forEach {
-                                            DropdownMenuItem(
-                                                text = {
-                                                    Text(
-                                                        text = stringResource(id = it.title)
-                                                    )
-                                                },
-                                                leadingIcon = {
-                                                    Icon(
-                                                        painter = painterResource(id = it.icon),
-                                                        contentDescription = null
-                                                    )
-                                                },
-                                                onClick = {
-                                                    tagVisibility = it
-                                                    tagVisibilitySelectionVisible = false
-                                                }
-                                            )
-                                        }
+                        val anchorType = if (readOnly) {
+                            ExposedDropdownMenuAnchorType.PrimaryNotEditable
+                        } else {
+                            ExposedDropdownMenuAnchorType.PrimaryEditable
+                        }
+                        ExposedDropdownMenuBox(
+                            expanded = tagValueSelectionVisible,
+                            onExpandedChange = { tagValueSelectionVisible = it },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            OutlinedTextField(
+                                value = displayedValue,
+                                onValueChange = {
+                                    tagValue = it
+                                    if (dropdownAvailable) tagValueSelectionVisible = true
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .menuAnchor(
+                                        type = anchorType
+                                    ),
+                                label = {
+                                    Text(
+                                        text = stringResource(id = type!!.title)
+                                    )
+                                },
+                                placeholder = {
+                                    Text(
+                                        text = stringResource(id = type!!.example),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                },
+                                readOnly = readOnly,
+                                singleLine = true,
+                                enabled = !(saving || deleting),
+                                trailingIcon = {
+                                    if (dropdownAvailable) {
+                                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = tagValueSelectionVisible)
                                     }
                                 }
-                            },
-                            interactionSource = interactionSource
-                        )
-                        DropdownMenu(
-                            expanded = type.allowedValues != null && tagValueSelectionVisible,
-                            onDismissRequest = {
-                                tagValueSelectionVisible = false
-                                focusManager.clearFocus(true)
-                            }
-                        ) {
-                            type.allowedValues?.filterKeys { key -> key != "unknown" }?.forEach { (key, stringRes) ->
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(text = stringResource(id = stringRes))
-                                    },
-                                    onClick = {
-                                        tagValue = key
-                                        tagValueSelectionVisible = false
-                                        focusManager.clearFocus(true)
+                            )
+                            ExposedDropdownMenu(
+                                expanded = dropdownAvailable && tagValueSelectionVisible,
+                                onDismissRequest = {
+                                    tagValueSelectionVisible = false
+                                }) {
+                                type!!.allowedValues?.filterKeys { key -> key != "unknown" }
+                                    ?.forEach { (key, stringRes) ->
+                                        DropdownMenuItem(text = {
+                                            Text(text = stringResource(id = stringRes))
+                                        }, onClick = {
+                                            tagValue = key
+                                            tagValueSelectionVisible = false
+                                            focusManager.clearFocus(true)
+                                        })
                                     }
-                                )
+                                defaultTagValues.filter { it.contains(displayedValue) }
+                                    .forEach { defaultTagValue ->
+                                        DropdownMenuItem(
+                                            text = { Text(defaultTagValue) },
+                                            onClick = {
+                                                tagValue = defaultTagValue
+                                                tagValueSelectionVisible = false
+                                                focusManager.clearFocus(true)
+                                            }
+                                        )
+                                    }
                             }
                         }
                     }

@@ -413,4 +413,9 @@
     <string name="displayed_in_account_language">displayed in your selected account language</string>
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="privacy_policy_not_accepted">You have not yet accepted the current privacy policy of Träwelling. Please do this on the Träwelling website to continue using the app.</string>
+    <string name="tag_default_values">Tag default values</string>
+    <string name="tag_default_values_text">You can define default values for tags here.</string>
+    <string name="add">Add</string>
+    <string name="new_value">New value</string>
+    <string name="value_contained_in_list">This value is already contained in the list.</string>
 </resources>

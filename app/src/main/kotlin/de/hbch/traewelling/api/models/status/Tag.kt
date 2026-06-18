@@ -18,6 +18,7 @@ enum class TagType {
         override val title = R.string.tag_travel_class_title
         override val key = "trwl:travel_class"
         override val example = R.string.tag_travel_class_example
+        override val ssDefaultValKey = "TAG_DEFAULT_TRAVEL_CLASS"
     },
     @SerializedName("trwl:ticket")
     TICKET {
@@ -25,6 +26,7 @@ enum class TagType {
         override val title = R.string.tag_ticket_title
         override val key = "trwl:ticket"
         override val example = R.string.tag_ticket_example
+        override val ssDefaultValKey = "TAG_DEFAULT_TICKET"
     },
     @SerializedName("trwl:wagon")
     COACH {
@@ -46,6 +48,7 @@ enum class TagType {
         override val title = R.string.tag_locomotive_class_title
         override val key = "trwl:locomotive_class"
         override val example = R.string.tag_locomotive_class_example
+        override val ssDefaultValKey = "TAG_DEFAULT_LOCOMOTIVE_CLASS"
     },
     @SerializedName("trwl:vehicle_number")
     VEHICLE_NUMBER {
@@ -67,6 +70,7 @@ enum class TagType {
         override val title = R.string.tag_staff_role_title
         override val key = "trwl:role"
         override val example = R.string.tag_staff_role_example
+        override val ssDefaultValKey = "TAG_DEFAULT_ROLE"
     },
     @SerializedName("trwl:passenger_rights")
     PASSENGER_RIGHTS {
@@ -74,6 +78,7 @@ enum class TagType {
         override val title = R.string.tag_passenger_rights_title
         override val key = "trwl:passenger_rights"
         override val example = R.string.tag_passenger_rights_example
+        override val ssDefaultValKey = "TAG_DEFAULT_PASSENGER_RIGHTS"
     },
     @SerializedName("trwl:journey_number")
     JOURNEY_NUMBER {
@@ -88,6 +93,7 @@ enum class TagType {
         override val title = R.string.tag_price_title
         override val key = "trwl:price"
         override val example = R.string.tag_price_example
+        override val ssDefaultValKey = "TAG_DEFAULT_PRICE"
     },
     @SerializedName("trwl:social_status")
     SOCIAL_STATUS {
@@ -117,4 +123,5 @@ enum class TagType {
     abstract val example: Int
     open val selectable: Boolean = true
     open val allowedValues: Map<String, Int>? = null
+    open val ssDefaultValKey: String? = null
 }

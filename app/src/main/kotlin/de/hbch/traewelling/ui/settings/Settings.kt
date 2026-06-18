@@ -1,5 +1,6 @@
 package de.hbch.traewelling.ui.settings
 
+import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -9,9 +10,15 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,11 +26,14 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +50,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +62,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jcloquell.androidsecurestorage.SecureStorage
 import de.c1710.filemojicompat_ui.views.picker.EmojiPackItemAdapter
 import de.hbch.traewelling.R
+import de.hbch.traewelling.api.models.status.TagType
 import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.shared.SettingsViewModel
 import de.hbch.traewelling.shared.SharedValues
@@ -58,11 +70,14 @@ import de.hbch.traewelling.theme.LocalColorScheme
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.theme.MainTheme
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
+import de.hbch.traewelling.ui.composables.ContentDialog
 import de.hbch.traewelling.ui.composables.OpenRailwayMapLayer
 import de.hbch.traewelling.ui.composables.SwitchWithIconAndText
 import de.hbch.traewelling.util.getJwtExpiration
 import de.hbch.traewelling.util.refreshJwt
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun Settings(
@@ -86,6 +101,7 @@ fun Settings(
         HashtagSettings(
             snackbarHostState = snackbarHostState
         )
+        TagsValueSettings()
         MapViewSettings()
         EmojiSettings(
             emojiPackItemAdapter = emojiPackItemAdapter
@@ -93,6 +109,7 @@ fun Settings(
     }
 }
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 private fun DisplayProviderSettings(
     snackbarHostState: SnackbarHostState,
@@ -207,6 +224,7 @@ private fun CheckInProviderSettings(
     }
 }
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 private fun TraewellingProviderSettings(
     snackbarHostState: SnackbarHostState,
@@ -216,8 +234,22 @@ private fun TraewellingProviderSettings(
     if (loggedInUserViewModel != null) {
         val context = LocalContext.current
         val secureStorage = SecureStorage(context)
-        var jwt by remember { mutableStateOf(secureStorage.getObject(SharedValues.SS_JWT, String::class.java) ?: "") }
-        var defaultCheckIn by remember { mutableStateOf(secureStorage.getObject(SharedValues.SS_TRWL_AUTO_LOGIN, Boolean::class.java) ?: true) }
+        var jwt by remember {
+            mutableStateOf(
+                secureStorage.getObject(
+                    SharedValues.SS_JWT,
+                    String::class.java
+                ) ?: ""
+            )
+        }
+        var defaultCheckIn by remember {
+            mutableStateOf(
+                secureStorage.getObject(
+                    SharedValues.SS_TRWL_AUTO_LOGIN,
+                    Boolean::class.java
+                ) ?: true
+            )
+        }
         val username by loggedInUserViewModel.username.observeAsState("")
         val coroutineScope = rememberCoroutineScope()
 
@@ -287,6 +319,7 @@ private fun TraewellingProviderSettings(
     }
 }
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TravelynxProviderSettings(
@@ -297,8 +330,22 @@ private fun TravelynxProviderSettings(
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     val secureStorage = SecureStorage(context)
-    var token by remember { mutableStateOf(secureStorage.getObject(SharedValues.SS_TRAVELYNX_TOKEN, String::class.java) ?: "") }
-    var defaultCheckIn by remember { mutableStateOf(secureStorage.getObject(SharedValues.SS_TRAVELYNX_AUTO_CHECKIN, Boolean::class.java) ?: false) }
+    var token by remember {
+        mutableStateOf(
+            secureStorage.getObject(
+                SharedValues.SS_TRAVELYNX_TOKEN,
+                String::class.java
+            ) ?: ""
+        )
+    }
+    var defaultCheckIn by remember {
+        mutableStateOf(
+            secureStorage.getObject(
+                SharedValues.SS_TRAVELYNX_AUTO_CHECKIN,
+                Boolean::class.java
+            ) ?: false
+        )
+    }
     val saveTokenAction: () -> Unit = {
         keyboardController?.hide()
         secureStorage.storeObject(SharedValues.SS_TRAVELYNX_TOKEN, token)
@@ -378,6 +425,7 @@ private fun TravelynxProviderSettings(
 }
 
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun HashtagSettings(
@@ -455,7 +503,8 @@ private fun MapViewSettings(
 
     if (!LocalView.current.isInEditMode) {
         secureStorage = SecureStorage(LocalContext.current)
-        val storedOrmLayer = secureStorage.getObject(SharedValues.SS_ORM_LAYER, OpenRailwayMapLayer::class.java)
+        val storedOrmLayer =
+            secureStorage.getObject(SharedValues.SS_ORM_LAYER, OpenRailwayMapLayer::class.java)
         storedOrmLayer?.let {
             selectedOrmLayer = it
         }
@@ -480,7 +529,7 @@ private fun MapViewSettings(
                     text = stringResource(id = R.string.openrailwaymap)
                 )
                 OpenRailwayMapLayer.entries.forEach { layer ->
-                    val layerSelected : () -> Unit = {
+                    val layerSelected: () -> Unit = {
                         selectedOrmLayer = layer
                         secureStorage?.storeObject(SharedValues.SS_ORM_LAYER, selectedOrmLayer)
                     }
@@ -539,6 +588,165 @@ private fun EmojiSettings(
                         recyclerView
                     }
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TagsValueSettings(
+    modifier: Modifier = Modifier
+) {
+    SettingsCard(
+        modifier = modifier,
+        title = R.string.tag_default_values,
+        description = R.string.tag_default_values_text,
+        expandable = true
+    ) {
+        Column {
+            TagType.entries.filter { it.ssDefaultValKey != null }.forEach {
+                TagValueSetting(it)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TagValueSetting(
+    tag: TagType,
+    modifier: Modifier = Modifier
+) {
+    var listVisible by remember { mutableStateOf(false) }
+    var defaultValues by remember { mutableStateOf<List<String>>(emptyList()) }
+    val newDefaultValue = rememberTextFieldState("")
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val secureStorage = remember { SecureStorage(context) }
+
+    val updateAndSaveValues: (List<String>) -> Unit = { newValues ->
+        defaultValues = newValues
+        if (tag.ssDefaultValKey != null) {
+            coroutineScope.launch(context = Dispatchers.IO) {
+                secureStorage.storeObject(key = tag.ssDefaultValKey, objectToStore = newValues)
+            }
+        }
+    }
+
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(painter = painterResource(id = tag.icon), contentDescription = null)
+            Text(stringResource(id = tag.title))
+        }
+        Button(
+            onClick = { listVisible = true }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_edit),
+                contentDescription = stringResource(id = R.string.title_edit)
+            )
+        }
+    }
+    if (listVisible) {
+        ContentDialog(
+            onDismissRequest = { listVisible = false },
+            modifier = Modifier.padding(8.dp, 48.dp)
+        ) {
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.IO) {
+                    val storedArray = secureStorage.getObject(
+                        (tag.ssDefaultValKey!!),
+                        Array<String>::class.java
+                    )
+                    defaultValues = storedArray?.toMutableList() ?: emptyList()
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .padding(20.dp, 8.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(id = tag.title), style = MaterialTheme.typography.titleMedium )
+                }
+                val valueIsDuplicate = defaultValues.contains(newDefaultValue.text.toString())
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val addNewValue: () -> Unit = {
+                        val textToAdd = newDefaultValue.text.toString()
+                        if (textToAdd.isNotBlank() && !valueIsDuplicate) {
+                            val newList = listOf(textToAdd) + defaultValues
+                            updateAndSaveValues(newList)
+                            newDefaultValue.edit { replace(0, length, "") }
+                        }
+                    }
+                    OutlinedTextField(
+                        state = newDefaultValue,
+                        modifier = Modifier.weight(1f),
+                        lineLimits = TextFieldLineLimits.SingleLine,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        onKeyboardAction = { addNewValue() },
+                        isError = valueIsDuplicate
+                    )
+                    Button(onClick = addNewValue, modifier = Modifier.padding(top = 4.dp)) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_add),
+                            contentDescription = stringResource(id = R.string.add)
+                        )
+                    }
+                }
+                AnimatedVisibility(visible = valueIsDuplicate, modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        stringResource(id = R.string.value_contained_in_list),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f, fill = false),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(items = defaultValues, key = { item -> item }) { defaultValue ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = defaultValue, modifier = Modifier.weight(1f))
+                            OutlinedButton(onClick = {
+                                val newList = defaultValues.filter { it != defaultValue }
+                                updateAndSaveValues(newList)
+                            }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_delete),
+                                    contentDescription = stringResource(id = R.string.delete)
+                                )
+                            }
+                        }
+                    }
+                }
+                Button(onClick = { listVisible = false }) {
+                    Text(
+                        text = stringResource(id = R.string.ok),
+                        modifier = Modifier.padding(16.dp, 0.dp)
+                    )
+                }
             }
         }
     }
