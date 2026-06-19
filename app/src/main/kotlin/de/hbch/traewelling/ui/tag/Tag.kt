@@ -260,6 +260,8 @@ fun TagForm(
                 val storedArray = secureStorage.getObject(key, Array<String>::class.java)
                 defaultTagValues = storedArray?.toList() ?: emptyList()
             }
+        } else {
+            defaultTagValues = emptyList()
         }
     }
 
@@ -372,82 +374,82 @@ fun TagForm(
                 }
                 AnimatedVisibility(type != null) {
                     val focusManager = LocalFocusManager.current
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        val readOnly = type?.allowedValues != null
-                        val dropdownAvailable = readOnly || defaultTagValues.any {
-                            it.contains(
-                                displayedValue
-                            )
-                        }
-                        val anchorType = if (readOnly) {
-                            ExposedDropdownMenuAnchorType.PrimaryNotEditable
-                        } else {
-                            ExposedDropdownMenuAnchorType.PrimaryEditable
-                        }
-                        ExposedDropdownMenuBox(
-                            expanded = tagValueSelectionVisible,
-                            onExpandedChange = { tagValueSelectionVisible = it },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            OutlinedTextField(
-                                value = displayedValue,
-                                onValueChange = {
-                                    tagValue = it
-                                    if (dropdownAvailable) tagValueSelectionVisible = true
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .menuAnchor(
-                                        type = anchorType
-                                    ),
-                                label = {
-                                    Text(
-                                        text = stringResource(id = type!!.title)
-                                    )
-                                },
-                                placeholder = {
-                                    Text(
-                                        text = stringResource(id = type!!.example),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                },
-                                readOnly = readOnly,
-                                singleLine = true,
-                                enabled = !(saving || deleting),
-                                trailingIcon = {
-                                    if (dropdownAvailable) {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = tagValueSelectionVisible)
-                                    }
+                    val readOnly = type?.allowedValues != null
+                    val dropdownAvailable = readOnly || defaultTagValues.any {
+                        it.lowercase().contains(
+                            displayedValue.lowercase()
+                        )
+                    }
+                    val anchorType = if (readOnly) {
+                        ExposedDropdownMenuAnchorType.PrimaryNotEditable
+                    } else {
+                        ExposedDropdownMenuAnchorType.PrimaryEditable
+                    }
+                    ExposedDropdownMenuBox(
+                        expanded = tagValueSelectionVisible,
+                        onExpandedChange = { tagValueSelectionVisible = it },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        OutlinedTextField(
+                            value = displayedValue,
+                            onValueChange = {
+                                tagValue = it
+                                if (dropdownAvailable) tagValueSelectionVisible = true
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor(
+                                    type = anchorType
+                                ),
+                            label = {
+                                Text(
+                                    text = stringResource(id = type!!.title)
+                                )
+                            },
+                            placeholder = {
+                                Text(
+                                    text = stringResource(id = type!!.example),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            },
+                            readOnly = readOnly,
+                            singleLine = true,
+                            enabled = !(saving || deleting),
+                            trailingIcon = {
+                                if (dropdownAvailable) {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = tagValueSelectionVisible)
                                 }
-                            )
-                            ExposedDropdownMenu(
-                                expanded = dropdownAvailable && tagValueSelectionVisible,
-                                onDismissRequest = {
-                                    tagValueSelectionVisible = false
-                                }) {
-                                type!!.allowedValues?.filterKeys { key -> key != "unknown" }
-                                    ?.forEach { (key, stringRes) ->
-                                        DropdownMenuItem(text = {
-                                            Text(text = stringResource(id = stringRes))
-                                        }, onClick = {
-                                            tagValue = key
+                            }
+                        )
+                        ExposedDropdownMenu(
+                            expanded = dropdownAvailable && tagValueSelectionVisible,
+                            onDismissRequest = {
+                                tagValueSelectionVisible = false
+                            }) {
+                            type!!.allowedValues?.filterKeys { key -> key != "unknown" }
+                                ?.forEach { (key, stringRes) ->
+                                    DropdownMenuItem(text = {
+                                        Text(text = stringResource(id = stringRes))
+                                    }, onClick = {
+                                        tagValue = key
+                                        tagValueSelectionVisible = false
+                                        focusManager.clearFocus(true)
+                                    })
+                                }
+                            defaultTagValues.filter {
+                                it.lowercase().contains(displayedValue.lowercase())
+                            }
+                                .forEach { defaultTagValue ->
+                                    DropdownMenuItem(
+                                        text = { Text(defaultTagValue) },
+                                        onClick = {
+                                            tagValue = defaultTagValue
                                             tagValueSelectionVisible = false
                                             focusManager.clearFocus(true)
-                                        })
-                                    }
-                                defaultTagValues.filter { it.contains(displayedValue) }
-                                    .forEach { defaultTagValue ->
-                                        DropdownMenuItem(
-                                            text = { Text(defaultTagValue) },
-                                            onClick = {
-                                                tagValue = defaultTagValue
-                                                tagValueSelectionVisible = false
-                                                focusManager.clearFocus(true)
-                                            }
-                                        )
-                                    }
-                            }
+                                        }
+                                    )
+                                }
                         }
                     }
                 }
