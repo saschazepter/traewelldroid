@@ -526,6 +526,8 @@ fun TraewelldroidNavHost(
                 checkInAction = { trwl, travelynx ->
                     if (editMode) {
                         checkInViewModel.updateCheckIn { status ->
+                            loggedInUserViewModel.getLastVisitedStations {}
+                            coroutineScope.launch { loggedInUserViewModel.updateCurrentStatus() }
                             navController.navigate(
                                 StatusDetails(status.id)
                             ) {
@@ -541,6 +543,8 @@ fun TraewelldroidNavHost(
                         coroutineScope.launch {
                             checkInViewModel.checkIn(trwl, travelynx) { succeeded ->
                                 if (succeeded) {
+                                    loggedInUserViewModel.getLastVisitedStations {}
+                                    coroutineScope.launch { loggedInUserViewModel.updateCurrentStatus() }
                                     secureStorage.storeObject(
                                         SharedValues.SS_CHECK_IN_COUNT,
                                         checkInCount + 1
@@ -586,6 +590,8 @@ fun TraewelldroidNavHost(
                 onCheckInForced = {
                     coroutineScope.launch {
                         checkInViewModel.forceCheckIn {
+                            loggedInUserViewModel.getLastVisitedStations {}
+                            coroutineScope.launch { loggedInUserViewModel.updateCurrentStatus() }
                             navController.popBackStackAndNavigate(Dashboard, popUpToInclusive = true)
                             navController.navigate(
                                 CheckInResult

@@ -23,6 +23,7 @@ import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.ZonedDateTime
 import kotlin.math.absoluteValue
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ActiveStatusBar(
@@ -38,7 +39,7 @@ fun ActiveStatusBar(
         )
         var duration by remember { mutableIntStateOf(0) }
         
-        LaunchedEffect(true) {
+        LaunchedEffect(status) {
             while (true) {
                 progress = calculateProgress(
                     from = status.journey.departureManual ?: status.journey.origin.departureReal ?: status.journey.origin.departurePlanned,
@@ -48,7 +49,7 @@ fun ActiveStatusBar(
                     status.journey.destination.arrivalReal ?: status.journey.destination.arrivalPlanned,
                     ZonedDateTime.now()
                 ).toMinutes().toInt()
-                delay(5000)
+                delay(5.seconds)
             }
         }
         Column(

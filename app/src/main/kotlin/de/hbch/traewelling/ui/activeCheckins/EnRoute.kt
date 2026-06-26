@@ -12,6 +12,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,6 +21,7 @@ import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.ui.include.status.CheckInCardViewModel
 import de.hbch.traewelling.util.checkInList
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -35,10 +37,14 @@ fun EnRoute(
     val checkInCardViewModel: CheckInCardViewModel = viewModel()
 
     val refreshing by viewModel.isRefreshing.observeAsState(false)
+    val coroutineScope = rememberCoroutineScope()
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing,
         onRefresh = {
             viewModel.getActiveCheckins()
+            coroutineScope.launch {
+                loggedInUserViewModel.updateCurrentStatus()
+            }
         }
     )
 
