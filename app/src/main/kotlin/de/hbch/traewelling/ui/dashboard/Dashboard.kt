@@ -69,6 +69,7 @@ fun Dashboard(
         onRefresh = {
             currentPage = 1
             dashboardViewModel.refresh()
+            loggedInUserViewModel.getLastVisitedStations {}
         }
     )
     val checkInListState = rememberLazyListState()
