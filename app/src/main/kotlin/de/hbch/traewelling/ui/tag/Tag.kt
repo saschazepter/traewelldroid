@@ -416,11 +416,11 @@ fun TagForm(
                             readOnly = readOnly,
                             singleLine = true,
                             enabled = !(saving || deleting),
-                            trailingIcon = {
-                                if (dropdownAvailable) {
+                            trailingIcon = if (dropdownAvailable) {
+                                {
                                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = tagValueSelectionVisible)
                                 }
-                            }
+                            } else null
                         )
                         ExposedDropdownMenu(
                             expanded = dropdownAvailable && tagValueSelectionVisible,
