@@ -75,6 +75,10 @@
     <string name="product_type_national_express">National express</string>
     <string name="product_type_national">Regional express</string>
     <string name="product_type_plane">Plane</string>
+    <string name="product_type_coach">Coach</string>
+    <string name="product_type_train">Train</string>
+    <string name="product_type_aerial_lift">Aerial lift</string>
+    <string name="product_type_funicular">Funicular</string>
     <string name="data_loading" tools:ignore="TypographyEllipsis">Loading data…</string>
     <string name="status_details">Status details</string>
     <string name="title_statistics">Statistics</string>

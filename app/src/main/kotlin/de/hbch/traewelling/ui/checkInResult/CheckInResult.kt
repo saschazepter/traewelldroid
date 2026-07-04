@@ -32,6 +32,7 @@ import de.hbch.traewelling.ui.composables.*
 import de.hbch.traewelling.ui.include.status.StatusDetailsRow
 import de.hbch.traewelling.ui.tag.StatusTags
 import de.hbch.traewelling.util.ReviewRequest
+import de.hbch.traewelling.util.getTravelTypeIcon
 
 @Composable
 fun CheckInResultView(
@@ -178,7 +179,8 @@ private fun SuccessfulCheckInResult(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             StatusDetailsRow(
-                productType = journey.safeProductType,
+                icon = getTravelTypeIcon(journey.travelType, journey.category),
+                text = getTravelTypeIcon(journey.travelType, journey.category),
                 line = journey.line,
                 journeyNumber = journey.manualJourneyNumber ?: journey.journeyNumber,
                 kilometers = journey.distance,

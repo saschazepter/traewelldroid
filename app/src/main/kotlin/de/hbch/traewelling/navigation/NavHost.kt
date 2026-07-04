@@ -115,6 +115,7 @@ fun TraewelldroidNavHost(
         checkInViewModel.tripId = it.journey.hafasTripId
         checkInViewModel.editStatusId = it.id
         checkInViewModel.category = it.journey.safeProductType
+        checkInViewModel.travelType = it.journey.travelType
         checkInViewModel.event.postValue(it.event)
 
         navController.navigate(
@@ -133,6 +134,7 @@ fun TraewelldroidNavHost(
         checkInViewModel.destinationId = status.journey.destination.id
         checkInViewModel.arrivalTime = status.journey.destination.arrivalPlanned
         checkInViewModel.category = status.journey.safeProductType
+        checkInViewModel.travelType = status.journey.travelType
         checkInViewModel.destination = status.journey.destination.name
         checkInViewModel.event.postValue(status.event)
 
@@ -152,6 +154,7 @@ fun TraewelldroidNavHost(
         checkInViewModel.originEvaIdentifier = trip.origin.evaIdentifier
         checkInViewModel.departureTime = trip.stopovers.first().departurePlanned
         checkInViewModel.category = trip.category ?: ProductType.UNKNOWN
+        checkInViewModel.travelType = trip.travelType
         checkInViewModel.origin = trip.origin.name
 
         navController.navigate(

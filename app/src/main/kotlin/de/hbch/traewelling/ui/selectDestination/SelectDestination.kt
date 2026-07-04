@@ -38,7 +38,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.trip.Trip
 import de.hbch.traewelling.api.models.trip.Stopover
-import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.shared.CheckInViewModel
 import de.hbch.traewelling.theme.LocalColorScheme
 import de.hbch.traewelling.theme.LocalFont
@@ -46,6 +45,8 @@ import de.hbch.traewelling.ui.composables.DataLoading
 import de.hbch.traewelling.ui.composables.LineIcon
 import de.hbch.traewelling.util.getDelayColor
 import de.hbch.traewelling.util.getLocalTimeString
+import de.hbch.traewelling.util.getTravelTypeIcon
+import de.hbch.traewelling.util.getTravelTypeString
 
 @Composable
 fun SelectDestination(
@@ -122,7 +123,8 @@ fun SelectDestination(
                         )
                     } else if (trip != null) {
                         FromToTextRow(
-                            category = trip!!.safeProductType,
+                            icon = getTravelTypeIcon(trip?.travelType, trip?.category),
+                            text = getTravelTypeString(trip?.travelType, trip?.category),
                             lineName = trip!!.lineName,
                             lineColor = trip!!.lineColor,
                             destination = trip!!.destination.name,
@@ -161,7 +163,8 @@ fun SelectDestination(
 @Composable
 fun FromToTextRow(
     modifier: Modifier = Modifier,
-    category: ProductType?,
+    icon: Int,
+    text: Int,
     lineName: String,
     lineColor: String?,
     destination: String
@@ -170,13 +173,12 @@ fun FromToTextRow(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (category != null) {
-            Image(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = category.icon),
-                contentDescription = null
-            )
-        }
+        Image(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(id = icon),
+            contentDescription = stringResource(id = text)
+        )
+
         LineIcon(
             lineName = lineName,
             modifier = Modifier.padding(start = 4.dp),

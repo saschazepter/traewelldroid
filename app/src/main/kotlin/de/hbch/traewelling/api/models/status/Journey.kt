@@ -2,15 +2,19 @@ package de.hbch.traewelling.api.models.status
 
 import com.google.gson.annotations.SerializedName
 import de.hbch.traewelling.api.models.trip.DataSource
+import de.hbch.traewelling.api.models.trip.MotisTravelType
 import de.hbch.traewelling.api.models.trip.Operator
 import de.hbch.traewelling.api.models.trip.Stopover
 import de.hbch.traewelling.api.models.trip.ProductType
+import de.hbch.traewelling.util.getTravelTypeIcon
+import de.hbch.traewelling.util.getTravelTypeString
 import java.time.ZonedDateTime
 
 data class Journey(
     @SerializedName("trip") val tripId: ULong,
     @SerializedName("hafasId") val hafasTripId: String,
     val category: ProductType?,
+    @SerializedName("mode") val travelType: MotisTravelType?,
     @SerializedName("lineName") val line: String,
     val journeyNumber: String?,
     val manualJourneyNumber: String?,
@@ -28,4 +32,6 @@ data class Journey(
     val dataSource: DataSource?
 ) {
     val safeProductType get() = category ?: ProductType.UNKNOWN
+    val icon get() = getTravelTypeIcon(travelType, category)
+    val text get() = getTravelTypeString(travelType, category)
 }

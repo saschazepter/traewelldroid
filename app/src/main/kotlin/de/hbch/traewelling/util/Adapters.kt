@@ -20,6 +20,8 @@ import com.auth0.android.jwt.JWT
 import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.station.Station
 import de.hbch.traewelling.api.models.trip.Departure
+import de.hbch.traewelling.api.models.trip.MotisTravelType
+import de.hbch.traewelling.api.models.trip.ProductType
 import java.lang.Exception
 import java.time.Duration
 import java.time.Instant
@@ -192,3 +194,9 @@ fun getGreeting(): String {
         else -> "WTF"
     }
 }
+
+fun getTravelTypeIcon(motis: MotisTravelType?, hafas: ProductType?)
+    = motis?.icon ?: hafas?.icon ?: R.drawable.ic_unknown
+
+fun getTravelTypeString(motis: MotisTravelType?, hafas: ProductType?)
+    = motis?.string ?: hafas?.text ?: R.string.unknown

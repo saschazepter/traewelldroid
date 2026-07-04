@@ -6,6 +6,7 @@ import de.hbch.traewelling.api.models.station.Station
 data class Trip(
     @SerializedName("id") val id: Int,
     @SerializedName("category") val category: ProductType?,
+    @SerializedName("mode") val travelType: MotisTravelType?,
     @SerializedName("lineName") val lineName: String,
     @SerializedName("origin") val origin: Station,
     @SerializedName("destination") val destination: Station,
@@ -13,9 +14,7 @@ data class Trip(
     @SerializedName("number") val lineId: String,
     @SerializedName("routeColor") val lineColor: String,
     val dataSource: DataSource?
-) {
-    val safeProductType get() = category ?: ProductType.UNKNOWN
-}
+)
 
 data class DataSource(
     val id: String,

@@ -14,6 +14,7 @@ import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.api.models.status.StatusBusiness
 import de.hbch.traewelling.api.models.status.StatusVisibility
 import de.hbch.traewelling.api.models.status.TrwlCheckInUpdateRequest
+import de.hbch.traewelling.api.models.trip.MotisTravelType
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.api.models.user.TrustedUser
 import de.hbch.traewelling.providers.checkin.CheckInResponse
@@ -53,6 +54,7 @@ class CheckInViewModel(application: Application) : AndroidViewModel(application)
     val statusBusiness = MutableLiveData(StatusBusiness.PRIVATE)
     val event = MutableLiveData<Event?>()
     var category: ProductType = ProductType.ALL
+    var travelType: MotisTravelType? = null
     var trwlCheckInResponse: CheckInResponse<TrwlCheckInResponse>? = null
     var travelynxCheckInResponse: CheckInResponse<Unit>? = null
     var forceCheckIn: Boolean = false
@@ -89,6 +91,7 @@ class CheckInViewModel(application: Application) : AndroidViewModel(application)
         forceCheckIn = false
         editStatusId = 0
         category = ProductType.ALL
+        travelType = null
         coTravellers.postValue(listOf())
     }
 

@@ -35,6 +35,7 @@ import de.hbch.traewelling.R
 import de.hbch.traewelling.api.models.status.Status
 import de.hbch.traewelling.api.models.status.StatusBusiness
 import de.hbch.traewelling.api.models.status.StatusVisibility
+import de.hbch.traewelling.api.models.trip.MotisTravelType
 import de.hbch.traewelling.api.models.trip.Stopover
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.shared.LoggedInUserViewModel
@@ -49,6 +50,8 @@ import de.hbch.traewelling.ui.tag.StatusTags
 import de.hbch.traewelling.ui.user.getDurationString
 import de.hbch.traewelling.util.getLocalDateTimeString
 import de.hbch.traewelling.util.getLocalTimeString
+import de.hbch.traewelling.util.getTravelTypeIcon
+import de.hbch.traewelling.util.getTravelTypeString
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -195,6 +198,7 @@ fun CheckInCard(
                                 width = Dimension.fillToConstraints
                             },
                         productType = status.journey.safeProductType,
+                        motisTravelType = status.journey.travelType,
                         line = status.journey.line,
                         kilometers = status.journey.distance,
                         duration = status.journey.duration,
@@ -327,6 +331,7 @@ fun StationRow(
 fun CheckInCardContent(
     modifier: Modifier = Modifier,
     productType: ProductType,
+    motisTravelType: MotisTravelType?,
     line: String,
     journeyNumber: String?,
     kilometers: Int,
@@ -343,7 +348,8 @@ fun CheckInCardContent(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         StatusDetailsRow(
-            productType = productType,
+            icon = getTravelTypeIcon(motisTravelType, productType),
+            text = getTravelTypeString(motisTravelType, productType),
             line = line,
             journeyNumber = journeyNumber,
             kilometers = kilometers,
@@ -382,7 +388,8 @@ fun CheckInCardContent(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StatusDetailsRow(
-    productType: ProductType,
+    icon: Int,
+    text: Int,
     line: String,
     journeyNumber: String?,
     kilometers: Int,
@@ -398,8 +405,8 @@ fun StatusDetailsRow(
         val alignmentModifier = Modifier.align(Alignment.CenterVertically)
         Image(
             modifier = alignmentModifier,
-            painter = painterResource(id = productType.icon),
-            contentDescription = null
+            painter = painterResource(id = icon),
+            contentDescription = stringResource(id = text)
         )
         LineIcon(
             lineName = line,

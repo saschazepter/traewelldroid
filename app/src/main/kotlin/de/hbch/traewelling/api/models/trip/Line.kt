@@ -9,6 +9,7 @@ data class Line(
     @SerializedName("fahrtNr") val journeyNumber: String?,
     @SerializedName("name") val name: String?,
     @SerializedName("product") val product: ProductType?,
+    @SerializedName("mode") val travelType: MotisTravelType?,
     @SerializedName("color") val lineColor: String?,
     @SerializedName("textColor") val textColor: String?
 ) {

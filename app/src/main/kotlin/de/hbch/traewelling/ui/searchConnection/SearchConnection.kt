@@ -56,6 +56,7 @@ import de.hbch.traewelling.api.models.station.Station
 import de.hbch.traewelling.api.models.trip.Line
 import de.hbch.traewelling.api.models.trip.Departure
 import de.hbch.traewelling.api.models.trip.DeparturePage
+import de.hbch.traewelling.api.models.trip.MotisTravelType
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.shared.CheckInViewModel
 import de.hbch.traewelling.shared.LoggedInUserViewModel
@@ -71,6 +72,8 @@ import de.hbch.traewelling.ui.include.cardSearchStation.CardSearch
 import de.hbch.traewelling.util.getDelayColor
 import de.hbch.traewelling.util.getLastDestination
 import de.hbch.traewelling.util.getLocalTimeString
+import de.hbch.traewelling.util.getTravelTypeIcon
+import de.hbch.traewelling.util.getTravelTypeString
 import de.hbch.traewelling.util.openLink
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -393,6 +396,7 @@ fun SearchConnection(
                     }
                     .padding(vertical = 8.dp),
                 productType = trip.line?.safeProductType ?: ProductType.UNKNOWN,
+                travelType = trip.line?.travelType,
                 departurePlanned = trip.plannedDeparture ?: ZonedDateTime.now(),
                 departureReal = trip.departure,
                 isCancelled = trip.isCancelled,
@@ -437,6 +441,7 @@ fun SearchConnection(
 @Composable
 fun ConnectionListItem(
     productType: ProductType,
+    travelType: MotisTravelType?,
     departurePlanned: ZonedDateTime,
     departureReal: ZonedDateTime?,
     isCancelled: Boolean,
@@ -463,8 +468,8 @@ fun ConnectionListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = productType.icon),
-                    contentDescription = stringResource(id = productType.text)
+                    painter = painterResource(getTravelTypeIcon(travelType, productType)),
+                    contentDescription = stringResource(getTravelTypeString(travelType, productType))
                 )
                 LineIcon(
                     lineName = line?.name ?: "",
@@ -641,6 +646,7 @@ fun ConnectionListItemPreview() {
         ) {
             ConnectionListItem(
                 productType = ProductType.BUS,
+                travelType = MotisTravelType.BUS,
                 departurePlanned = ZonedDateTime.now(),
                 departureReal = ZonedDateTime.now(),
                 isCancelled = false,
@@ -652,6 +658,7 @@ fun ConnectionListItemPreview() {
             )
             ConnectionListItem(
                 productType = ProductType.TRAM,
+                travelType = MotisTravelType.TRAM,
                 departurePlanned = ZonedDateTime.now(),
                 departureReal = ZonedDateTime.now(),
                 isCancelled = true,

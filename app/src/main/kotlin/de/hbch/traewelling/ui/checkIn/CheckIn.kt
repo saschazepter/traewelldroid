@@ -75,6 +75,8 @@ import de.hbch.traewelling.ui.user.TrustedUsersViewModel
 import de.hbch.traewelling.util.checkAnyUsernames
 import de.hbch.traewelling.util.checkCustomEmojis
 import de.hbch.traewelling.util.getLocalDateString
+import de.hbch.traewelling.util.getTravelTypeIcon
+import de.hbch.traewelling.util.getTravelTypeString
 import de.hbch.traewelling.util.useDebounce
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -267,7 +269,8 @@ fun CheckIn(
             ) {
                 FromToTextRow(
                     modifier = Modifier.fillMaxWidth(),
-                    category = checkInViewModel.category,
+                    icon = getTravelTypeIcon(checkInViewModel.travelType, checkInViewModel.category),
+                    text = getTravelTypeString(checkInViewModel.travelType, checkInViewModel.category),
                     lineName = checkInViewModel.lineName,
                     lineColor = checkInViewModel.lineColor,
                     destination = checkInViewModel.destination
