@@ -41,6 +41,7 @@ enum class TagType {
         override val title = R.string.tag_seat_title
         override val key = "trwl:seat"
         override val example = R.string.tag_seat_example
+        override val ssDefaultValKey = "TAG_DEFAULT_SEAT"
     },
     @SerializedName("trwl:locomotive_class")
     LOCOMOTIVE_CLASS {
@@ -63,6 +64,7 @@ enum class TagType {
         override val title = R.string.tag_wagon_class_title
         override val key = "trwl:wagon_class"
         override val example = R.string.tag_wagon_class_example
+        override val ssDefaultValKey = "TAG_DEFAULT_WAGON_CLASS"
     },
     @SerializedName("trwl:role")
     STAFF_ROLE {
