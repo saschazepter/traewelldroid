@@ -43,10 +43,10 @@ fun ActiveStatusBar(
             while (true) {
                 progress = calculateProgress(
                     from = status.journey.departureManual ?: status.journey.origin.departureReal ?: status.journey.origin.departurePlanned,
-                    to = status.journey.destination.arrivalReal ?: status.journey.destination.arrivalPlanned
+                    to = status.journey.arrivalManual ?: status.journey.destination.arrivalReal ?: status.journey.destination.arrivalPlanned
                 )
                 duration = Duration.between(
-                    status.journey.destination.arrivalReal ?: status.journey.destination.arrivalPlanned,
+                    status.journey.arrivalManual ?: status.journey.destination.arrivalReal ?: status.journey.destination.arrivalPlanned,
                     ZonedDateTime.now()
                 ).toMinutes().toInt()
                 delay(5.seconds)
