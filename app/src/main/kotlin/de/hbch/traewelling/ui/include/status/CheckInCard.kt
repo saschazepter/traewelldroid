@@ -55,7 +55,8 @@ import de.hbch.traewelling.util.getTravelTypeString
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.ZonedDateTime
-import java.util.*
+import androidx.compose.ui.platform.LocalLocale
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun CheckInCard(
@@ -94,7 +95,7 @@ fun CheckInCard(
                     to = status.journey.arrivalManual ?: status.journey.destination.arrivalReal
                     ?: status.journey.destination.arrivalPlanned
                 )
-                delay(5000)
+                delay(5000.milliseconds)
             }
         }
 
@@ -289,8 +290,8 @@ fun StationRow(
         ) {
             Text(
                 modifier = Modifier
-                    .clickable { stationSelected(station.id, null) },
-                text = station.name,
+                    .clickable { stationSelected(station.station.id, null) },
+                text = station.station.name,
                 style = LocalFont.current.titleLarge,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2,
@@ -307,7 +308,7 @@ fun StationRow(
                 else
                     timePlanned
             Text(
-                modifier = Modifier.clickable { stationSelected(station.id, displayedDate) },
+                modifier = Modifier.clickable { stationSelected(station.station.id, displayedDate) },
                 text = getLocalTimeString(
                     date = displayedDate
                 ),
@@ -761,6 +762,6 @@ fun getFormattedDistance(distance: Int): String {
             Measure(distance / 1000, MeasureUnit.KILOMETER)
 
     return MeasureFormat
-        .getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
+        .getInstance(LocalLocale.current.platformLocale, MeasureFormat.FormatWidth.SHORT)
         .formatMeasures(roundedDistance)
 }

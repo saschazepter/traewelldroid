@@ -1,10 +1,10 @@
 package de.hbch.traewelling.api.models.trip
 
+import de.hbch.traewelling.api.models.station.Station
 import java.time.ZonedDateTime
 
 data class Stopover(
-    val id: Int,
-    val name: String,
+    val station: Station,
     val arrivalPlanned: ZonedDateTime,
     val arrivalReal: ZonedDateTime?,
     val arrivalPlatformPlanned: String?,

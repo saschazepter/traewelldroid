@@ -177,7 +177,7 @@ fun AddTrustedUser(
     val foundUsers = remember { mutableStateListOf<User>() }
     var isSearching by remember { mutableStateOf(false) }
     var userSearch by remember { mutableStateOf(TextFieldValue()) }
-    userSearch.useDebounce(500L, coroutineScope) {
+    userSearch.useDebounce(500L) {
         isSearching = true
         foundUsers.clear()
         val users = searchViewModel.searchUsers(it.text)

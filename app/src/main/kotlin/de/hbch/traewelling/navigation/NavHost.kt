@@ -105,13 +105,13 @@ fun TraewelldroidNavHost(
         checkInViewModel.message.postValue(it.body)
         checkInViewModel.statusVisibility.postValue(it.visibility)
         checkInViewModel.statusBusiness.postValue(it.business)
-        checkInViewModel.destination = it.journey.destination.name
-        checkInViewModel.destinationId = it.journey.destination.id
+        checkInViewModel.destination = it.journey.destination.station.name
+        checkInViewModel.destinationId = it.journey.destination.station.id
         checkInViewModel.departureTime = it.journey.origin.departurePlanned
         checkInViewModel.manualDepartureTime = it.journey.departureManual
         checkInViewModel.arrivalTime = it.journey.destination.arrivalPlanned
         checkInViewModel.manualArrivalTime = it.journey.arrivalManual
-        checkInViewModel.originId = it.journey.origin.id
+        checkInViewModel.originId = it.journey.origin.station.id
         checkInViewModel.tripId = it.journey.hafasTripId
         checkInViewModel.editStatusId = it.id
         checkInViewModel.category = it.journey.safeProductType
@@ -129,13 +129,13 @@ fun TraewelldroidNavHost(
         checkInViewModel.lineColor = status.journey.lineColor
         checkInViewModel.textColor = status.journey.textColor
         checkInViewModel.tripId = status.journey.hafasTripId
-        checkInViewModel.originId = status.journey.origin.id
+        checkInViewModel.originId = status.journey.origin.station.id
         checkInViewModel.departureTime = status.journey.origin.departurePlanned
-        checkInViewModel.destinationId = status.journey.destination.id
+        checkInViewModel.destinationId = status.journey.destination.station.id
         checkInViewModel.arrivalTime = status.journey.destination.arrivalPlanned
         checkInViewModel.category = status.journey.safeProductType
         checkInViewModel.travelType = status.journey.travelType
-        checkInViewModel.destination = status.journey.destination.name
+        checkInViewModel.destination = status.journey.destination.station.name
         checkInViewModel.event.postValue(status.event)
 
         navController.navigate(

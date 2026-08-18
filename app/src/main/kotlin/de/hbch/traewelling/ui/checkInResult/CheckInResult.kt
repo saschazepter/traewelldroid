@@ -267,7 +267,7 @@ fun CoTraveller(
                     fontWeight = FontWeight.ExtraBold
                 )
                 Text(
-                    text = "${status.journey.origin.name} → ${status.journey.destination.name}",
+                    text = "${status.journey.origin.station.name} → ${status.journey.destination.station.name}",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

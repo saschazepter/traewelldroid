@@ -77,7 +77,7 @@ fun ActiveStatusBar(
                         contentDescription = null
                     )
                     Text(
-                        text = status.journey.destination.name,
+                        text = status.journey.destination.station.name,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )

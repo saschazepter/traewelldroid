@@ -1,5 +1,6 @@
 package de.hbch.traewelling.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -22,7 +23,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -47,16 +47,15 @@ import de.hbch.traewelling.shared.LoggedInUserViewModel
 import de.hbch.traewelling.theme.LocalFont
 import de.hbch.traewelling.ui.include.status.CheckInCard
 import de.hbch.traewelling.ui.include.status.CheckInCardViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
+import kotlin.time.Duration.Companion.milliseconds
 
 fun NavHostController.popBackStackAndNavigate(
     destination: Destination,
@@ -174,9 +173,9 @@ fun Context.shareStatus(
 ) {
     var shareText =
         if (status.getStatusText().isBlank())
-            getString(R.string.share_text, status.journey.line, status.journey.destination.name)
+            getString(R.string.share_text, status.journey.line, status.journey.destination.station.name)
         else
-            getString(R.string.share_text_with_body, status.getStatusText(), status.journey.line, status.journey.destination.name)
+            getString(R.string.share_text_with_body, status.getStatusText(), status.journey.line, status.journey.destination.station.name)
 
     val shareUri = Uri.Builder()
         .scheme("https")
@@ -290,6 +289,7 @@ fun Context.openLink(url: String) {
     } catch (_: Exception) { }
 }
 
+@SuppressLint("ComposableNaming")
 @OptIn(FlowPreview::class)
 @Composable
 fun TextFieldState.useDebounce(
@@ -300,7 +300,7 @@ fun TextFieldState.useDebounce(
 
     LaunchedEffect(state) {
         snapshotFlow { state.text }
-            .debounce(delayMillis)
+            .debounce(delayMillis.milliseconds)
             .collectLatest {
                 onChange(state)
             }
@@ -310,13 +310,12 @@ fun TextFieldState.useDebounce(
 @Composable
 fun <T> T.useDebounce(
     delayMillis: Long = 300L,
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     onChange: suspend (T) -> Unit
 ): T {
     val state by rememberUpdatedState(this)
 
     LaunchedEffect(state) {
-        delay(delayMillis)
+        delay(delayMillis.milliseconds)
         onChange(state)
     }
 

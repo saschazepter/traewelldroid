@@ -71,7 +71,7 @@ fun SelectDestination(
                     val relevantStations = tripData.stopovers.subList(
                         tripData.stopovers.indexOf(
                             tripData.stopovers.find {
-                                it.id == checkInViewModel.originId
+                                it.station.id == checkInViewModel.originId
                                     && it.departurePlanned.isEqual(checkInViewModel.departureTime)
                             }
                         ) + 1, tripData.stopovers.lastIndex + 1)
@@ -138,8 +138,8 @@ fun SelectDestination(
                                     modifier = Modifier.clickable(onClick = {
                                         checkInViewModel.arrivalTime =
                                             tripStation.arrivalPlanned
-                                        checkInViewModel.destination = tripStation.name
-                                        checkInViewModel.destinationId = tripStation.id
+                                        checkInViewModel.destination = tripStation.station.name
+                                        checkInViewModel.destinationId = tripStation.station.id
                                         onStationSelected(tripStation)
                                     }),
                                     station = tripStation,
@@ -276,7 +276,7 @@ private fun TravelStopListItem(
                     end.linkTo(time.start, margin = 8.dp)
                     width = Dimension.fillToConstraints
                 },
-            text = station.name,
+            text = station.station.name,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = LocalFont.current.titleMedium
