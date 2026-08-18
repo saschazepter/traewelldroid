@@ -5,8 +5,8 @@ plugins {
     id("com.android.application")
     id("com.mikepenz.aboutlibraries.plugin")
     id("com.google.gms.google-services")
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.0"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.4.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.10"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.4.10"
 }
 
 aboutLibraries {
@@ -30,7 +30,7 @@ android {
     defaultConfig {
         applicationId = packageName
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = code
         versionName = name
 
@@ -119,7 +119,7 @@ android {
 
 dependencies {
     // Jetpack Compose
-    val composeVersion = "1.11.3"
+    val composeVersion = "1.12.0"
     implementation("androidx.compose.runtime:runtime:$composeVersion")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
@@ -131,18 +131,18 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.37.3")
     implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.activity:activity-compose:1.13.0")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.2")
 
     implementation("androidx.core:core-ktx:1.19.0")
-    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("com.google.android.material:material:1.14.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.11.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.browser:browser:1.10.0")
     implementation("androidx.core:core-splashscreen:1.2.0")
-    implementation("com.auth0.android:jwtdecode:2.0.2")
+    implementation("com.auth0.android:jwtdecode:2.1.0")
     implementation("net.openid:appauth:0.11.1")
     implementation("org.greenrobot:eventbus:3.3.1")
 
@@ -172,7 +172,7 @@ dependencies {
     implementation("de.c1710:filemojicompat-autoinit:3.3.1")
 
     // OSS licenses
-    implementation("com.mikepenz:aboutlibraries-compose:14.2.1")
+    implementation("com.mikepenz:aboutlibraries-compose:15.0.4")
 
     // Feature flags
     implementation("io.getunleash:unleash-android-proxy-sdk:1.0.0")

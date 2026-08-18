@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Traewelling"
         android:enableOnBackInvokedCallback="true"
-        tools:targetApi="35">
+        tools:targetApi="37">
 
         <provider
             android:name=".util.TraewelldroidFileProvider"
