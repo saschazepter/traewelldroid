@@ -421,5 +421,7 @@
     <string name="tag_default_values_text">You can define default values for tags here.</string>
     <string name="add">Add</string>
     <string name="new_value">New value</string>
-    <string name="value_contained_in_list">This value is already contained in the list.</string>
+    <string name="value_contained_in_list">This value is already contained in the list.</string>    <!-- General strings previously provided by OSMDroid -->
+    <string name="unknown">Unknown</string>
+    <string name="format_distance_kilometers">%1$s km</string>
 </resources>

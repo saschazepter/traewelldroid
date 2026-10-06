@@ -50,15 +50,19 @@ import de.hbch.traewelling.theme.PolylineColor
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.DataLoading
 import de.hbch.traewelling.ui.composables.OpenRailwayMapView
+import de.hbch.traewelling.ui.composables.RoutePolylineLayer
 import de.hbch.traewelling.ui.composables.OutlinedButtonWithIconAndText
-import de.hbch.traewelling.ui.composables.getBoundingBoxFromPolyLines
-import de.hbch.traewelling.ui.composables.getPolyLinesFromFeatureCollection
 import de.hbch.traewelling.ui.include.status.CheckInCard
 import de.hbch.traewelling.ui.include.status.CheckInCardViewModel
 import de.hbch.traewelling.ui.include.status.getFormattedDistance
 import de.hbch.traewelling.ui.user.getDurationString
 import de.hbch.traewelling.util.getLongLocalDateString
-import org.osmdroid.views.MapView
+import androidx.compose.runtime.snapshotFlow
+import de.hbch.traewelling.ui.composables.extractPositionsFromGeoJson
+import de.hbch.traewelling.ui.composables.toBoundingBox
+import de.hbch.traewelling.ui.composables.toInitialCameraPosition
+import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.flow.first
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -273,27 +277,63 @@ private fun DailyStatisticsView(
                     .fillMaxWidth()
                     .fillMaxHeight()
             ) {
-                var map: MapView? = remember { null }
+                var map: org.maplibre.compose.map.MapState? = remember { null }
 
-                val polyLines = getPolyLinesFromFeatureCollection(
-                    statistics.featureCollection,
-                    PolylineColor.toArgb(),
-                    statuses = checkIns
-                )
-                val bounds = getBoundingBoxFromPolyLines(polyLines)
-
-                LaunchedEffect(true) {
-                    map?.overlayManager?.overlays()?.addAll(polyLines)
-                    map?.zoomToBoundingBox(bounds.increaseByScale(1.1f), false)
+                val coords = remember(statistics.featureCollection) {
+                    val gson = com.google.gson.Gson()
+                    extractPositionsFromGeoJson(gson.toJsonTree(statistics.featureCollection))
                 }
+
+                LaunchedEffect(coords, map) {
+                    val m = map ?: return@LaunchedEffect
+                    coords.toBoundingBox()?.let { bbox ->
+                        snapshotFlow { m.viewport }
+                            .first { viewport -> viewport != null }
+
+                        m.animateCameraToBounds(
+                            boundingBox = bbox,
+                            fitPadding = org.maplibre.compose.util.DpPadding(72.dp, 72.dp, 72.dp, 72.dp),
+                            animation = org.maplibre.compose.camera.CameraAnimation.Ease(100.milliseconds)
+                        )
+                    }
+                }
+                val initialCameraPosition = remember(coords) {
+                    coords.toInitialCameraPosition() ?: org.maplibre.compose.camera.CameraPosition()
+                }
+
                 OpenRailwayMapView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(),
-                    onInit = {
+                    initialCameraPosition = initialCameraPosition,
+                    onMapReady = {
                         map = it
                     }
-                )
+                ) {
+                    val styledGeoJson = remember(statistics.featureCollection, checkIns) {
+                        val fallbackHex = String.format("#%06X", 0xFFFFFF and PolylineColor.toArgb())
+                        val gson = com.google.gson.Gson()
+                        val jsonElement = gson.toJsonTree(statistics.featureCollection)
+                        if (jsonElement is com.google.gson.JsonObject) {
+                            jsonElement.getAsJsonArray("features")?.forEach { f ->
+                                if (f is com.google.gson.JsonObject) {
+                                    var props = f.getAsJsonObject("properties")
+                                    if (props == null) {
+                                        props = com.google.gson.JsonObject()
+                                        f.add("properties", props)
+                                    }
+                                    val statusId = if (props.has("statusId") && !props.get("statusId").isJsonNull) props.get("statusId").asInt else null
+                                    val status = checkIns.firstOrNull { it.id == statusId }
+                                    val statusLineColor = status?.journey?.lineColor
+                                    val hex = statusLineColor?.let { if (it.startsWith("#")) it else "#$it" } ?: fallbackHex
+                                    props.addProperty("lineColor", hex)
+                                }
+                            }
+                        }
+                        jsonElement
+                    }
+                    RoutePolylineLayer(geoJson = styledGeoJson)
+                }
             }
         }
         Box { }

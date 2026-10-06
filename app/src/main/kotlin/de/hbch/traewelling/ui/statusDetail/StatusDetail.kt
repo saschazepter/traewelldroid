@@ -63,16 +63,21 @@ import de.hbch.traewelling.ui.checkInResult.CoTraveller
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.DataLoading
 import de.hbch.traewelling.ui.composables.OpenRailwayMapView
+import de.hbch.traewelling.ui.composables.RoutePolylineLayer
 import de.hbch.traewelling.ui.composables.ProfilePicture
 import de.hbch.traewelling.ui.tag.StatusTags
-import de.hbch.traewelling.ui.composables.getBoundingBoxFromPolyLines
-import de.hbch.traewelling.ui.composables.getPolyLinesFromFeatureCollection
 import de.hbch.traewelling.ui.include.status.CheckInCard
 import de.hbch.traewelling.ui.include.status.CheckInCardViewModel
 import de.hbch.traewelling.util.colorFromHex
+import androidx.compose.runtime.snapshotFlow
+import de.hbch.traewelling.ui.composables.extractPositionsFromGeoJson
+import de.hbch.traewelling.ui.composables.toBoundingBox
+import de.hbch.traewelling.ui.composables.toInitialCameraPosition
+import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Polyline
+import org.maplibre.compose.expressions.dsl.*
+import org.maplibre.compose.map.MapState
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -135,7 +140,9 @@ fun StatusDetail(
                     )
                     if (displayMap == true) {
                         IconToggleButton(
-                            modifier = Modifier.align(Alignment.TopEnd),
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .padding(8.dp),
                             checked = mapExpanded,
                             onCheckedChange = {
                                 mapExpanded = it
@@ -289,43 +296,49 @@ private fun StatusDetailMap(
     statusDetailViewModel: StatusDetailViewModel,
     mapLoaded: (Boolean) -> Unit,
 ) {
-    val colorArgb = (colorFromHex("#${status.journey.lineColor}") ?: PolylineColor).toArgb()
-    val polyLines = remember { mutableStateListOf<Polyline>() }
+    var featureCollection: de.hbch.traewelling.api.models.polyline.FeatureCollection? by remember { mutableStateOf(null) }
     var requested by remember { mutableStateOf(false) }
-    var mapView: MapView? = remember { null }
+    var mapView: org.maplibre.compose.map.MapState? = remember { null }
 
     LaunchedEffect(requested) {
-        if (!requested && polyLines.isEmpty()) {
+        if (!requested && featureCollection == null) {
             requested = true
             statusDetailViewModel.getPolylineForStatus(
                 statusId = status.id,
                 successfulCallback = {
-                    val polylines = getPolyLinesFromFeatureCollection(it, colorArgb)
-                    polyLines.addAll(polylines)
-                    if (polylines.isEmpty()) {
-                        mapLoaded(false)
-                    }
+                    featureCollection = it
+                    mapLoaded(!it.features.isNullOrEmpty())
                 },
                 failureCallback = {}
             )
         }
     }
 
-    LaunchedEffect(polyLines.size) {
-        val map = mapView
-        if (polyLines.isNotEmpty() && map != null) {
-            map.overlayManager.overlays().removeIf {
-                it is Polyline
-            }
-            map.overlayManager.overlays().addAll(polyLines)
+    val coords = remember(featureCollection) {
+        val gson = com.google.gson.Gson()
+        extractPositionsFromGeoJson(gson.toJsonTree(featureCollection))
+    }
 
-            val bounds = getBoundingBoxFromPolyLines(polyLines)
-            map.zoomToBoundingBox(bounds.increaseByScale(1.1f), false)
+    LaunchedEffect(coords, mapView) {
+        val map = mapView ?: return@LaunchedEffect
+        coords.toBoundingBox()?.let { bbox ->
+            snapshotFlow { map.viewport }
+                .first { viewport -> viewport != null }
+
+            map.animateCameraToBounds(
+                boundingBox = bbox,
+                fitPadding = org.maplibre.compose.util.DpPadding(72.dp, 72.dp, 72.dp, 72.dp),
+                animation = org.maplibre.compose.camera.CameraAnimation.Ease(100.milliseconds)
+            )
             mapLoaded(true)
         }
     }
 
-    if (polyLines.isNotEmpty()) {
+    val initialCameraPosition = remember(coords) {
+        coords.toInitialCameraPosition() ?: org.maplibre.compose.camera.CameraPosition()
+    }
+
+    if (featureCollection?.features?.isNotEmpty() == true) {
         ElevatedCard(
             modifier = modifier
                 .fillMaxWidth(),
@@ -334,10 +347,16 @@ private fun StatusDetailMap(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(),
-                onLoad = {
+                initialCameraPosition = initialCameraPosition,
+                onMapReady = {
                     mapView = it
                 }
-            )
+            ) {
+                RoutePolylineLayer(
+                    geoJson = featureCollection,
+                    defaultColorHex = status.journey.lineColor
+                )
+            }
         }
     }
 }

@@ -102,6 +102,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
     namespace = "de.hbch.traewelling"
+
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86_64")
+            isUniversalApk = true
+        }
+    }
+
     flavorDimensions += "libs"
     productFlavors {
         create("play") {
@@ -151,8 +161,10 @@ dependencies {
     implementation("androidx.glance:glance-appwidget:$glanceVersion")
     implementation("androidx.glance:glance-material3:$glanceVersion")
 
-    // OSM integration
-    implementation("org.osmdroid:osmdroid-android:6.1.20")
+    // MapLibre integration
+    implementation("org.maplibre.compose:maplibre-compose:0.19.0")
+    implementation("org.maplibre.compose:maplibre-compose-material3:0.19.0")
+    runtimeOnly("org.maplibre.compose:maplibre-compose-runtime-vulkan-android:0.19.0")
 
     // Secure Storage
     implementation("com.google.code.gson:gson:2.14.0")
@@ -201,4 +213,21 @@ if (getGradle().startParameter.getTaskNames().stream().anyMatch { f -> f.contain
     println("Play services will be applied!")
 } else {
     println("Play services were not applied!")
+}
+
+val abiCodes = mapOf(
+    "armeabi-v7a" to 1,
+    "arm64-v8a" to 2,
+    "x86_64" to 3
+)
+
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            val abi = output.filters.find { it.filterType == com.android.build.api.variant.FilterConfiguration.FilterType.ABI }?.identifier
+            val baseVersionCode = variant.outputs.first().versionCode.get()
+            val abiCode = abiCodes[abi] ?: 0
+            output.versionCode.set(baseVersionCode * 10 + abiCode)
+        }
+    }
 }

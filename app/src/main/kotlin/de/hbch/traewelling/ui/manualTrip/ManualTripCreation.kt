@@ -69,18 +69,21 @@ import de.hbch.traewelling.api.models.trip.Operator
 import de.hbch.traewelling.api.models.trip.PreviewManualTripPolylineRequest
 import de.hbch.traewelling.api.models.trip.ProductType
 import de.hbch.traewelling.api.models.trip.Trip
-import de.hbch.traewelling.theme.PolylineColor
 import de.hbch.traewelling.ui.composables.ButtonWithIconAndText
 import de.hbch.traewelling.ui.composables.DateTimeSelection
 import de.hbch.traewelling.ui.composables.OpenRailwayMapView
+import de.hbch.traewelling.ui.composables.RoutePolylineLayer
 import de.hbch.traewelling.ui.composables.OutlinedButtonWithIconAndText
-import de.hbch.traewelling.ui.composables.getBoundingBoxFromPolyLines
-import de.hbch.traewelling.ui.composables.getPolyLineFromFeature
 import de.hbch.traewelling.ui.search.SearchViewModel
 import de.hbch.traewelling.util.useDebounce
+import androidx.compose.runtime.snapshotFlow
+import de.hbch.traewelling.ui.composables.extractPositionsFromGeoJson
+import de.hbch.traewelling.ui.composables.toBoundingBox
+import de.hbch.traewelling.ui.composables.toInitialCameraPosition
+import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Polyline
+import org.maplibre.compose.map.MapState
 import java.time.ZonedDateTime
 import java.util.UUID
 
@@ -664,7 +667,7 @@ fun ManualTripCreation(
                 }
             )
         } else {
-            var mapView by remember { mutableStateOf<MapView?>(null) }
+            var mapView by remember { mutableStateOf<MapState?>(null) }
             var errorText by remember { mutableStateOf("") }
             var feature by remember { mutableStateOf<Feature?>(null) }
 
@@ -695,20 +698,29 @@ fun ManualTripCreation(
                 errorText = ""
             }
 
-            LaunchedEffect(feature, mapView) {
-                val feat = feature ?: return@LaunchedEffect
+            val coords = remember(feature) {
+                val gson = com.google.gson.Gson()
+                extractPositionsFromGeoJson(gson.toJsonTree(feature))
+            }
+
+            LaunchedEffect(coords, mapView) {
                 val map = mapView ?: return@LaunchedEffect
+                coords.toBoundingBox()?.let { bbox ->
+                    snapshotFlow { map.viewport }
+                        .first { viewport -> viewport != null }
 
-                val polyline =
-                    getPolyLineFromFeature(feat, PolylineColor.toArgb()) ?: return@LaunchedEffect
-                val bounds = getBoundingBoxFromPolyLines(listOf(polyline))
-
-                map.overlays.filterIsInstance<Polyline>().forEach { map.overlays.remove(it) }
-                map.overlays.add(polyline)
-                map.zoomToBoundingBox(bounds.increaseByScale(1.2f), false)
-                map.invalidate()
+                    map.animateCameraToBounds(
+                        boundingBox = bbox,
+                        fitPadding = org.maplibre.compose.util.DpPadding(72.dp, 72.dp, 72.dp, 72.dp),
+                        animation = org.maplibre.compose.camera.CameraAnimation.Ease(100.milliseconds)
+                    )
+                }
             }
             if (feature != null) {
+                val initialCameraPosition = remember(coords) {
+                    coords.toInitialCameraPosition() ?: org.maplibre.compose.camera.CameraPosition()
+                }
+
                 ElevatedCard(
                     modifier = modifier
                         .fillMaxWidth(),
@@ -717,10 +729,13 @@ fun ManualTripCreation(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight(),
-                        onLoad = {
+                        initialCameraPosition = initialCameraPosition,
+                        onMapReady = {
                             mapView = it
                         }
-                    )
+                    ) {
+                        RoutePolylineLayer(geoJson = feature)
+                    }
                 }
             } else if (errorText.isNotBlank()) {
                 Text(text = errorText)

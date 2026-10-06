@@ -8,6 +8,9 @@ import de.hbch.traewelling.api.AuthManager
 import de.hbch.traewelling.api.TraewellingApi
 import de.hbch.traewelling.api.interceptors.CoilInterceptor
 import de.hbch.traewelling.logging.Logger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 
 class TraewelldroidApplication : Application(), ImageLoaderFactory {
@@ -22,6 +25,16 @@ class TraewelldroidApplication : Application(), ImageLoaderFactory {
         traewellingApi = TraewellingApi(this)
 
         Logger.getInstance().initialize(this)
+        
+        @OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                filesDir.resolve("osmdroid").deleteRecursively()
+                getExternalFilesDir(null)?.resolve("osmdroid")?.deleteRecursively()
+            } catch (_: Exception) {
+                // Ignore errors during cache cleanup
+            }
+        }
     }
 
     override fun newImageLoader(): ImageLoader {
