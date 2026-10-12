@@ -68,9 +68,9 @@ fun OpenRailwayMapView(
     var ormEnabled by remember { mutableStateOf(true) }
     val isDark = isSystemInDarkTheme()
     val baseStyleUri = if (isDark) {
-        "https://tiles.openfreemap.org/styles/dark"
+        "https://app.traewelldroid.de/assets/map_styles/dark.json"
     } else {
-        "https://tiles.openfreemap.org/styles/liberty"
+        "https://app.traewelldroid.de/assets/map_styles/light.json"
     }
 
     val userAgent = "${BuildConfig.APPLICATION_ID}/${BuildConfig.VERSION_NAME}"
