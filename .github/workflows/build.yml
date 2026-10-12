@@ -30,8 +30,11 @@ jobs:
         with:
           cache-read-only: ${{ github.event_name == 'pull_request' || (github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev' && github.ref_type != 'tag') }}
 
-      - name: Assemble Foss Debug
+      - name: Assemble Foss Debug (Universal)
         run: ./gradlew assembleFossDebug
+
+      - name: Assemble Foss Debug (Multi-Architecture Splits)
+        run: ./gradlew assembleFossDebug -PsplitApks=true
 
       - name: Assemble Play Debug
         run: ./gradlew assemblePlayDebug

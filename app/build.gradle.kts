@@ -14,6 +14,8 @@ aboutLibraries {
     collect.configPath.set(rootProject.file("config"))
 }
 
+val enableSplits = project.findProperty("splitApks") == "true"
+
 android {
     val packageName = "de.hbch.traewelling"
     val name = "2.26.5"
@@ -36,21 +38,27 @@ android {
 
         manifestPlaceholders["appAuthRedirectScheme"] = "app.traewelldroid.de"
 
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
+        }
+
         testInstrumentationRunner
     }
 
-    signingConfigs {
-        create("release") {
-           try {
-               val keystorePropertiesFile = rootProject.file("keystore.properties")
-               val keystoreProperties = Properties()
-               keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    val hasKeystore = keystorePropertiesFile.exists()
 
-               storeFile = file(keystoreProperties.getProperty("storeFile"))
-               storePassword = keystoreProperties.getProperty("storePassword")
-               keyAlias = keystoreProperties.getProperty("keyAlias")
-               keyPassword = keystoreProperties.getProperty("keyPassword")
-           } catch (_: Exception) { }
+    if (hasKeystore) {
+        signingConfigs {
+            create("release") {
+                val keystoreProperties = Properties()
+                keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
         }
     }
 
@@ -73,7 +81,9 @@ android {
             buildConfigField("String", "ACRA_PASSWORD", "\"tA4VekBGnHuWQuGS\"")
             buildConfigField("String", "ACRA_REPORT_MAIL", "\"bugs@traewelldroid.de\"")
 
-            signingConfig = signingConfigs["release"]
+            if (hasKeystore) {
+                signingConfig = signingConfigs["release"]
+            }
         }
         debug {
             buildConfigField("String", "OAUTH_REDIRECT_URL", "\"https://app.traewelldroid.de/oauth2redirect\"")
@@ -105,7 +115,7 @@ android {
 
     splits {
         abi {
-            isEnable = true
+            isEnable = enableSplits
             reset()
             include("armeabi-v7a", "arm64-v8a", "x86_64")
             isUniversalApk = true
@@ -221,13 +231,20 @@ val abiCodes = mapOf(
     "x86_64" to 3
 )
 
-androidComponents {
-    onVariants { variant ->
-        variant.outputs.forEach { output ->
-            val abi = output.filters.find { it.filterType == com.android.build.api.variant.FilterConfiguration.FilterType.ABI }?.identifier
+if (enableSplits) {
+    androidComponents {
+        onVariants { variant ->
             val baseVersionCode = variant.outputs.first().versionCode.get()
-            val abiCode = abiCodes[abi] ?: 0
-            output.versionCode.set(baseVersionCode * 10 + abiCode)
+            variant.outputs.forEach { output ->
+                val abi = output.filters.find { it.filterType == com.android.build.api.variant.FilterConfiguration.FilterType.ABI }?.identifier
+                val abiCode = abiCodes[abi]
+                if (abiCode != null) {
+                    output.versionCode.set(baseVersionCode * 10 + abiCode)
+                } else {
+                    output.versionCode.set(baseVersionCode * 10 + 0)
+                }
+            }
         }
     }
 }
+

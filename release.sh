@@ -7,16 +7,26 @@ set -e
 rm -rf release
 mkdir release
 
-# FOSS Release APK bauen
+# FOSS Release APKs bauen
 ./gradlew clean
-./gradlew assembleFossRelease
-mv app/build/outputs/apk/foss/release/app-foss-release.apk release/
+./gradlew assembleFossRelease -PsplitApks=true
+if [ -f "app/build/outputs/apk/foss/release/app-foss-universal-release.apk" ]; then
+    cp app/build/outputs/apk/foss/release/app-foss-universal-release.apk release/app-foss-release.apk
+elif [ -f "app/build/outputs/apk/foss/release/app-foss-universal-release-unsigned.apk" ]; then
+    cp app/build/outputs/apk/foss/release/app-foss-universal-release-unsigned.apk release/app-foss-release.apk
+fi
+cp app/build/outputs/apk/foss/release/app-foss-*.apk release/
 
-# Play Release APK bauen
+# Play Release APKs bauen
 ./gradlew clean
-./gradlew assemblePlayRelease
-mv app/build/outputs/apk/play/release/app-play-release.apk release/
+./gradlew assemblePlayRelease -PsplitApks=true
+if [ -f "app/build/outputs/apk/play/release/app-play-universal-release.apk" ]; then
+    cp app/build/outputs/apk/play/release/app-play-universal-release.apk release/app-play-release.apk
+elif [ -f "app/build/outputs/apk/play/release/app-play-universal-release-unsigned.apk" ]; then
+    cp app/build/outputs/apk/play/release/app-play-universal-release-unsigned.apk release/app-play-release.apk
+fi
+cp app/build/outputs/apk/play/release/app-play-*.apk release/
 
 # Play Release Bundle (AAB) bauen
 ./gradlew bundlePlayRelease
-mv app/build/outputs/bundle/playRelease/app-play-release.aab release/
+cp app/build/outputs/bundle/playRelease/app-play-release.aab release/
