@@ -32,6 +32,8 @@ import org.maplibre.compose.expressions.dsl.asString
 import org.maplibre.compose.expressions.dsl.const
 import org.maplibre.compose.expressions.dsl.convertToColor
 import org.maplibre.compose.expressions.dsl.feature
+import org.maplibre.compose.expressions.value.LineCap
+import org.maplibre.compose.expressions.value.LineJoin
 import org.maplibre.compose.layers.LineLayer
 import org.maplibre.compose.layers.RasterLayer
 import org.maplibre.compose.material3.DisappearingCompassButton
@@ -265,7 +267,9 @@ fun RoutePolylineLayer(
     defaultColorHex: String? = null,
     fallbackColor: Color = PolylineColor,
     layerId: String = "traewelldroid-route",
-    lineWidth: Dp = 4.dp
+    lineWidth: Dp = 4.dp,
+    outlineWidth: Dp = 1.5.dp,
+    outlineColor: Color = if (isSystemInDarkTheme()) Color.White else Color.Black
 ) {
     if (geoJson == null) return
 
@@ -276,7 +280,7 @@ fun RoutePolylineLayer(
 
     val geoJsonString = remember(geoJson, fallbackHex) {
         val gson = com.google.gson.Gson()
-        val jsonElement = if (geoJson is com.google.gson.JsonElement) geoJson else gson.toJsonTree(geoJson)
+        val jsonElement = geoJson as? com.google.gson.JsonElement ?: gson.toJsonTree(geoJson)
 
         fun processFeature(feature: com.google.gson.JsonObject) {
             var props = feature.getAsJsonObject("properties")
@@ -313,12 +317,25 @@ fun RoutePolylineLayer(
         data = GeoJsonData.JsonString(geoJsonString)
     )
 
+    if (outlineWidth > 0.dp) {
+        LineLayer(
+            id = "$layerId-outline",
+            source = source,
+            color = const(outlineColor),
+            width = const(lineWidth + (outlineWidth * 2)),
+            cap = const(LineCap.Round),
+            join = const(LineJoin.Round)
+        )
+    }
+
     LineLayer(
         id = layerId,
         source = source,
         color = feature["lineColor"]
             .asString(const(fallbackHex))
             .convertToColor(),
-        width = const(lineWidth)
+        width = const(lineWidth),
+        cap = const(LineCap.Round),
+        join = const(LineJoin.Round)
     )
 }
