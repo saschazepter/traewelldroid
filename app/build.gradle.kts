@@ -14,7 +14,8 @@ aboutLibraries {
     collect.configPath.set(rootProject.file("config"))
 }
 
-val enableSplits = project.findProperty("splitApks") == "true"
+val isBuildingBundle = gradle.startParameter.taskNames.any { it.contains("bundle", ignoreCase = true) }
+val enableSplits = project.findProperty("splitApks") == "true" && !isBuildingBundle
 
 android {
     val packageName = "de.hbch.traewelling"
@@ -65,7 +66,10 @@ android {
     buildTypes {
         release {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            isMinifyEnabled = false
+
+            optimization {
+                enable = true
+            }
 
             buildConfigField("String", "OAUTH_REDIRECT_URL", "\"https://app.traewelldroid.de/oauth2redirect\"")
             buildConfigField("String", "OAUTH_CLIENT_ID", "\"43\"")
