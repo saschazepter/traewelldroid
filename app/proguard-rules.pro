@@ -20,5 +20,15 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+
+-keep class com.google.gson.reflect.TypeToken { *; }
+-keep class * extends com.google.gson.reflect.TypeToken
+
+-keep class de.hbch.traewelling.api.models.** { *; }
+-keep class de.hbch.traewelling.providers.checkin.travelynx.** { *; }
+-keep class de.hbch.traewelling.ui.composables.OpenRailwayMapLayer { *; }
+
 -dontwarn com.google.firebase.analytics.connector.AnalyticsConnector
 -dontobfuscate
